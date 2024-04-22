@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="bottom_sheet_dialog_style" parent="Theme.Material3.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/round_bottom_sheet_dialog_style</item>
+    </style>
+
+    <style name="round_bottom_sheet_dialog_style" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_all_bottom_sheet_dialog</item>
+    </style>
+
+    <style name="bottom_navigation_view_style" parent="Widget.Design.BottomNavigationView">
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="elevation">20dp</item>
+        <item name="itemIconSize">32dp</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="itemIconTint">@color/bottom_navigation_icon</item>
+        <item name="android:minHeight">65dp</item>
+        <item name="enforceTextAppearance">true</item>
+        <item name="itemTextAppearanceInactive">@style/navigation_inactive</item>
+        <item name="itemTextAppearanceActive">@style/navigation_active</item>
+    </style>
+
+    <style name="date_picker_dialog_style" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorAccent">@color/main</item>
+        <item name="android:textColorPrimary">@color/gray_g5</item>
+        <item name="android:textColorPrimaryInverse">@color/white</item>
+        <item name="android:textColorSecondaryInverse">@color/white</item>
+        <item name="colorPrimary">@color/gray_g5</item>
+        <item name="background">@color/white</item>
+    </style>
+
+    <style name="no_scroll_bars" parent="android:Widget.ScrollView">
+        <item name="android:scrollbars">none</item>
+    </style>
+
+    <style name="floating_action_button_style" parent="Widget.Design.FloatingActionButton">
+        <item name="shapeAppearanceOverlay">@style/fab_shape_style</item>
+        <item name="backgroundTint">@color/sub_w</item>
+    </style>
+
+    <style name="fab_shape_style" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">50%</item>
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerFamilyBottomRight">rounded</item>
+    </style>
+</resources>

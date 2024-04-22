@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="uiState"
+            type="com.ki960213.kidsandseoul.presentation.ui.facilitydetail.reviews.reviews.ReviewUiState" />
+
+        <variable
+            name="onProfileUiClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+
+        <variable
+            name="onFacilityNameClick"
+            type="kotlin.jvm.functions.Function1&lt;Long, Unit>" />
+
+        <variable
+            name="onLikeToggle"
+            type="kotlin.jvm.functions.Function2&lt;String, Boolean, Unit>" />
+
+        <variable
+            name="onDeleteButtonClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="6dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_review_item_author_profile_image"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_margin="12dp"
+                android:onClick="@{() -> onProfileUiClick.invoke(uiState.authorId)}"
+                app:errorImage="@{@drawable/img_all_error_user}"
+                app:imageUrl="@{uiState.authorProfileImageUrl}"
+                app:isCircle="@{true}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tv_review_item_author_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:onClick="@{() -> onProfileUiClick.invoke(uiState.authorId)}"
+                android:text="@{uiState.authorName}"
+                android:textAppearance="@style/content"
+                android:textColor="@color/gray_g5"
+                app:layout_constraintBottom_toBottomOf="@id/iv_review_item_author_profile_image"
+                app:layout_constraintStart_toEndOf="@id/iv_review_item_author_profile_image"
+                app:layout_constraintTop_toTopOf="@id/iv_review_item_author_profile_image"
+                tools:text="닉네임" />
+
+            <ImageView
+                android:id="@+id/iv_review_item_star_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/ic_review_item_star"
+                app:isVisible="@{uiState.review.starPoint.value >= 1}"
+                app:layout_constraintBottom_toBottomOf="@id/tv_review_item_author_name"
+                app:layout_constraintStart_toEndOf="@id/tv_review_item_author_name"
+                app:layout_constraintTop_toTopOf="@id/tv_review_item_author_name"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/iv_review_item_star_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2.51dp"
+                android:src="@drawable/ic_review_item_star"
+                app:isVisible="@{uiState.review.starPoint.value >= 2}"
+                app:layout_constraintBottom_toBottomOf="@id/tv_review_item_author_name"
+                app:layout_constraintStart_toEndOf="@id/iv_review_item_star_1"
+                app:layout_constraintTop_toTopOf="@id/tv_review_item_author_name"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/iv_review_item_star_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2.51dp"
+                android:src="@drawable/ic_review_item_star"
+                app:isVisible="@{uiState.review.starPoint.value >= 3}"
+                app:layout_constraintBottom_toBottomOf="@id/tv_review_item_author_name"
+                app:layout_constraintStart_toEndOf="@id/iv_review_item_star_2"
+                app:layout_constraintTop_toTopOf="@id/tv_review_item_author_name"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/iv_review_item_star_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2.51dp"
+                android:src="@drawable/ic_review_item_star"
+                app:isVisible="@{uiState.review.starPoint.value >= 4}"
+                app:layout_constraintBottom_toBottomOf="@id/tv_review_item_author_name"
+                app:layout_constraintStart_toEndOf="@id/iv_review_item_star_3"
+                app:layout_constraintTop_toTopOf="@id/tv_review_item_author_name"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/iv_review_item_star_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2.51dp"
+                android:src="@drawable/ic_review_item_star"
+                app:isVisible="@{uiState.review.starPoint.value >= 5}"
+                app:layout_constraintBottom_toBottomOf="@id/tv_review_item_author_name"
+                app:layout_constraintStart_toEndOf="@id/iv_review_item_star_4"
+                app:layout_constraintTop_toTopOf="@id/tv_review_item_author_name"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/iv_review_delete_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> onDeleteButtonClick.invoke(uiState.review.id)}"
+                android:padding="12dp"
+                android:src="@drawable/ic_comment_delete"
+                app:isVisible="@{uiState.deletable}"
+                app:layout_constraintBottom_toBottomOf="@id/iv_review_item_author_profile_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/iv_review_item_author_profile_image"
+                tools:ignore="ContentDescription" />
+
+            <com.smarteist.autoimageslider.SliderView
+                android:id="@+id/slider_review_item_images"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_review_item_author_profile_image"
+                app:sliderIndicatorGravity="center_horizontal|bottom"
+                app:sliderIndicatorMargin="15dp"
+                app:sliderIndicatorOrientation="horizontal"
+                app:sliderIndicatorPadding="3dp"
+                app:sliderIndicatorRadius="2dp"
+                app:sliderIndicatorSelectedColor="@color/main"
+                app:sliderIndicatorUnselectedColor="@color/gray_g2" />
+
+            <TextView
+                android:id="@+id/tv_review_item_facility_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:onClick="@{() -> onFacilityNameClick.invoke(uiState.facility.id)}"
+                android:paddingTop="17dp"
+                android:paddingBottom="5dp"
+                android:text="@{uiState.facility.name}"
+                android:textAppearance="@style/content_accent"
+                android:textColor="@color/gray_g5"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toStartOf="@+id/tv_review_item_service"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/slider_review_item_images"
+                tools:text="서울형 키즈카페 종로구 혜화동점(종로 혜명 아이들 상상놀이터)" />
+
+            <TextView
+                android:id="@+id/tv_review_item_service"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="9dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/gray_g4"
+                android:textSize="10sp"
+                app:facilityService="@{uiState.facility}"
+                app:layout_constraintBottom_toBottomOf="@id/tv_review_item_facility_name"
+                app:layout_constraintEnd_toStartOf="@+id/iv_review_item_like_toggle"
+                app:layout_constraintStart_toEndOf="@+id/tv_review_item_facility_name"
+                tools:ignore="SmallSp"
+                tools:text="키즈카페, 실내놀이터" />
+
+            <ImageView
+                android:id="@+id/iv_review_item_like_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="16dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/slider_review_item_images"
+                tools:ignore="ContentDescription"
+                tools:src="@drawable/ic_all_liked" />
+
+            <TextView
+                android:id="@+id/tv_review_item_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="@{uiState.facility.address.baseAddress}"
+                android:textAppearance="@style/content"
+                android:textColor="@color/gray_g3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_review_item_facility_name"
+                tools:text="서울특별시 송파구 000" />
+
+            <TextView
+                android:id="@+id/tv_review_item_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginTop="6dp"
+                android:text="@{uiState.review.content}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_review_item_address"
+                tools:text="그런데, 어제까지는 개울 기슭에서 하더니, 오늘은 징검다리 한가운데 앉아서 하고 있다. 개울가에 다다르기 전에, 가을 하늘은 언제 그랬는가 싶게 구름 한 점 없이 쪽빛으로 개어 있었다. 그리고 2010년, 황순원 작가의 순수함을 그대로 간직한 소나기마을의 어느 개울가에서도 소설 속 그날처럼 비가 개고 있었다." />
+
+            <TextView
+                android:id="@+id/tv_review_item_created_at"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="10dp"
+                android:textAppearance="@style/content"
+                android:textColor="@color/gray_g3"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_review_item_content"
+                app:text="@{uiState.review.createdAt}"
+                tools:text="2024. 10. 21" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+</layout>

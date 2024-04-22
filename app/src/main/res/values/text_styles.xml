@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="title">
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="sub_title">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="content">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="content_accent">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="navigation_inactive">
+        <item name="android:textSize">11sp</item>
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="android:textColor">@color/gray_g3</item>
+    </style>
+
+    <style name="navigation_active">
+        <item name="android:textSize">11sp</item>
+        <item name="android:fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textColor">@color/main</item>
+    </style>
+
+    <style name="tab_layout_selected_text">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="tab_layout_unselected_text">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+</resources>

@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="viewModel"
+            type="com.ki960213.kidsandseoul.presentation.ui.firstscreen.myprofile.MyProfileViewModel" />
+
+        <variable
+            name="onProfileSettingButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onLoginClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onMyInterestButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onMyReviewButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onFollowButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onFollowingButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onMyPostButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onMyCommentButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onUseOfTermButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onPrivacyPolicyButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onLogoutButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onLeaveButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_my_profile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.ui.firstscreen.myprofile.MyProfileFragment">
+
+        <ProgressBar
+            android:id="@+id/pb_my_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:isVisible="@{viewModel.isLoading}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/my_profile_login_user"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:isVisible="@{!viewModel.isLoading}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_my_profile_top_decorator"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:importantForAccessibility="no"
+                android:src="@color/sub_g0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/my_profile_title"
+                android:textAppearance="@style/sub_title"
+                android:textColor="@color/gray_g5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_my_profile_image"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="@dimen/horizontal_padding"
+                android:layout_marginTop="34dp"
+                app:errorImage="@{@drawable/img_all_error_user}"
+                app:imageUrl="@{viewModel.loginUser.profileImageUrl}"
+                app:isCircle="@{true}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_my_profile_title"
+                tools:ignore="ContentDescription"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="23dp"
+                android:text="@{@string/my_profile_user_name_format(viewModel.loginUser.name)}"
+                android:textAppearance="@style/title"
+                android:textColor="@color/gray_g5"
+                app:isVisible="@{viewModel.isLogin}"
+                app:layout_constraintStart_toEndOf="@id/iv_my_profile_image"
+                app:layout_constraintTop_toTopOf="@id/iv_my_profile_image"
+                tools:text="김대현님" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_kids_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="@string/my_profile_my_child_label"
+                android:textColor="@color/gray_g5"
+                android:textSize="16sp"
+                app:isVisible="@{viewModel.isLogin}"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="@id/tv_my_profile_user_name"
+                app:layout_constraintEnd_toStartOf="@+id/iv_proifle_setting_button"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@id/tv_my_profile_user_name" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_login_request"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="@string/my_profile_login_request"
+                android:textColor="@color/gray_g5"
+                app:isVisible="@{!viewModel.isLogin}"
+                app:layout_constraintStart_toEndOf="@id/iv_my_profile_image"
+                app:layout_constraintTop_toTopOf="@id/iv_my_profile_image" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_all_button_highlight"
+                android:fontFamily="@font/pretendard_medium"
+                android:onClick="@{() -> onLoginClick.invoke()}"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="6dp"
+                android:text="@string/my_profile_login_button"
+                android:textColor="@color/main"
+                android:textSize="12sp"
+                app:isVisible="@{!viewModel.isLogin}"
+                app:layout_constraintStart_toStartOf="@id/tv_my_profile_login_request"
+                app:layout_constraintTop_toBottomOf="@id/tv_my_profile_login_request" />
+
+            <ImageView
+                android:id="@+id/iv_proifle_setting_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:onClick="@{() -> onProfileSettingButtonClick.invoke()}"
+                android:padding="10dp"
+                android:src="@drawable/ic_my_profile_setting"
+                app:isVisible="@{viewModel.isLogin}"
+                app:layout_constraintBottom_toBottomOf="@id/tv_my_profile_user_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_my_profile_user_name"
+                tools:ignore="ContentDescription" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_my_profile_kids"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/horizontal_padding"
+                android:paddingVertical="7dp"
+                app:itemAnimator="@{null}"
+                app:itemSpacing_dp="@{8}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="@id/iv_my_profile_top_decorator"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_my_profile_top_decorator"
+                app:profile_kids="@{viewModel.kids}"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_profile_kid" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_my_interest_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:drawablePadding="13dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:onClick="@{() -> onMyInterestButtonClick.invoke()}"
+                android:text="@string/my_profile_my_interest"
+                android:textColor="@color/gray_g5"
+                android:textSize="14sp"
+                app:drawableTopCompat="@drawable/ic_my_profile_my_interest"
+                app:layout_constraintEnd_toStartOf="@+id/tv_my_profile_my_review_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_my_profile_kids" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_my_review_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="13dp"
+                android:onClick="@{() -> onMyReviewButtonClick.invoke()}"
+                android:text="@string/my_profile_my_review"
+                android:visibility="gone"
+                app:drawableTopCompat="@drawable/ic_my_profile_my_review"
+                app:layout_constraintEnd_toStartOf="@+id/tv_my_profile_follow_label"
+                app:layout_constraintStart_toEndOf="@+id/tv_my_profile_my_interest_button"
+                app:layout_constraintTop_toTopOf="@id/tv_my_profile_my_interest_button" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_follow_count"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center_horizontal"
+                android:onClick="@{() ->onFollowButtonClick.invoke()}"
+                android:paddingTop="4dp"
+                android:paddingBottom="17dp"
+                android:text="@{viewModel.loginUser != null ? viewModel.loginUser.followerCount : 0}"
+                android:textColor="@color/gray_g5"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@id/tv_my_profile_follow_label"
+                app:layout_constraintStart_toStartOf="@id/tv_my_profile_follow_label"
+                app:layout_constraintTop_toTopOf="@id/tv_my_profile_my_interest_button"
+                tools:text="13" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_follow_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_regular"
+                android:onClick="@{() ->onFollowButtonClick.invoke()}"
+                android:text="@string/my_profile_follower"
+                android:textColor="@color/gray_g5"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_my_profile_my_interest_button"
+                app:layout_constraintEnd_toStartOf="@+id/tv_my_profile_following_label"
+                app:layout_constraintStart_toEndOf="@+id/tv_my_profile_my_review_button" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_following_count"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center_horizontal"
+                android:onClick="@{() -> onFollowingButtonClick.invoke()}"
+                android:paddingTop="4dp"
+                android:paddingBottom="17dp"
+                android:text="@{viewModel.loginUser != null ? viewModel.loginUser.followingCount : 0}"
+                android:textColor="@color/gray_g5"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@id/tv_my_profile_following_label"
+                app:layout_constraintStart_toStartOf="@id/tv_my_profile_following_label"
+                app:layout_constraintTop_toTopOf="@id/tv_my_profile_my_interest_button"
+                tools:text="13" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_following_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_regular"
+                android:onClick="@{() -> onFollowingButtonClick.invoke()}"
+                android:text="@string/my_profile_following"
+                android:textColor="@color/gray_g5"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_my_profile_my_interest_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_my_profile_follow_label" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_my_buttons"
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_marginTop="20dp"
+                app:dividerColor="@color/gray_g1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_my_profile_my_interest_button" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_my_posts_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginTop="14dp"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:onClick="@{() ->onMyPostButtonClick.invoke()}"
+                android:padding="10dp"
+                android:text="@string/my_profile_my_post"
+                android:textColor="@color/gray_g5"
+                android:textSize="14sp"
+                app:drawableEndCompat="@drawable/ic_my_profile_move"
+                app:drawableStartCompat="@drawable/ic_my_profile_my_post"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_my_buttons" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_my_comments_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:onClick="@{() -> onMyCommentButtonClick.invoke()}"
+                android:padding="10dp"
+                android:text="@string/my_profile_my_comments"
+                android:textColor="@color/gray_g5"
+                android:textSize="14sp"
+                android:visibility="gone"
+                app:drawableEndCompat="@drawable/ic_my_profile_move"
+                app:drawableStartCompat="@drawable/ic_my_profile_my_comments"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_my_profile_my_posts_button" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_use_of_term"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:onClick="@{() -> onUseOfTermButtonClick.invoke()}"
+                android:padding="10dp"
+                android:text="@string/all_use_of_term"
+                android:textColor="@color/gray_g5"
+                android:textSize="14sp"
+                app:drawableEndCompat="@drawable/ic_my_profile_move"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_my_profile_my_comments_button" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_privacy_policy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:onClick="@{() -> onPrivacyPolicyButtonClick.invoke()}"
+                android:padding="10dp"
+                android:text="@string/all_privacy_policy"
+                android:textColor="@color/gray_g5"
+                android:textSize="14sp"
+                app:drawableEndCompat="@drawable/ic_my_profile_move"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_my_profile_use_of_term" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_logout_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_padding"
+                android:layout_marginBottom="36dp"
+                android:onClick="@{() -> onLogoutButtonClick.invoke()}"
+                android:text="@string/my_profile_logout"
+                android:textAppearance="@style/content"
+                android:textColor="@color/gray_g4"
+                app:isVisible="@{viewModel.isLogin}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_my_profile_leave_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:onClick="@{() -> onLeaveButtonClick.invoke()}"
+                android:text="@string/my_profile_leave"
+                android:textAppearance="@style/content"
+                android:textColor="@color/gray_g2"
+                app:isVisible="@{viewModel.isLogin}"
+                app:layout_constraintBottom_toBottomOf="@id/tv_my_profile_logout_button"
+                app:layout_constraintStart_toEndOf="@id/tv_my_profile_logout_button"
+                app:layout_constraintTop_toTopOf="@id/tv_my_profile_logout_button" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

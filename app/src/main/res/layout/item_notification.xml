@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="4dp">
+
+        <ImageView
+            android:id="@+id/iv_item_notification_profile_image"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            app:isCircle="@{true}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_item_notification_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:textColor="@color/gray_g5"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_item_notification_created_at"
+            app:layout_constraintStart_toEndOf="@id/iv_item_notification_profile_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="oiiiniwa님이 회원님의 게시물에 댓글을 남겼습니다. oiiiniwa님이 회원님의 게시물에 댓글을 남겼습니다." />
+
+        <TextView
+            android:id="@+id/tv_item_notification_created_at"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="어제"
+            tools:textColor="@color/main" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

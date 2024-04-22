@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.ki960213.kidsandseoul.presentation.ui.profileedit.ProfileEditViewModel" />
+
+        <variable
+            name="onBackButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onProfileImageClick"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/pb_profile_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:isVisible="@{viewModel.user == null}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:isVisible="@{viewModel.user != null}">
+
+            <ImageView
+                android:id="@+id/iv_profile_edit_back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:onClick="@{() -> onBackButtonClick.invoke()}"
+                android:padding="10dp"
+                android:src="@drawable/ic_all_back_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tv_profile_edit_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/profile_edit_title"
+                android:textAppearance="@style/sub_title"
+                android:textColor="@color/gray_g5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nsv_profile_edit"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_title">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_profile_edit_profile_image_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="28dp"
+                        android:text="@string/profile_edit_image_label"
+                        android:textAppearance="@style/content_accent"
+                        android:textColor="@color/gray_g5"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_profile_edit_profile_image"
+                        android:layout_width="84dp"
+                        android:layout_height="84dp"
+                        android:layout_marginTop="12dp"
+                        android:onClick="@{() -> onProfileImageClick.invoke()}"
+                        app:errorImage="@{@drawable/img_all_error_user}"
+                        app:imageUrl="@{viewModel.user.profileImageUrl}"
+                        app:isCircle="@{true}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.498"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_profile_image_label"
+                        tools:ignore="ContentDescription"
+                        tools:src="@drawable/img_all_error_user" />
+
+                    <ImageView
+                        android:id="@+id/iv_profile_edit_profile_image_edit_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_profile_edit_profile_image_edit"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_profile_edit_profile_image"
+                        app:layout_constraintEnd_toEndOf="@id/iv_profile_edit_profile_image"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/tv_profile_edit_nickname_edit_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/horizontal_padding"
+                        android:layout_marginTop="40dp"
+                        android:text="@string/profile_edit_nickname_edit_label"
+                        android:textAppearance="@style/content_accent"
+                        android:textColor="@color/gray_g5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/iv_profile_edit_profile_image" />
+
+                    <EditText
+                        android:id="@+id/et_profile_edit_nickname_input"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:hint="@string/profile_edit_input_nickname_hint"
+                        android:importantForAutofill="no"
+                        android:inputType="text|textNoSuggestions"
+                        android:maxLength="6"
+                        android:textColorHint="@color/gray_g3"
+                        android:paddingVertical="6dp"
+                        android:text="@={viewModel.tempName}"
+                        android:textColor="@color/gray_g5"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toStartOf="@id/iv_profile_edit_nickname_delete_button"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@id/tv_profile_edit_nickname_edit_label"
+                        app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_nickname_edit_label" />
+
+                    <ImageView
+                        android:id="@+id/iv_profile_edit_nickname_delete_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/horizontal_padding"
+                        android:onClick="@{() -> etProfileEditNicknameInput.getText().clear()}"
+                        android:src="@drawable/ic_profile_edit_nickname_delete"
+                        android:visibility="@{etProfileEditNicknameInput.text.toString().empty ? View.INVISIBLE : View.VISIBLE}"
+                        app:layout_constraintBottom_toBottomOf="@id/et_profile_edit_nickname_input"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/et_profile_edit_nickname_input"
+                        tools:ignore="ContentDescription" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/divider_profile_edit_nickname_bottom"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="@dimen/horizontal_padding"
+                        app:dividerColor="@color/gray_g2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/et_profile_edit_nickname_input" />
+
+                    <TextView
+                        android:id="@+id/profile_edit_name_change_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_all_button_main"
+                        android:elevation="6dp"
+                        android:enabled="@{viewModel.isNameChanged &amp;&amp; !etProfileEditNicknameInput.text.toString().blank}"
+                        android:fontFamily="@font/pretendard_semi_bold"
+                        android:onClick="@{() -> viewModel.saveName()}"
+                        android:paddingHorizontal="52dp"
+                        android:paddingVertical="8dp"
+                        android:text="@string/profile_edit_change"
+                        android:textColor="@{profileEditNameChangeButton.enabled ? @color/white : @color/gray_g3}"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider_profile_edit_nickname_bottom" />
+
+                    <TextView
+                        android:id="@+id/tv_profile_edit_kid_edit_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/horizontal_padding"
+                        android:layout_marginTop="28dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="@string/profile_edit_kid_edit_label"
+                        android:textColor="@color/gray_g5"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/profile_edit_name_change_button" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_profile_edit_kids"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:clipToPadding="false"
+                        android:orientation="vertical"
+                        android:overScrollMode="never"
+                        android:paddingHorizontal="@dimen/horizontal_padding"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="20dp"
+                        app:itemAnimator="@{null}"
+                        app:itemSpacing_dp="@{12}"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_kid_edit_label"
+                        app:profileEdit_kids="@{viewModel.kids}"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/item_profile_edit_kid" />
+
+                    <TextView
+                        android:id="@+id/tv_profile_edit_region_edit_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/horizontal_padding"
+                        android:layout_marginTop="40dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="@string/profile_edit_region_edit_label"
+                        android:textColor="@color/gray_g5"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/rv_profile_edit_kids" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/divider_profile_edit_header_top"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="16dp"
+                        app:dividerColor="@color/gray_g2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_region_edit_label" />
+
+                    <TextView
+                        android:id="@+id/tv_profile_edit_borough_header"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/gray_g1"
+                        android:gravity="center"
+                        android:paddingVertical="8dp"
+                        android:text="@string/all_borough_header"
+                        android:textAppearance="@style/content"
+                        android:textColor="@color/gray_g5"
+                        app:layout_constraintEnd_toStartOf="@+id/divider_profile_edit_borough_and_administrative_dong"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider_profile_edit_header_top" />
+
+                    <TextView
+                        android:id="@+id/tv_profile_edit_administrative_dong_header"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/gray_g1"
+                        android:gravity="center"
+                        android:paddingVertical="8dp"
+                        android:text="@string/all_dong_header"
+                        android:textAppearance="@style/content"
+                        android:textColor="@color/gray_g5"
+                        app:layout_constraintEnd_toStartOf="@+id/divider_profile_edit_administrative_dong_and_selected_region"
+                        app:layout_constraintStart_toEndOf="@+id/divider_profile_edit_borough_and_administrative_dong"
+                        app:layout_constraintTop_toTopOf="@id/tv_profile_edit_borough_header" />
+
+                    <TextView
+                        android:id="@+id/tv_profile_edit_selected_region_header"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/gray_g1"
+                        android:gravity="center"
+                        android:paddingVertical="8dp"
+                        android:text="@string/all_selected_region_header"
+                        android:textAppearance="@style/content"
+                        android:textColor="@color/gray_g5"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/divider_profile_edit_administrative_dong_and_selected_region"
+                        app:layout_constraintTop_toTopOf="@id/tv_profile_edit_borough_header" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/divider_profile_edit_header_bottom"
+                        android:layout_width="0dp"
+                        android:layout_height="0.5dp"
+                        app:dividerColor="@color/gray_g2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_borough_header" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_profile_edit_boroughs"
+                        android:layout_width="0dp"
+                        android:layout_height="215dp"
+                        android:orientation="vertical"
+                        app:all_boroughs="@{viewModel.boroughs}"
+                        app:itemAnimator="@{null}"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintBottom_toTopOf="@id/divider_profile_edit_table_bottom"
+                        app:layout_constraintEnd_toStartOf="@id/divider_profile_edit_borough_and_administrative_dong"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider_profile_edit_header_bottom" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/divider_profile_edit_borough_and_administrative_dong"
+                        android:layout_width="0.5dp"
+                        android:layout_height="0dp"
+                        app:dividerColor="@color/gray_g2"
+                        app:layout_constraintBottom_toTopOf="@id/divider_profile_edit_table_bottom"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.291"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider_profile_edit_header_top" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_profile_edit_administrative_dongs"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:orientation="vertical"
+                        app:all_administrativeDongs="@{viewModel.administrativeDongs}"
+                        app:itemAnimator="@{null}"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintBottom_toTopOf="@id/divider_profile_edit_table_bottom"
+                        app:layout_constraintEnd_toStartOf="@id/divider_profile_edit_administrative_dong_and_selected_region"
+                        app:layout_constraintStart_toEndOf="@id/divider_profile_edit_borough_and_administrative_dong"
+                        app:layout_constraintTop_toBottomOf="@id/divider_profile_edit_header_bottom" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/divider_profile_edit_administrative_dong_and_selected_region"
+                        android:layout_width="0.5dp"
+                        android:layout_height="0dp"
+                        app:dividerColor="@color/gray_g2"
+                        app:layout_constraintBottom_toTopOf="@id/divider_profile_edit_table_bottom"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.583"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider_profile_edit_header_top" />
+
+                    <TextView
+                        android:id="@+id/tv_profile_edit_selected_region"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_all_chip"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:textColor="@color/main"
+                        android:textSize="12sp"
+                        app:all_selectedAdministrativeDong="@{viewModel.selectedAdministrativeDong}"
+                        app:isVisible="@{viewModel.selectedAdministrativeDong != null}"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/divider_profile_edit_administrative_dong_and_selected_region"
+                        app:layout_constraintTop_toBottomOf="@id/divider_profile_edit_header_bottom"
+                        tools:text="서울 강남구 개포2동" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/divider_profile_edit_table_bottom"
+                        android:layout_width="0dp"
+                        android:layout_height="0.5dp"
+                        android:layout_marginBottom="86dp"
+                        app:dividerColor="@color/gray_g2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/rv_profile_edit_boroughs" />
+
+                    <TextView
+                        android:id="@+id/profile_edit_living_dong_change_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="28dp"
+                        android:background="@drawable/bg_all_button_main"
+                        android:elevation="6dp"
+                        android:enabled="@{viewModel.isLivingDongChanged}"
+                        android:fontFamily="@font/pretendard_semi_bold"
+                        android:onClick="@{() -> viewModel.saveLivingDong()}"
+                        android:paddingHorizontal="52dp"
+                        android:paddingVertical="8dp"
+                        android:text="@string/profile_edit_change"
+                        android:textColor="@{profileEditLivingDongChangeButton.enabled ? @color/white : @color/gray_g3}"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider_profile_edit_table_bottom" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.core.widget.NestedScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

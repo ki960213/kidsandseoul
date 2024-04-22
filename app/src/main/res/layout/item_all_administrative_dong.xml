@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <import type="com.ki960213.kidsandseoul.presentation.common.bindingadapter.FontType" />
+
+        <variable
+            name="uiState"
+            type="com.ki960213.kidsandseoul.presentation.ui.kidadd.administrativedongs.AdministrativeDongUiState" />
+
+        <variable
+            name="onAdministrativeDongClick"
+            type="kotlin.jvm.functions.Function1&lt;Long, Unit>" />
+    </data>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@{uiState.selected ? @color/sub_g0 : @color/white}"
+        android:onClick="@{() -> onAdministrativeDongClick.invoke(uiState.administrativeDong.id)}"
+        android:paddingVertical="8dp"
+        android:paddingStart="22dp"
+        android:text="@{uiState.administrativeDong.name}"
+        android:textColor="@{uiState.selected ? @color/main : @color/gray_g4}"
+        app:font="@{uiState.selected ? FontType.PRETENDARD_SEMI_BOLD : FontType.PRETENDARD_REGULAR}"
+        tools:ignore="RtlSymmetry"
+        tools:text="본동" />
+</layout>

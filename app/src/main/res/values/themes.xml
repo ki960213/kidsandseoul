@@ -1,9 +1,19 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.KidsAndSeoul" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+<resources>
+
+    <style name="Theme.KidsAndSeoul" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/white</item>
+        <item name="bottomNavigationStyle">@style/bottom_navigation_view_style</item>
+        <item name="android:datePickerDialogTheme">@style/date_picker_dialog_style</item>
+        <item name="android:scrollViewStyle">@style/no_scroll_bars</item>
+        <item name="bottomSheetDialogTheme">@style/bottom_sheet_dialog_style</item>
+        <item name="floatingActionButtonStyle">@style/floating_action_button_style</item>
+        <item name="android:colorControlActivated">@color/main</item>
     </style>
 
-    <style name="Theme.KidsAndSeoul" parent="Base.Theme.KidsAndSeoul" />
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#ECE2F2</item>
+        <item name="windowSplashScreenAnimationDuration">500</item>
+        <item name="postSplashScreenTheme">@style/Theme.KidsAndSeoul</item>
+    </style>
+
 </resources>

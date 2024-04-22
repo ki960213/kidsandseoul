@@ -1,26 +1,160 @@
 [versions]
-agp = "8.3.0"
-kotlin = "1.9.0"
-coreKtx = "1.13.0"
+# Gradle Versions
+agp = "8.3.2"
+kotlin = "1.9.23"
+
+# 안드로이드
+coreKtx = "1.13.1"
+appcompat = "1.6.1"
+activity = "1.9.0"
+constraintlayout = "2.1.4"
+material = "1.12.0"
+
+# Splash
+splash = "1.0.1"
+
+# 코루틴
+coroutine = "1.8.0"
+
+# Inject
+inject = "1"
+
+# Annotation Processor
+ksp = "1.9.21-1.0.16"
+
+# Navigation
+navigation = "2.7.7"
+
+# Hilt
+hilt = "2.50"
+hiltNavigation = "1.2.0"
+
+# Preferences DataStore
+preferencesDataStore = "1.1.1"
+
+# Room
+room = "2.6.1"
+
+# OkHttp
+okhttp = "4.12.0"
+
+# Retrofit
+retrofit = "2.9.0"
+
+# Kotlinx Serialization
+kotlinxSerializationJson = "1.5.1"
+kotlinxSerializationConverter = "1.0.0"
+
+# Glide
+glide = "4.15.1"
+
+# 테스트
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
-appcompat = "1.6.1"
-material = "1.11.0"
-activity = "1.8.0"
-constraintlayout = "2.1.4"
+junit5 = "5.10.2"
+assertj = "3.25.3"
+
+# 네이버 지도 SDK
+naverMapSdk = "3.18.0"
+
+# Kakao SDK
+kakaoSdk = "2.20.0"
+
+# Google Service
+playServicesBase = "18.4.0"
+playServicesAuth = "21.1.1"
+googleServices = "4.4.1"
+playAppUpdate = "2.1.0"
+
+# Firebase Bom
+firebaseBom = "33.0.0"
 
 [libraries]
+# 안드로이드
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splash" }
+
+# 코루틴
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutine" }
+
+# Inject
+javax-inject = { module = "javax.inject:javax.inject", version.ref = "inject" }
+
+# Navigation
+androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
+androidx-navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
+androidx-navigation-safe-args-gradle-plugin = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navigation" }
+
+# Hilt
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+hilt-navigation-fragment = { module = "androidx.hilt:hilt-navigation-fragment", version.ref = "hiltNavigation" }
+
+# DataStroe
+preferences-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "preferencesDataStore" }
+
+# Room
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+
+# OkHttp
+okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+
+# Retrofit
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+
+# Kotlinx Serialization
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "kotlinxSerializationConverter" }
+
+# Glide
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+
+# ImageViewer
+stfalcon-imageviewer = { module = "com.github.stfalcon:stfalcon-imageviewer", version = "1.0.10" }
+smarteist-autoimageslider = { module = "com.github.smarteist:autoimageslider", version = "1.4.0" }
+
+# 테스트
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
-androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
+junit-jupiter_params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit5" }
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+
+# 네이버 지도 SDK
+naver-map = { module = "com.naver.maps:map-sdk", version.ref = "naverMapSdk" }
+
+# Kakao SDK 의존성
+kakao-sdk-all = { module = "com.kakao.sdk:v2-all", version.ref = "kakaoSdk" }
+
+# Google Services
+play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
+play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
+google-services = { group = "com.google.gms", name = "google-services", version.ref = "googleServices" }
+play-app-update = { module = "com.google.android.play:app-update-ktx", version.ref = "playAppUpdate" }
+
+# firebase
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
+firebase-storage = { module = "com.google.firebase:firebase-storage" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }

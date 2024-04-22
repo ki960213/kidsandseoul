@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="user"
+            type="com.ki960213.domain.user.model.JoinedUser" />
+
+        <variable
+            name="onMemberClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/ll_chat_room_member"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:onClick="@{() -> onMemberClick.invoke(user.id)}"
+        android:orientation="horizontal"
+        android:paddingVertical="6dp"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/iv_chat_room_member_profile_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="35dp"
+            android:src="@{user.profileImageUrl}"
+            app:errorImage="@{@drawable/img_all_error_user}"
+            app:isCircle="@{true}"
+            tools:ignore="ContentDescription"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_chat_room_member_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:text="@{user.name}"
+            android:textColor="@color/black"
+            tools:text="김커디" />
+    </LinearLayout>
+</layout>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground">
+
+        <TextView
+            android:id="@+id/tv_item_written_comment_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_padding"
+            android:layout_marginTop="17dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:textColor="@color/gray_g5"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="아무나 같이 참여하실 분 구합니다! 역에서 만나서 같이가면 좋겠어요요" />
+
+        <TextView
+            android:id="@+id/tv_item_written_comment_created_at"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_padding"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="17dp"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_written_comment_content"
+            tools:text="2021. 04. 17" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

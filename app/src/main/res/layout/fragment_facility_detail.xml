@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.ki960213.domain.facility.model.KidsCafe" />
+
+        <import type="com.ki960213.kidsandseoul.presentation.common.bindingadapter.FontType" />
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="viewModel"
+            type="com.ki960213.kidsandseoul.presentation.ui.facilitydetail.FacilityDetailViewModel" />
+
+        <variable
+            name="onBackButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onCallButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onInterestButtonClick"
+            type="kotlin.jvm.functions.Function1&lt;Boolean, Unit>" />
+
+        <variable
+            name="onReviewButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onShareButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_facility_detail_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="10dp"
+            android:onClick="@{() -> onBackButtonClick.invoke()}"
+            android:padding="10dp"
+            android:src="@drawable/ic_all_back_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_facility_detail_service_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="27dp"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g4"
+            app:facilityService="@{viewModel.facility}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_facility_detail_back_button"
+            tools:text="우리동네키움센터" />
+
+        <TextView
+            android:id="@+id/tv_facility_detail_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_padding"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:gravity="center"
+            android:text="@{viewModel.facility.name}"
+            android:textColor="@color/gray_g5"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_facility_detail_service_name"
+            tools:text="캘리클럽 잠실점" />
+
+        <ImageView
+            android:id="@+id/iv_facility_detail_call_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="72dp"
+            android:background="@drawable/bg_facility_detail_button"
+            android:onClick="@{() -> onCallButtonClick.invoke()}"
+            android:padding="7dp"
+            android:src="@drawable/ic_facility_detail_call"
+            app:isVisible="@{viewModel.facility instanceof KidsCafe}"
+            app:layout_constraintEnd_toStartOf="@+id/iv_facility_detail_interest_button"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_facility_detail_interest_button"
+            tools:ignore="ContentDescription"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_facility_detail_call_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:text="@string/facility_detail_call"
+            android:textColor="@color/gray_g5"
+            android:textSize="14sp"
+            app:isVisible="@{viewModel.facility instanceof KidsCafe}"
+            app:layout_constraintEnd_toEndOf="@id/iv_facility_detail_call_button"
+            app:layout_constraintStart_toStartOf="@id/iv_facility_detail_call_button"
+            app:layout_constraintTop_toBottomOf="@id/iv_facility_detail_call_button" />
+
+        <ImageView
+            android:id="@+id/iv_facility_detail_interest_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/bg_facility_detail_button"
+            android:onClick="@{() -> onInterestButtonClick.invoke(!viewModel.loginUser.interestFacilityIds.contains(viewModel.facility.id))}"
+            android:padding="7dp"
+            android:src="@{viewModel.loginUser.interestFacilityIds.contains(viewModel.facility.id) ? @drawable/ic_facility_detail_interested : @drawable/ic_facility_detail_interest}"
+            app:layout_constraintEnd_toStartOf="@+id/iv_facility_detail_review_button"
+            app:layout_constraintStart_toEndOf="@+id/iv_facility_detail_call_button"
+            app:layout_constraintTop_toBottomOf="@+id/tv_facility_detail_name"
+            app:layout_goneMarginStart="72dp"
+            tools:ignore="ContentDescription" />
+
+
+        <TextView
+            android:id="@+id/tv_facility_detail_interest_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/facility_detail_interest"
+            android:textColor="@{viewModel.loginUser.interestFacilityIds.contains(viewModel.facility.id) ? @color/main : @color/gray_g5}"
+            android:textSize="14sp"
+            app:font="@{viewModel.loginUser.interestFacilityIds.contains(viewModel.facility.id) ? FontType.PRETENDARD_SEMI_BOLD : FontType.PRETENDARD_REGULAR}"
+            app:layout_constraintEnd_toEndOf="@id/iv_facility_detail_interest_button"
+            app:layout_constraintStart_toStartOf="@id/iv_facility_detail_interest_button"
+            app:layout_constraintTop_toBottomOf="@id/iv_facility_detail_interest_button" />
+
+        <ImageView
+            android:id="@+id/iv_facility_detail_review_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_facility_detail_button"
+            android:onClick="@{() -> onReviewButtonClick.invoke()}"
+            android:padding="9dp"
+            android:src="@drawable/ic_facility_detail_review"
+            app:layout_constraintEnd_toStartOf="@+id/iv_facility_detail_share_button"
+            app:layout_constraintStart_toEndOf="@+id/iv_facility_detail_interest_button"
+            app:layout_constraintTop_toTopOf="@id/iv_facility_detail_interest_button"
+            app:layout_goneMarginEnd="72dp"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_facility_detail_review_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:text="@string/facility_detail_review"
+            android:textColor="@color/gray_g5"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/iv_facility_detail_review_button"
+            app:layout_constraintStart_toStartOf="@id/iv_facility_detail_review_button"
+            app:layout_constraintTop_toBottomOf="@id/iv_facility_detail_review_button" />
+
+        <ImageView
+            android:id="@+id/iv_facility_detail_share_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="42dp"
+            android:background="@drawable/bg_facility_detail_button"
+            android:onClick="@{() -> onShareButtonClick.invoke()}"
+            android:padding="9dp"
+            android:src="@drawable/ic_facility_detail_share"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_facility_detail_review_button"
+            app:layout_constraintTop_toTopOf="@id/iv_facility_detail_interest_button"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_facility_detail_share_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:text="@string/facility_detail_share"
+            android:textColor="@color/gray_g5"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/iv_facility_detail_share_button"
+            app:layout_constraintStart_toStartOf="@id/iv_facility_detail_share_button"
+            app:layout_constraintTop_toBottomOf="@id/iv_facility_detail_share_button" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_facility_detail_buttons"
+            android:layout_width="0dp"
+            android:layout_height="8dp"
+            android:layout_marginTop="26dp"
+            app:dividerColor="@color/gray_g1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_facility_detail_interest_label" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tl_facility_detail"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_facility_detail_buttons"
+            app:tabBackground="@color/white"
+            app:tabIndicatorColor="@color/main"
+            app:tabSelectedTextAppearance="@style/tab_layout_selected_text"
+            app:tabSelectedTextColor="@color/sub_g2"
+            app:tabTextAppearance="@style/tab_layout_unselected_text"
+            app:tabTextColor="@color/gray_g3" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_facility_detail_bottom_tab_layout"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:dividerColor="@color/gray_g1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tl_facility_detail" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_facility_detail"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_facility_detail_bottom_tab_layout" />
+
+        <ProgressBar
+            android:id="@+id/pb_facility_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:isVisible="@{viewModel.isLoading}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

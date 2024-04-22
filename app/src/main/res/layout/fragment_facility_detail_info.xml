@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.ki960213.domain.facility.model.Facility" />
+
+        <import type="com.ki960213.domain.facility.model.ChildCareFacility" />
+
+        <import type="com.ki960213.domain.facility.model.KidsCafe" />
+
+        <import type="com.ki960213.domain.facility.model.OtherFacility" />
+
+        <import type="java.time.LocalDate" />
+
+        <import type="java.time.DayOfWeek" />
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="viewModel"
+            type="com.ki960213.kidsandseoul.presentation.ui.facilitydetail.FacilityDetailViewModel" />
+
+        <variable
+            name="onAddressCopyButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onInformationUseClick"
+            type="kotlin.jvm.functions.Function1&lt;Facility, Unit>" />
+
+        <variable
+            name="onHomepageButtonClick"
+            type="kotlin.jvm.functions.Function1&lt;Facility, Unit>" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:id="@+id/sv_facility_detail_info"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/ll_facility_detail_info_homepage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_facility_detail_info_star_point"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginStart="@dimen/horizontal_padding"
+                    android:layout_marginTop="25dp"
+                    android:src="@drawable/ic_all_star_point"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tv_facility_detail_info_star_point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:textAppearance="@style/content_accent"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_facility_detail_info_star_point"
+                    app:layout_constraintStart_toEndOf="@id/iv_facility_detail_info_star_point"
+                    app:layout_constraintTop_toTopOf="@id/iv_facility_detail_info_star_point"
+                    app:starPointAvg="@{viewModel.facility.starPointAvg}"
+                    tools:text="4.9" />
+
+                <TextView
+                    android:id="@+id/tv_facility_detail_info_review_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@{@string/item_facility_review_count_format(viewModel.facility.reviewCount)}"
+                    android:textAppearance="@style/content_accent"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_facility_detail_info_star_point"
+                    app:layout_constraintStart_toEndOf="@id/tv_facility_detail_info_star_point"
+                    app:layout_constraintTop_toTopOf="@id/iv_facility_detail_info_star_point"
+                    tools:text="후기 수 81" />
+
+                <ImageView
+                    android:id="@+id/iv_facility_detail_info_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/horizontal_padding"
+                    android:layout_marginTop="24dp"
+                    android:src="@drawable/ic_facility_detail_info_address"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_facility_detail_info_star_point"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tv_facility_detail_info_address_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/facility_detail_info_address"
+                    android:textAppearance="@style/content_accent"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_facility_detail_info_address"
+                    app:layout_constraintStart_toEndOf="@id/iv_facility_detail_info_address"
+                    app:layout_constraintTop_toTopOf="@id/iv_facility_detail_info_address" />
+
+                <TextView
+                    android:id="@+id/tv_facility_detail_info_copy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:onClick="@{() -> onAddressCopyButtonClick.invoke()}"
+                    android:padding="8dp"
+                    android:text="@string/facility_detail_info_copy"
+                    android:textColor="#4946CF"
+                    android:textSize="14sp"
+                    app:drawableStartCompat="@drawable/ic_facility_detail_info_copy"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_facility_detail_info_address"
+                    app:layout_constraintStart_toEndOf="@id/tv_facility_detail_info_address_label"
+                    app:layout_constraintTop_toTopOf="@id/iv_facility_detail_info_address" />
+
+                <TextView
+                    android:id="@+id/tv_facility_detail_info_basic_address"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="@dimen/horizontal_padding"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:text="@{viewModel.facility.address.baseAddress}"
+                    android:textColor="@color/gray_g5"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tv_facility_detail_info_address_label"
+                    app:layout_constraintTop_toBottomOf="@id/tv_facility_detail_info_address_label"
+                    tools:text="서울특별시 송파구 000 2층" />
+
+                <TextView
+                    android:id="@+id/tv_facility_detail_detail_address"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="@dimen/horizontal_padding"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:text="@{viewModel.facility.address.detail}"
+                    android:textColor="@color/gray_g5"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tv_facility_detail_info_basic_address"
+                    app:layout_constraintTop_toBottomOf="@id/tv_facility_detail_info_basic_address" />
+
+                <ImageView
+                    android:id="@+id/iv_facility_detail_info_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/horizontal_padding"
+                    android:layout_marginTop="24dp"
+                    android:src="@drawable/ic_facility_detail_info_time"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_facility_detail_detail_address"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tv_facility_detail_info_time_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="@string/facility_detail_info_time"
+                    android:textAppearance="@style/content_accent"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_facility_detail_info_time"
+                    app:layout_constraintStart_toEndOf="@id/iv_facility_detail_info_time"
+                    app:layout_constraintTop_toTopOf="@id/iv_facility_detail_info_time" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="iv_facility_detail_info_time,tv_facility_detail_info_time_label"
+                    app:isVisible="@{!(viewModel.facility instanceof OtherFacility)}" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_facility_detail_info_kids_cafe_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"
+                    app:isVisible="@{viewModel.facility instanceof KidsCafe}"
+                    app:layout_constraintStart_toStartOf="@id/tv_facility_detail_info_time_label"
+                    app:layout_constraintTop_toBottomOf="@id/tv_facility_detail_info_time_label"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/tv_facility_detail_info_monday_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="@string/all_monday"
+                        android:textColor="@{LocalDate.now().dayOfWeek == DayOfWeek.MONDAY ? @color/point : @color/gray_g5}"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_facility_detail_info_monday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:text="@{viewModel.operateDays.contains(DayOfWeek.MONDAY) ? @string/facility_detail_info_operate : @string/facility_detail_info_close_date}"
+                        android:textColor="@{LocalDate.now().dayOfWeek == DayOfWeek.MONDAY ? @color/point : @color/gray_g5}"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_facility_detail_info_monday_label"
+                        app:layout_constraintStart_toEndOf="@id/tv_facility_detail_info_monday_label"
+                        app:layout_constraintTop_toTopOf="@id/tv_facility_detail_info_monday_label"
+                        tools:text="@string/facility_detail_info_close_date" />
+
+                    <TextView
+                        android:id="@+id/tv_facility_detail_info_tuesday_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="@string/all_tuesday"
+                        android:textColor="@{LocalDate.now().dayOfWeek == DayOfWeek.TUESDAY ? @color/point : @color/gray_g5}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_facility_detail_info_monday_label" />
+
+                    <TextView
+                        android:id="@+id/tv_facility_detail_info_tuesday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:text="@{viewModel.operateDays.contains(DayOfWeek.TUESDAY) ? @string/facility_detail_info_operate : @string/facility_detail_info_close_date}"
+                        android:textColor="@{LocalDate.now().dayOfWeek == DayOfWeek.TUESDAY ? @color/point : @color/gray_g5}"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_facility_detail_info_tuesday_label"
+                        app:layout_constraintStart_toEndOf="@id/tv_facility_detail_info_tuesday_label"
+                        app:layout_constraintTop_toTopOf="@id/tv_facility_detail_info_tuesday_label"
+                        tools:text="운영" />
+
+                    <TextView
+                        android:id="@+id/tv_facility_detail_info_wednesday_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="@string/all_wednesday"
+                        android:textColor="@{LocalDate.now().dayOfWeek == DayOfWeek.WEDNESDAY ? @color/point : @color/gray_g5}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_facility_detail_info_tuesday_label"
+                        tools:textColor="@color/point" />
+
+                    <TextView
+                        android:id="@+id/tv_facility_detail_info_wednesday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:text="@{viewModel.operateDays.contains(DayOfWeek.WEDNESDAY) ? @string/facility_detail_info_operate : @string/facility_detail_info_close_date}"
+                        android:textColor="@{LocalDate.now().dayOfWeek == DayOfWeek.WEDNESDAY ? @color/point : @color/gray_g5}"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_facility_detail_info_wednesday_label"
+                        app:layout_constraintStart_toEndOf="@id/tv_facility_detail_info_tuesday_label"
+                        app:layout_constraintTop_toTopOf="@id/tv_facility_detail_info_wednesday_label"
+                        tools:text="운영"
+                        tools:textColor="@color/point" />
+
+                    <TextView
+                        android:id="@+id/tv_facility_detail_info_thursday_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="@string/all_thursday"
+                        android:textColor="@{LocalDate.now().dayOfWeek == DayOfWeek.THURSDAY ? @color/point : @color/gray_g5}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_facility_detail_info_wednesday_label" />
+
+                    <TextView
+                        android:id="@+id/tv_facility_detail_info_thursday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:text="@{viewModel.operateDays.contains(DayOfWeek.THURSDAY) ? @string/facility_detail_info_operate : @string/facility_detail_info_close_date}"
+                        android:textColor="@{LocalDate.now().dayOfWeek == DayOfWeek.THURSDAY ? @color/point : @color/gray_g5}"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_facility_detail_info_thursday_label"
+                        app:layout_constraintStart_toEndOf="@id/tv_facility_detail_info_tuesday_label"
+                        app:layout_constraintTop_toTopOf="@id/tv_facility_detail_info_thursday_label"
+                        tools:text="운영" />
+
+
+                    <TextView
+                        android:id="@+id/tv_facility_detail_info_friday_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="@string/all_friday"
+                        android:textColor="@{LocalDate.now().dayOfWeek == DayOfWeek.FRIDAY ? @color/point : @color/gray_g5}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_facility_detail_info_thursday_label" />
+
+                    <TextView
+                        android:id="@+id/tv_facility_detail_info_friday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:text="@{viewModel.operateDays.contains(DayOfWeek.FRIDAY) ? @string/facility_detail_info_operate : @string/facility_detail_info_close_date}"
+                        android:textColor="@{LocalDate.now().dayOfWeek == DayOfWeek.FRIDAY ? @color/point : @color/gray_g5}"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_facility_detail_info_friday_label"
+                        app:layout_constraintStart_toEndOf="@id/tv_facility_detail_info_tuesday_label"
+                        app:layout_constraintTop_toTopOf="@id/tv_facility_detail_info_friday_label"
+                        tools:text="운영" />
+
+                    <TextView
+                        android:id="@+id/tv_facility_detail_info_saturday_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="@string/all_saturday"
+                        android:textColor="@{LocalDate.now().dayOfWeek == DayOfWeek.SATURDAY ? @color/point : @color/gray_g5}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_facility_detail_info_friday_label" />
+
+                    <TextView
+                        android:id="@+id/tv_facility_detail_info_saturday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:text="@{viewModel.operateDays.contains(DayOfWeek.SATURDAY) ? @string/facility_detail_info_operate : @string/facility_detail_info_close_date}"
+                        android:textColor="@{LocalDate.now().dayOfWeek == DayOfWeek.SATURDAY ? @color/point : @color/gray_g5}"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_facility_detail_info_saturday_label"
+                        app:layout_constraintStart_toEndOf="@id/tv_facility_detail_info_tuesday_label"
+                        app:layout_constraintTop_toTopOf="@id/tv_facility_detail_info_saturday_label"
+                        tools:text="운영" />
+
+                    <TextView
+                        android:id="@+id/tv_facility_detail_info_sunday_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="@string/all_sunday"
+                        android:textColor="@{LocalDate.now().dayOfWeek == DayOfWeek.SUNDAY ? @color/point : @color/gray_g5}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_facility_detail_info_saturday_label" />
+
+                    <TextView
+                        android:id="@+id/tv_facility_detail_info_sunday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:text="@{viewModel.operateDays.contains(DayOfWeek.SUNDAY) ? @string/facility_detail_info_operate : @string/facility_detail_info_close_date}"
+                        android:textColor="@{LocalDate.now().dayOfWeek == DayOfWeek.SUNDAY ? @color/point : @color/gray_g5}"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_facility_detail_info_sunday_label"
+                        app:layout_constraintStart_toEndOf="@id/tv_facility_detail_info_tuesday_label"
+                        app:layout_constraintTop_toTopOf="@id/tv_facility_detail_info_sunday_label"
+                        tools:text="운영" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/tv_facility_detail_info_child_care_saturday_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:text="@string/all_saturday"
+                    android:textColor="@color/gray_g5"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="@id/tv_facility_detail_info_time_label"
+                    app:layout_constraintTop_toBottomOf="@id/tv_facility_detail_info_time_label" />
+
+                <TextView
+                    android:id="@+id/tv_facility_detail_info_child_care_saturday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:text="@{viewModel.isSaturdayOperate ? @string/facility_detail_info_operate : @string/facility_detail_info_is_not_saturday_operate}"
+                    android:textColor="@color/gray_g5"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_facility_detail_info_child_care_saturday_label"
+                    app:layout_constraintStart_toEndOf="@id/tv_facility_detail_info_child_care_saturday_label"
+                    app:layout_constraintTop_toTopOf="@id/tv_facility_detail_info_child_care_saturday_label"
+                    tools:text="@string/facility_detail_info_is_not_saturday_operate" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="tv_facility_detail_info_child_care_saturday_label,tv_facility_detail_info_child_care_saturday"
+                    app:isVisible="@{viewModel.facility instanceof ChildCareFacility}"
+                    tools:visibility="gone" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/barrier_times"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="cl_facility_detail_info_kids_cafe_time,tv_facility_detail_info_child_care_saturday_label,tv_facility_detail_detail_address" />
+
+                <ImageView
+                    android:id="@+id/iv_facility_detail_info_use"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/horizontal_padding"
+                    android:layout_marginTop="24dp"
+                    android:src="@drawable/ic_facility_detail_info_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/barrier_times"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tv_facility_detail_info_use_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/facility_detail_info_info"
+                    android:textAppearance="@style/content_accent"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_facility_detail_info_use"
+                    app:layout_constraintStart_toEndOf="@id/iv_facility_detail_info_use"
+                    app:layout_constraintTop_toTopOf="@id/iv_facility_detail_info_use" />
+
+                <TextView
+                    android:id="@+id/tv_facility_detail_info_use_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:onClick="@{() -> onInformationUseClick.invoke(viewModel.facility)}"
+                    android:paddingVertical="8dp"
+                    android:textColor="#4946CF"
+                    android:textSize="14sp"
+                    app:facilityService="@{viewModel.facility}"
+                    app:layout_constraintStart_toStartOf="@id/tv_facility_detail_info_use_label"
+                    app:layout_constraintTop_toBottomOf="@id/iv_facility_detail_info_use"
+                    tools:text="우리동네키움센터" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="iv_facility_detail_info_use,tv_facility_detail_info_use_label,tv_facility_detail_info_use_link"
+                    app:isVisible="@{!(viewModel.facility instanceof OtherFacility)}" />
+
+                <View
+                    android:id="@+id/view_facility_detail_info_warning_background"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="24dp"
+                    android:background="@color/gray_g1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_facility_detail_info_use_link"
+                    app:layout_goneMarginTop="24dp" />
+
+                <TextView
+                    android:id="@+id/tv_facility_detail_info_warning"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/horizontal_padding"
+                    android:text="@string/facility_detail_info_warning"
+                    android:textAppearance="@style/content"
+                    android:textColor="@color/gray_g4"
+                    app:layout_constraintBottom_toBottomOf="@id/view_facility_detail_info_warning_background"
+                    app:layout_constraintEnd_toEndOf="@id/view_facility_detail_info_warning_background"
+                    app:layout_constraintStart_toStartOf="@id/view_facility_detail_info_warning_background"
+                    app:layout_constraintTop_toTopOf="@id/view_facility_detail_info_warning_background" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/ll_facility_detail_info_homepage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:elevation="10dp"
+            android:gravity="center"
+            android:paddingVertical="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tv_facility_detail_info_homepage_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_all_big_button_main"
+                android:onClick="@{() -> onHomepageButtonClick.invoke(viewModel.facility)}"
+                android:paddingHorizontal="103dp"
+                android:paddingVertical="11.5dp"
+                android:text="@string/facility_detail_info_homepage"
+                android:textAppearance="@style/content_accent"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

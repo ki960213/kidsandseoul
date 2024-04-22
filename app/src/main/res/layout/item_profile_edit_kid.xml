@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <import type="com.ki960213.domain.user.model.Sex" />
+
+        <variable
+            name="uiState"
+            type="com.ki960213.kidsandseoul.presentation.ui.profileedit.kids.KidUiState" />
+
+        <variable
+            name="onDeleteButtonClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_profile_kid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_profile_unselected_kid"
+        android:elevation="6dp">
+
+        <TextView
+            android:id="@+id/tv_profile_edit_kid_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:textColor="@color/gray_g4"
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:profileEditKid_order="@{uiState.order}"
+            tools:ignore="SmallSp"
+            tools:text="첫째 아이" />
+
+        <ImageView
+            android:id="@+id/iv_profile_edit_kid_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
+            android:onClick="@{() -> onDeleteButtonClick.invoke(uiState.kid.id)}"
+            android:padding="10dp"
+            android:src="@drawable/ic_profile_edit_kid_delete"
+            app:layout_constraintBottom_toBottomOf="@id/tv_profile_edit_kid_order"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_profile_edit_kid_order"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/iv_profile_kid_image"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:src="@{uiState.kid.sex == Sex.MALE ? @drawable/img_profile_son : @drawable/img_profile_daughter}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_kid_order"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/img_profile_daughter" />
+
+        <TextView
+            android:id="@+id/tv_profile_kid_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:text="@{uiState.kid.name}"
+            android:textColor="@color/gray_g5"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/iv_profile_kid_image"
+            app:layout_constraintTop_toTopOf="@id/iv_profile_kid_image"
+            tools:text="지현이" />
+
+        <ImageView
+            android:id="@+id/iv_profile_kid_sex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:src="@{uiState.kid.sex == Sex.MALE ? @drawable/ic_profile_kid_male : @drawable/ic_profile_kid_female}"
+            app:layout_constraintBottom_toBottomOf="@id/tv_profile_kid_name"
+            app:layout_constraintStart_toEndOf="@id/tv_profile_kid_name"
+            app:layout_constraintTop_toTopOf="@id/tv_profile_kid_name"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/ic_profile_kid_female" />
+
+        <TextView
+            android:id="@+id/tv_profile_kid_birth_date"
+            android:layout_width="wrap_content"
+            android:layout_height="19dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:textColor="@color/gray_g4"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/tv_profile_kid_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_kid_name"
+            app:text="@{uiState.kid.birthDate}"
+            tools:text="2014. 02. 13" />
+
+        <TextView
+            android:id="@+id/tv_profile_kid_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_regular"
+            android:text="@{@string/my_profile_kid_age_format(uiState.kid.age)}"
+            android:textColor="@color/gray_g4"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_profile_kid_birth_date"
+            app:layout_constraintStart_toEndOf="@id/tv_profile_kid_birth_date"
+            app:layout_constraintTop_toTopOf="@id/tv_profile_kid_birth_date"
+            tools:text=" | 10살" />
+
+        <TextView
+            android:id="@+id/tv_profile_kid_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="21dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:textColor="@color/gray_g4"
+            android:textSize="14sp"
+            app:administrativeDongText="@{uiState.kid.livingDong}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_profile_kid_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_kid_birth_date"
+            tools:text="서울특별시 남동구 남촌동" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

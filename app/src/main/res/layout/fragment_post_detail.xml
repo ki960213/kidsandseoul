@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="viewModel"
+            type="com.ki960213.kidsandseoul.presentation.ui.postdetail.PostDetailViewModel" />
+
+        <variable
+            name="onBackButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onMoreButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onCommentSendButtonClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+
+        <variable
+            name="onLoginButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_post_detail_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:onClick="@{() -> onBackButtonClick.invoke()}"
+            android:padding="10dp"
+            android:src="@drawable/ic_all_back_button"
+            app:layout_constraintBaseline_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_post_detail_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_post_detail_title"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_post_detail_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/post_detail_title"
+            android:textAppearance="@style/sub_title"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_post_detail_post_delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> onMoreButtonClick.invoke()}"
+            android:padding="10dp"
+            android:src="@drawable/ic_all_more_button"
+            app:isVisible="@{viewModel.isLogin}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_post_detail_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_post_detail_title"
+            tools:ignore="ContentDescription" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_post_detail"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/barrier_post_detail_comment_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_post_detail_title"
+            app:layout_constraintVertical_bias="0.0"
+            app:postDetail_items="@{viewModel.items}"
+            tools:listitem="@layout/item_post_detail" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_post_detail_comment_input"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:barrierDirection="top"
+            app:constraint_referenced_ids="tv_post_detail_login_button,ll_post_detail_input_comment" />
+
+        <TextView
+            android:id="@+id/tv_post_detail_login_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_padding"
+            android:layout_marginBottom="17dp"
+            android:background="@drawable/bg_all_input_text"
+            android:elevation="6dp"
+            android:onClick="@{() -> onLoginButtonClick.invoke()}"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="10dp"
+            android:text="@string/post_detail_login_request_message"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g3"
+            app:isVisible="@{!viewModel.isLogin}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/ll_post_detail_input_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_padding"
+            android:layout_marginBottom="17dp"
+            android:background="@drawable/bg_all_input_text"
+            android:elevation="6dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:isVisible="@{viewModel.isLogin}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <EditText
+                android:id="@+id/et_post_detail_input_comment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="@string/post_detail_comment_input_hint"
+                android:inputType="text|textMultiLine"
+                android:maxLength="255"
+                android:maxLines="5"
+                android:paddingVertical="10dp"
+                android:textAppearance="@style/content"
+                android:textColor="@color/gray_g5"
+                android:textColorHint="@color/gray_g3"
+                tools:ignore="Autofill" />
+
+            <ImageView
+                android:id="@+id/tv_post_detail_comment_send_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:enabled="@{!etPostDetailInputComment.text.toString().blank}"
+                android:onClick="@{() -> onCommentSendButtonClick.invoke(etPostDetailInputComment.getText().toString())}"
+                android:padding="8dp"
+                android:src="@{etPostDetailInputComment.text.toString().blank ? @drawable/ic_all_send_button_disabled : @drawable/ic_all_send_button_enabled}"
+                tools:ignore="ContentDescription"
+                tools:src="@drawable/ic_all_send_button_enabled" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

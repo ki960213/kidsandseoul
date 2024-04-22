@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="onUserClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+
+        <variable
+            name="uiState"
+            type="com.ki960213.kidsandseoul.presentation.ui.followers.users.FollowUserUiState" />
+
+        <variable
+            name="onFollowToggle"
+            type="kotlin.jvm.functions.Function2&lt;String, Boolean, Unit>" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:onClick="@{() -> onUserClick.invoke(uiState.user.id)}"
+        android:orientation="horizontal"
+        android:paddingHorizontal="35dp">
+
+        <ImageView
+            android:id="@+id/iv_follow_user_profile_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginVertical="10dp"
+            app:errorImage="@{@drawable/img_all_error_user}"
+            app:imageUrl="@{uiState.user.profileImageUrl}"
+            app:isCircle="@{true}"
+            tools:ignore="ContentDescription"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_follow_user_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/pretendard_regular"
+            android:text="@{uiState.user.name}"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            tools:text="최선우" />
+
+        <ImageView
+            android:id="@+id/iv_follow_user_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="-10dp"
+            android:onClick="@{() -> onFollowToggle.invoke(uiState.user.id, !uiState.following)}"
+            android:padding="10dp"
+            android:src="@{uiState.following ? @drawable/ic_follow_user_cancel : @drawable/ic_follow_user_follow}"
+            app:isVisible="@{!uiState.me}"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/ic_follow_user_follow" />
+    </LinearLayout>
+</layout>

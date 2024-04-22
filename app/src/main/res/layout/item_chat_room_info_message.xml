@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <TextView
+        android:id="@+id/tv_chat_room_item_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_regular"
+        android:gravity="center"
+        android:textColor="@color/gray_g3"
+        android:textSize="11sp"
+        tools:text="2024.04.21. 일요일" />
+</layout>

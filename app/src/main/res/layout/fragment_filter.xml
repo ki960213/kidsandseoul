@@ -1,0 +1,970 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.ki960213.kidsandseoul.presentation.ui.facilitysearch.ChildCareFilterConditionUiState" />
+
+        <import type="com.ki960213.kidsandseoul.presentation.ui.facilitysearch.KidsCafeConditionUiState" />
+
+        <import type="com.ki960213.kidsandseoul.presentation.ui.facilitysearch.OtherDetailFilterConditionUiState" />
+
+        <import type="com.ki960213.domain.facility.model.ChildCareService" />
+
+        <import type="com.ki960213.domain.facility.model.FacilityType" />
+
+        <import type="java.time.DayOfWeek" />
+
+        <variable
+            name="viewModel"
+            type="com.ki960213.kidsandseoul.presentation.ui.facilitysearch.FacilitySearchViewModel" />
+
+        <variable
+            name="onCloseButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onKidAddButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onApplyButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_all_dialog">
+
+        <ImageView
+            android:id="@+id/iv_filter_close_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:onClick="@{() -> onCloseButtonClick.invoke()}"
+            android:padding="10dp"
+            android:src="@drawable/ic_all_back_button"
+            app:layout_constraintBottom_toBottomOf="@id/tv_filter_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_filter_title"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_filter_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/filter_title"
+            android:textAppearance="@style/sub_title"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:id="@+id/sv_filter"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toTopOf="@id/ll_filter_buttons"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_filter_title">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_filter_category_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:text="@string/filter_category_label"
+                    android:textColor="@color/gray_g5"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_filter_child_care_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="31dp"
+                    android:layout_marginTop="22dp"
+                    android:background="@{viewModel.detailCondition instanceof ChildCareFilterConditionUiState ? @drawable/bg_all_button_highlight : @drawable/bg_all_button_normal}"
+                    android:elevation="6dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:onClick="@{() -> viewModel.setChildCareDetailCondition()}"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="10dp"
+                    android:text="@string/all_child_care"
+                    android:textColor="@color/gray_g5"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_filter_kids_cafe_button"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_category_label"
+                    tools:background="@drawable/bg_all_button_highlight" />
+
+                <TextView
+                    android:id="@+id/tv_filter_kids_cafe_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:background="@{viewModel.detailCondition instanceof KidsCafeConditionUiState ? @drawable/bg_all_button_highlight : @drawable/bg_all_button_normal}"
+                    android:elevation="6dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:onClick="@{() -> viewModel.setKidsCafeDetailCondition()}"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="10dp"
+                    android:text="@string/all_kids_cafe"
+                    android:textColor="@color/gray_g5"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_filter_other_facility_button"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/tv_filter_child_care_button"
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_category_label"
+                    tools:background="@drawable/bg_all_button_normal" />
+
+                <TextView
+                    android:id="@+id/tv_filter_other_facility_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginEnd="31dp"
+                    android:background="@{viewModel.detailCondition instanceof OtherDetailFilterConditionUiState ? @drawable/bg_all_button_highlight : @drawable/bg_all_button_normal}"
+                    android:elevation="6dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:onClick="@{() -> viewModel.setOtherDetailCondition()}"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="10dp"
+                    android:text="@string/all_other_facility"
+                    android:textColor="@color/gray_g5"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/tv_filter_kids_cafe_button"
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_category_label"
+                    tools:background="@drawable/bg_all_button_normal" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_filter_child_care"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="21dp"
+                    app:isVisible="@{viewModel.detailCondition instanceof ChildCareFilterConditionUiState}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_child_care_button"
+                    tools:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tv_filter_child_care_notice"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/horizontal_padding"
+                        android:text="@string/filter_child_care_service_select_request"
+                        android:textAppearance="@style/content"
+                        android:textColor="@color/gray_g4"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/view_filter_child_care_service_buttons"
+                        android:layout_width="0dp"
+                        android:layout_height="74dp"
+                        android:layout_marginTop="6dp"
+                        android:background="@color/gray_g1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_filter_child_care_notice" />
+
+                    <HorizontalScrollView
+                        android:layout_width="0dp"
+                        android:layout_height="74dp"
+                        android:orientation="horizontal"
+                        android:scrollbars="none"
+                        app:layout_constraintBottom_toBottomOf="@id/view_filter_child_care_service_buttons"
+                        app:layout_constraintEnd_toEndOf="@id/view_filter_child_care_service_buttons"
+                        app:layout_constraintStart_toStartOf="@id/view_filter_child_care_service_buttons"
+                        app:layout_constraintTop_toTopOf="@id/view_filter_child_care_service_buttons">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_filter_growing_center_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="18dp"
+                                android:background="@{viewModel.detailCondition.ourNeighborGrowingCenterSelected ? @drawable/bg_all_button_main: @drawable/bg_all_button_normal}"
+                                android:elevation="6dp"
+                                android:fontFamily="@font/pretendard_medium"
+                                android:onClick="@{() -> viewModel.setChildCareService(ChildCareService.OUR_NEIGHBORHOOD_GROWING_CENTER)}"
+                                android:paddingHorizontal="20dp"
+                                android:paddingVertical="10dp"
+                                android:text="@string/all_our_neighbor_growing_center"
+                                android:textColor="@{viewModel.detailCondition.ourNeighborGrowingCenterSelected ? @color/white: @color/gray_g5}"
+                                android:textSize="12sp"
+                                tools:background="@drawable/bg_all_button_normal" />
+
+                            <TextView
+                                android:id="@+id/tv_filter_children_center_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:background="@{viewModel.detailCondition.localChildrenCenterSelected ? @drawable/bg_all_button_main: @drawable/bg_all_button_normal}"
+                                android:elevation="6dp"
+                                android:fontFamily="@font/pretendard_medium"
+                                android:onClick="@{() -> viewModel.setChildCareService(ChildCareService.LOCAL_CHILDREN_CENTER)}"
+                                android:paddingHorizontal="20dp"
+                                android:paddingVertical="10dp"
+                                android:text="@string/all_local_children_center"
+                                android:textColor="@{viewModel.detailCondition.localChildrenCenterSelected ? @color/white: @color/gray_g5}"
+                                android:textSize="12sp"
+                                tools:background="@drawable/bg_all_button_normal" />
+
+                            <TextView
+                                android:id="@+id/tv_filter_co_parenting_room_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:background="@{viewModel.detailCondition.coParentingRoomSelected ? @drawable/bg_all_button_main: @drawable/bg_all_button_normal}"
+                                android:elevation="6dp"
+                                android:fontFamily="@font/pretendard_medium"
+                                android:onClick="@{() -> viewModel.setChildCareService(ChildCareService.CO_PARENTING_ROOM)}"
+                                android:paddingHorizontal="20dp"
+                                android:paddingVertical="10dp"
+                                android:text="@string/all_co_parenting_room"
+                                android:textColor="@{viewModel.detailCondition.coParentingRoomSelected ? @color/white: @color/gray_g5}"
+                                android:textSize="12sp"
+                                tools:background="@drawable/bg_all_button_normal" />
+
+                            <TextView
+                                android:id="@+id/tv_filter_co_parenting_sharing_center_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginEnd="18dp"
+                                android:background="@{viewModel.detailCondition.coParentingSharingCenterSelected ? @drawable/bg_all_button_main: @drawable/bg_all_button_normal}"
+                                android:elevation="6dp"
+                                android:fontFamily="@font/pretendard_medium"
+                                android:onClick="@{() -> viewModel.setChildCareService(ChildCareService.CO_PARENTING_SHARING_CENTER)}"
+                                android:paddingHorizontal="20dp"
+                                android:paddingVertical="10dp"
+                                android:text="@string/all_co_parenting_sharing_center"
+                                android:textColor="@{viewModel.detailCondition.coParentingSharingCenterSelected ? @color/white: @color/gray_g5}"
+                                android:textSize="12sp"
+                                tools:background="@drawable/bg_all_button_normal" />
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <TextView
+                        android:id="@+id/tv_filter_child_care_saturday_operation_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="36dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="@string/filter_operation_label"
+                        android:textColor="@color/gray_g5"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/view_filter_child_care_service_buttons" />
+
+                    <TextView
+                        android:id="@+id/tv_filter_child_care_saturday_operation_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@{viewModel.detailCondition.mustSaturdayOperate ? @drawable/bg_all_button_highlight : @drawable/bg_all_button_normal}"
+                        android:elevation="6dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:onClick="@{() -> viewModel.setMustOperateSaturday(!viewModel.detailCondition.mustSaturdayOperate)}"
+                        android:paddingHorizontal="24dp"
+                        android:paddingVertical="10dp"
+                        android:text="@string/filter_saturday_operation"
+                        android:textColor="@color/gray_g5"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="@id/cl_filter_child_care"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_filter_child_care_saturday_operation_label"
+                        tools:background="@drawable/bg_all_button_normal" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_filter_kids_cafe"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    app:isVisible="@{viewModel.detailCondition instanceof KidsCafeConditionUiState}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_kids_cafe_button"
+                    tools:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tv_filter_kids_cafe_operation_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="@string/filter_operation_label"
+                        android:textColor="@color/gray_g5"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_filter_kids_cafe_monday_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="17dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@{viewModel.detailCondition.selectedDaysOfWeek.contains(DayOfWeek.MONDAY) ? @drawable/bg_all_button_highlight : @drawable/bg_all_button_normal}"
+                        android:elevation="6dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:gravity="center"
+                        android:onClick="@{() -> viewModel.toggleDayOfWeek(DayOfWeek.MONDAY)}"
+                        android:paddingVertical="10dp"
+                        android:text="@string/all_monday"
+                        android:textColor="@color/gray_g5"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="@id/cl_filter_kids_cafe"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_filter_kids_cafe_tuesday_button"
+                        app:layout_constraintHorizontal_chainStyle="spread_inside"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_filter_kids_cafe_operation_label"
+                        tools:background="@drawable/bg_all_button_normal" />
+
+                    <TextView
+                        android:id="@+id/tv_filter_kids_cafe_tuesday_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@{viewModel.detailCondition.selectedDaysOfWeek.contains(DayOfWeek.TUESDAY) ? @drawable/bg_all_button_highlight : @drawable/bg_all_button_normal}"
+                        android:elevation="6dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:gravity="center"
+                        android:onClick="@{() -> viewModel.toggleDayOfWeek(DayOfWeek.TUESDAY)}"
+                        android:paddingVertical="10dp"
+                        android:text="@string/all_tuesday"
+                        android:textColor="@color/gray_g5"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_filter_kids_cafe_wednesday_button"
+                        app:layout_constraintStart_toEndOf="@+id/tv_filter_kids_cafe_monday_button"
+                        app:layout_constraintTop_toBottomOf="@id/tv_filter_kids_cafe_operation_label"
+                        tools:background="@drawable/bg_all_button_normal" />
+
+                    <TextView
+                        android:id="@+id/tv_filter_kids_cafe_wednesday_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@{viewModel.detailCondition.selectedDaysOfWeek.contains(DayOfWeek.WEDNESDAY) ? @drawable/bg_all_button_highlight : @drawable/bg_all_button_normal}"
+                        android:elevation="6dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:gravity="center"
+                        android:onClick="@{() -> viewModel.toggleDayOfWeek(DayOfWeek.WEDNESDAY)}"
+                        android:paddingVertical="10dp"
+                        android:text="@string/all_wednesday"
+                        android:textColor="@color/gray_g5"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_filter_kids_cafe_thursday_button"
+                        app:layout_constraintStart_toEndOf="@+id/tv_filter_kids_cafe_tuesday_button"
+                        app:layout_constraintTop_toBottomOf="@id/tv_filter_kids_cafe_operation_label"
+                        tools:background="@drawable/bg_all_button_normal" />
+
+                    <TextView
+                        android:id="@+id/tv_filter_kids_cafe_thursday_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@{viewModel.detailCondition.selectedDaysOfWeek.contains(DayOfWeek.THURSDAY) ? @drawable/bg_all_button_highlight : @drawable/bg_all_button_normal}"
+                        android:elevation="6dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:gravity="center"
+                        android:onClick="@{() -> viewModel.toggleDayOfWeek(DayOfWeek.THURSDAY)}"
+                        android:paddingVertical="10dp"
+                        android:text="@string/all_thursday"
+                        android:textColor="@color/gray_g5"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_filter_kids_cafe_friday_button"
+                        app:layout_constraintStart_toEndOf="@+id/tv_filter_kids_cafe_wednesday_button"
+                        app:layout_constraintTop_toBottomOf="@id/tv_filter_kids_cafe_operation_label"
+                        tools:background="@drawable/bg_all_button_normal" />
+
+                    <TextView
+                        android:id="@+id/tv_filter_kids_cafe_friday_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@{viewModel.detailCondition.selectedDaysOfWeek.contains(DayOfWeek.FRIDAY) ? @drawable/bg_all_button_highlight : @drawable/bg_all_button_normal}"
+                        android:elevation="6dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:gravity="center"
+                        android:onClick="@{() -> viewModel.toggleDayOfWeek(DayOfWeek.FRIDAY)}"
+                        android:paddingVertical="10dp"
+                        android:text="@string/all_friday"
+                        android:textColor="@color/gray_g5"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_filter_kids_cafe_saturday_button"
+                        app:layout_constraintStart_toEndOf="@+id/tv_filter_kids_cafe_thursday_button"
+                        app:layout_constraintTop_toBottomOf="@id/tv_filter_kids_cafe_operation_label"
+                        tools:background="@drawable/bg_all_button_normal" />
+
+                    <TextView
+                        android:id="@+id/tv_filter_kids_cafe_saturday_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@{viewModel.detailCondition.selectedDaysOfWeek.contains(DayOfWeek.SATURDAY) ? @drawable/bg_all_button_highlight : @drawable/bg_all_button_normal}"
+                        android:elevation="6dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:gravity="center"
+                        android:onClick="@{() -> viewModel.toggleDayOfWeek(DayOfWeek.SATURDAY)}"
+                        android:paddingVertical="10dp"
+                        android:text="@string/all_saturday"
+                        android:textColor="@color/gray_g5"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_filter_kids_cafe_sunday_button"
+                        app:layout_constraintStart_toEndOf="@+id/tv_filter_kids_cafe_friday_button"
+                        app:layout_constraintTop_toBottomOf="@id/tv_filter_kids_cafe_operation_label"
+                        tools:background="@drawable/bg_all_button_normal" />
+
+                    <TextView
+                        android:id="@+id/tv_filter_kids_cafe_sunday_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="17dp"
+                        android:background="@{viewModel.detailCondition.selectedDaysOfWeek.contains(DayOfWeek.SUNDAY) ? @drawable/bg_all_button_highlight : @drawable/bg_all_button_normal}"
+                        android:elevation="6dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:gravity="center"
+                        android:onClick="@{() -> viewModel.toggleDayOfWeek(DayOfWeek.SUNDAY)}"
+                        android:paddingVertical="10dp"
+                        android:text="@string/all_sunday"
+                        android:textColor="@color/gray_g5"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tv_filter_kids_cafe_saturday_button"
+                        app:layout_constraintTop_toBottomOf="@id/tv_filter_kids_cafe_operation_label"
+                        tools:background="@drawable/bg_all_button_normal" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_filter_other_facility"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="21dp"
+                    android:paddingBottom="20dp"
+                    app:isVisible="@{viewModel.detailCondition instanceof OtherDetailFilterConditionUiState}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_other_facility_button"
+                    tools:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tv_filter_other_facility_notice"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/horizontal_padding"
+                        android:text="@string/filter_other_facility_service_select_request"
+                        android:textAppearance="@style/content"
+                        android:textColor="@color/gray_g4"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/cl_filter_other_facility" />
+
+                    <View
+                        android:id="@+id/view_filter_other_facility_service_buttons"
+                        android:layout_width="0dp"
+                        android:layout_height="74dp"
+                        android:layout_marginTop="6dp"
+                        android:background="@color/gray_g1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_filter_other_facility_notice" />
+
+                    <TextView
+                        android:id="@+id/tv_filter_outdoor_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:background="@{viewModel.detailCondition.outdoorSelected ? @drawable/bg_all_button_main : @drawable/bg_all_button_normal}"
+                        android:elevation="6dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:onClick="@{() -> viewModel.setFacilityType(FacilityType.OUTDOOR)}"
+                        android:paddingHorizontal="20dp"
+                        android:paddingVertical="10dp"
+                        android:text="@string/all_outdoor"
+                        android:textColor="@{viewModel.detailCondition.outdoorSelected ? @color/white : @color/gray_g5}"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_filter_experience_button"
+                        app:layout_constraintHorizontal_chainStyle="spread_inside"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/view_filter_other_facility_service_buttons"
+                        tools:background="@drawable/bg_all_button_normal" />
+
+                    <TextView
+                        android:id="@+id/tv_filter_experience_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@{viewModel.detailCondition.experienceSelected ? @drawable/bg_all_button_main : @drawable/bg_all_button_normal}"
+                        android:elevation="6dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:onClick="@{() -> viewModel.setFacilityType(FacilityType.EXPERIENCE)}"
+                        android:paddingHorizontal="20dp"
+                        android:paddingVertical="10dp"
+                        android:text="@string/all_experience"
+                        android:textColor="@{viewModel.detailCondition.experienceSelected ? @color/white : @color/gray_g5}"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_filter_medical_button"
+                        app:layout_constraintStart_toEndOf="@+id/tv_filter_outdoor_button"
+                        app:layout_constraintTop_toTopOf="@id/view_filter_other_facility_service_buttons"
+                        tools:background="@drawable/bg_all_button_normal" />
+
+                    <TextView
+                        android:id="@+id/tv_filter_medical_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@{viewModel.detailCondition.medicalSelected ? @drawable/bg_all_button_main : @drawable/bg_all_button_normal}"
+                        android:elevation="6dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:onClick="@{() -> viewModel.setFacilityType(FacilityType.MEDICAL)}"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="10dp"
+                        android:text="@string/all_medical"
+                        android:textColor="@{viewModel.detailCondition.medicalSelected ? @color/white : @color/gray_g5}"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_filter_library_button"
+                        app:layout_constraintStart_toEndOf="@+id/tv_filter_experience_button"
+                        app:layout_constraintTop_toTopOf="@id/view_filter_other_facility_service_buttons"
+                        tools:background="@drawable/bg_all_button_normal" />
+
+                    <TextView
+                        android:id="@+id/tv_filter_library_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="18dp"
+                        android:background="@{viewModel.detailCondition.librarySelected ? @drawable/bg_all_button_main : @drawable/bg_all_button_normal}"
+                        android:elevation="6dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:onClick="@{() -> viewModel.setFacilityType(FacilityType.LIBRARY)}"
+                        android:paddingHorizontal="20dp"
+                        android:paddingVertical="10dp"
+                        android:text="@string/all_library"
+                        android:textColor="@{viewModel.detailCondition.librarySelected ? @color/white : @color/gray_g5}"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tv_filter_medical_button"
+                        app:layout_constraintTop_toTopOf="@id/view_filter_other_facility_service_buttons"
+                        tools:background="@drawable/bg_all_button_selected"
+                        tools:textColor="@color/white" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/barrier_filter_service"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="cl_filter_child_care,cl_filter_kids_cafe,cl_filter_other_facility" />
+
+                <TextView
+                    android:id="@+id/tv_filter_kid_select_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:text="@string/filter_kid_fit_label"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/barrier_filter_service" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_filter_kids"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/horizontal_padding"
+                    android:paddingVertical="7dp"
+                    app:filter_kids="@{viewModel.kids}"
+                    app:isVisible="@{!viewModel.kids.empty}"
+                    app:itemSpacing_dp="@{8}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_kid_select_label"
+                    tools:listitem="@layout/item_profile_kid"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_filter_kid_empty_notice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/horizontal_padding"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/filter_kid_add_request"
+                    android:textAppearance="@style/content"
+                    android:textColor="@color/gray_g4"
+                    app:isVisible="@{viewModel.kids.empty}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_kid_select_label" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_filter_kid_add_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/horizontal_padding"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_kid_clickable"
+                    android:elevation="6dp"
+                    android:onClick="@{() -> onKidAddButtonClick.invoke()}"
+                    android:paddingVertical="19dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="40dp"
+                    app:isVisible="@{viewModel.kids.empty}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_kid_empty_notice">
+
+                    <ImageView
+                        android:id="@+id/iv_filter_kid_add_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/img_all_kid_add"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/tv_filter_kid_add_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="17dp"
+                        android:text="@string/all_kid_add_kid_request_message"
+                        android:textAppearance="@style/content"
+                        android:textColor="@color/gray_g5"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/iv_filter_kid_add_image"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/group_filter_kid_add"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="tv_filter_kid_empty_notice,cl_filter_kid_add_button"
+                    tools:visibility="visible" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/barrier_kids"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="rv_filter_kids,cl_filter_kid_add_button" />
+
+                <TextView
+                    android:id="@+id/tv_filter_age_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="42dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:text="@string/filter_age_label"
+                    android:textColor="@color/gray_g5"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/barrier_kids" />
+
+                <LinearLayout
+                    android:id="@+id/ll_filter_age_input"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/horizontal_padding"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_all_button_normal"
+                    android:elevation="6dp"
+                    android:gravity="center_vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_age_label">
+
+                    <EditText
+                        android:id="@+id/et_filter_age_input"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:hint="@string/filter_dialog_age_hint"
+                        android:inputType="number|numberSigned"
+                        android:maxLength="2"
+                        android:maxLines="1"
+                        android:paddingVertical="11dp"
+                        android:text="@={viewModel.age}"
+                        android:textAppearance="@style/content"
+                        android:textColorHint="@color/gray_g3"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_filter_age_label"
+                        tools:ignore="Autofill" />
+
+                    <ImageView
+                        android:id="@+id/iv_filter_age_delete_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{() -> etFilterAgeInput.getText().clear()}"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="6dp"
+                        android:src="@drawable/ic_all_delete"
+                        app:isVisible="@{!etFilterAgeInput.text.toString().blank}"
+                        tools:ignore="ContentDescription" />
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/tv_filter_region_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:text="@string/filter_region"
+                    android:textColor="@color/gray_g5"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ll_filter_age_input" />
+
+                <TextView
+                    android:id="@+id/tv_filter_other_facility_need_region"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/horizontal_padding"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/filter_other_facility_need_region"
+                    android:textAppearance="@style/content"
+                    android:textColor="@color/gray_g4"
+                    app:isVisible="@{viewModel.detailCondition instanceof OtherDetailFilterConditionUiState}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_region_label" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_filter_header_top"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    app:dividerColor="@color/gray_g2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_other_facility_need_region"
+                    app:layout_goneMarginTop="16dp" />
+
+                <TextView
+                    android:id="@+id/tv_filter_borough_header"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray_g1"
+                    android:gravity="center"
+                    android:paddingVertical="8dp"
+                    android:text="@string/all_borough_header"
+                    android:textAppearance="@style/content"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintEnd_toStartOf="@+id/divider_filter_borough_and_administrative_dong"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_filter_header_top" />
+
+                <TextView
+                    android:id="@+id/tv_filter_administrative_dong_header"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray_g1"
+                    android:gravity="center"
+                    android:paddingVertical="8dp"
+                    android:text="@string/all_dong_header"
+                    android:textAppearance="@style/content"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintEnd_toStartOf="@+id/divider_filter_administrative_dong_and_selected_region"
+                    app:layout_constraintStart_toEndOf="@+id/divider_filter_borough_and_administrative_dong"
+                    app:layout_constraintTop_toTopOf="@id/tv_filter_borough_header" />
+
+                <TextView
+                    android:id="@+id/tv_filter_selected_region_header"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray_g1"
+                    android:gravity="center"
+                    android:paddingVertical="8dp"
+                    android:text="@string/all_selected_region_header"
+                    android:textAppearance="@style/content"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/divider_filter_administrative_dong_and_selected_region"
+                    app:layout_constraintTop_toTopOf="@id/tv_filter_borough_header" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_filter_header_bottom"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    app:dividerColor="@color/gray_g2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_borough_header" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_filter_boroughs"
+                    android:layout_width="0dp"
+                    android:layout_height="215dp"
+                    android:orientation="vertical"
+                    app:all_boroughs="@{viewModel.boroughs}"
+                    app:itemAnimator="@{null}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toTopOf="@id/divider_filter_buttons"
+                    app:layout_constraintEnd_toStartOf="@id/divider_filter_borough_and_administrative_dong"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_filter_header_bottom" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_filter_borough_and_administrative_dong"
+                    android:layout_width="0.5dp"
+                    android:layout_height="0dp"
+                    app:dividerColor="@color/gray_g2"
+                    app:layout_constraintBottom_toTopOf="@id/divider_filter_buttons"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.291"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_filter_header_top" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_filter_administrative_dongs"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    app:all_administrativeDongs="@{viewModel.administrativeDongs}"
+                    app:itemAnimator="@{null}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toTopOf="@id/divider_filter_buttons"
+                    app:layout_constraintEnd_toStartOf="@id/divider_filter_administrative_dong_and_selected_region"
+                    app:layout_constraintStart_toEndOf="@id/divider_filter_borough_and_administrative_dong"
+                    app:layout_constraintTop_toBottomOf="@id/divider_filter_header_bottom" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_filter_administrative_dong_and_selected_region"
+                    android:layout_width="0.5dp"
+                    android:layout_height="0dp"
+                    app:dividerColor="@color/gray_g2"
+                    app:layout_constraintBottom_toTopOf="@id/divider_filter_buttons"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.583"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_filter_header_top" />
+
+                <TextView
+                    android:id="@+id/tv_filter_selected_region"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_all_chip"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:textColor="@color/main"
+                    android:textSize="12sp"
+                    app:all_selectedAdministrativeDong="@{viewModel.selectedAdministrativeDong}"
+                    app:isVisible="@{viewModel.selectedAdministrativeDong != null}"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/divider_filter_administrative_dong_and_selected_region"
+                    app:layout_constraintTop_toBottomOf="@id/divider_filter_header_bottom"
+                    tools:text="서울 강남구 개포2동" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_filter_buttons"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginBottom="13dp"
+                    app:dividerColor="@color/gray_g2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rv_filter_boroughs" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/ll_filter_buttons"
+            android:layout_width="0dp"
+            android:layout_height="79dp"
+            android:background="@color/white"
+            android:clickable="true"
+            android:elevation="20dp"
+            android:gravity="center_horizontal"
+            android:paddingTop="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tv_filter_reset_button"
+                android:layout_width="129dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_all_button_highlight"
+                android:elevation="6dp"
+                android:gravity="center"
+                android:onClick="@{() -> viewModel.resetFilterCondition()}"
+                android:paddingVertical="10dp"
+                android:text="@string/filter_reset"
+                android:textAppearance="@style/content_accent"
+                android:textColor="@color/gray_g5" />
+
+            <TextView
+                android:id="@+id/tv_filter_apply_button"
+                android:layout_width="129dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/bg_all_button_main"
+                android:elevation="6dp"
+                android:enabled="@{viewModel.canFiltering}"
+                android:gravity="center"
+                android:onClick="@{() -> onApplyButtonClick.invoke()}"
+                android:paddingVertical="10dp"
+                android:text="@string/filter_apply"
+                android:textAppearance="@style/content_accent"
+                android:textColor="@{tvFilterApplyButton.enabled ? @color/white : @color/gray_g2}"
+                tools:textColor="@color/white" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

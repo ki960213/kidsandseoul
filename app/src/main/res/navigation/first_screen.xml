@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/home"
+    app:startDestination="@id/facilitiesFragment">
+
+    <fragment
+        android:id="@+id/facilitiesFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.firstscreen.home.HomeFragment"
+        android:label="HomeFragment" />
+    <fragment
+        android:id="@+id/facilitiesMapFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.firstscreen.facilitiesmap.FacilitiesMapFragment"
+        android:label="FacilitiesMapFragment" />
+    <fragment
+        android:id="@+id/myProfileFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.firstscreen.myprofile.MyProfileFragment"
+        android:label="MyProfileFragment" />
+    <fragment
+        android:id="@+id/postsFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.firstscreen.community.posts.PostsFragment"
+        android:label="PostsFragment" />
+</navigation>

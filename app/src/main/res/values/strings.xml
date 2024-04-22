@@ -1,3 +1,176 @@
 <resources>
-    <string name="app_name">KidsAndSeoul</string>
+    <string name="app_name">키즈앤서울</string>
+
+    <string name="all_ok">확인</string>
+    <string name="all_cancel">취소</string>
+    <string name="all_region_label">지역</string>
+    <string name="all_borough_header">구</string>
+    <string name="all_dong_header">동</string>
+    <string name="all_selected_region_header">선택 지역</string>
+    <string name="all_kid_add_kid_request_message">소중한 아이를\n알려주세요~!</string>
+    <string name="all_monday">월</string>
+    <string name="all_tuesday">화</string>
+    <string name="all_wednesday">수</string>
+    <string name="all_thursday">목</string>
+    <string name="all_friday">금</string>
+    <string name="all_saturday">토</string>
+    <string name="all_sunday">일</string>
+    <string name="all_register_button">등록</string>
+    <string name="all_child_care">보육 시설</string>
+    <string name="all_other_facility">기타 시설</string>
+    <string name="all_our_neighbor_growing_center">우리동네키움센터</string>
+    <string name="all_local_children_center">지역아동센터</string>
+    <string name="all_co_parenting_room">공동육아방</string>
+    <string name="all_co_parenting_sharing_center">공동육아나눔터</string>
+    <string name="all_kids_cafe">키즈 카페</string>
+    <string name="all_kids_cafe_full">키즈 카페, 실내놀이터</string>
+    <string name="all_outdoor">야외 시설</string>
+    <string name="all_experience">체험 시설</string>
+    <string name="all_medical">의료 시설</string>
+    <string name="all_library">도서관</string>
+    <string name="all_use_of_term">서비스 이용약관</string>
+    <string name="all_privacy_policy">개인정보 처리방침</string>
+    <string name="all_search_too_short_message">두 글자 이상 입력해주세요.</string>
+
+    <string name="first_screen_bottom_navigation_home_label">홈</string>
+    <string name="first_screen_bottom_navigation_map_label">지도</string>
+    <string name="first_screen_bottom_navigation_community_label">커뮤니티</string>
+    <string name="first_screen_bottom_navigation_profile_label">프로필</string>
+
+    <string name="home_search_hint">검색어를 입력해주세요</string>
+    <string name="home_kid_register_request">아이를 등록한 후\n관련 시설을 찾아보세요~</string>
+    <string name="home_interest_facility_label">관심 시설</string>
+
+    <string name="join_welcome">회원가입 완료!\n키즈앤서울 회원이 되신 것을 환영합니다.</string>
+    <string name="join_start">시작하기</string>
+    <string name="join_description">아이돌봄 서비스 키즈앤서울에서\n사용될 기본 정보를 입력해주세요!</string>
+    <string name="join_input_name_hint">이름을 입력하세요</string>
+    <string name="join_region_label">지역</string>
+    <string name="join_borough_header">구</string>
+    <string name="join_administrative_header">동</string>
+    <string name="join_selected_region_header">선택 지역</string>
+    <string name="join_button_label">가입하기</string>
+
+    <string name="login_dialog_title">로그인</string>
+    <string name="login_dialog_description">간편하게 로그인 후 시작해보세요.</string>
+    <string name="login_dialog_kakao_button">카카오로 로그인/회원가입</string>
+    <string name="login_dialog_google_button">Google로 로그인/회원가입</string>
+
+    <string name="chat_room_input_message_hint">채팅 작성하기</string>
+    <string name="chat_room_members_label">대화 상대</string>
+
+    <string name="chat_rooms_facility_label">시설 단체 채팅</string>
+    <string name="chat_rooms_private_label">채팅</string>
+
+    <string name="community_title">커뮤니티</string>
+
+    <string name="followers_title">팔로워</string>
+
+    <string name="followings_title">팔로잉</string>
+
+    <string name="kid_add_title">아이 등록</string>
+    <string name="kid_add_input_kid_name_hint">아이의 이름을 입력하세요.</string>
+    <string name="kid_add_sex_label">성별</string>
+    <string name="kid_add_male">남자</string>
+    <string name="kid_add_female">여자</string>
+    <string name="kid_add_birth_date_label">생년월일</string>
+    <string name="kid_add_save">저장</string>
+
+    <string name="my_profile_title">프로필</string>
+    <string name="my_profile_user_name_format">%s님</string>
+    <string name="my_profile_my_child_label">의 소중한 아이들</string>
+    <string name="my_profile_kid_age_format">" | %d살"</string>
+    <string name="my_profile_logout"><u>로그아웃</u></string>
+    <string name="my_profile_leave"><u>회원탈퇴</u></string>
+    <string name="my_profile_login_request">로그인/회원가입 후 이용해보세요</string>
+    <string name="my_profile_login_button">로그인/회원가입</string>
+    <string name="my_profile_my_interest">내 관심</string>
+    <string name="my_profile_my_review">내 리뷰</string>
+    <string name="my_profile_follower">팔로워</string>
+    <string name="my_profile_following">팔로잉</string>
+    <string name="my_profile_my_post">나의 게시글</string>
+    <string name="my_profile_my_comments">나의 작성 댓글</string>
+    <string name="my_profile_login_request_message">로그인 하시면 편리하고 다양한 경험을 하실 수 있어요!</string>
+
+    <string name="profile_title">프로필</string>
+    <string name="profile_follower_format">팔로워 "<b>"%d"</b>"</string>
+    <string name="profile_following_format">팔로잉 "<b>"%d"</b>"</string>
+    <string name="profile_follow">팔로우</string>
+    <string name="profile_unfollow">언팔로우</string>
+    <string name="profile_written_post_label">작성한 게시물</string>
+    <string name="profile_written_review_label">작성한 리뷰</string>
+
+    <string name="profile_edit_title">프로필 수정</string>
+    <string name="profile_edit_image_label">프로필 사진</string>
+    <string name="profile_edit_nickname_edit_label">닉네임 수정</string>
+    <string name="profile_edit_input_nickname_hint">닉네임을 입력하세요.</string>
+    <string name="profile_edit_kid_edit_label">아이들 수정</string>
+    <string name="profile_edit_region_edit_label">지역 수정</string>
+    <string name="profile_edit_change">변경</string>
+
+    <string name="post_write_title">게시글 작성</string>
+    <string name="post_write_post_title_hint">게시글 제목</string>
+    <string name="post_write_content_hint">문구를 입력해주세요.</string>
+    <string name="post_write_content_max_length_format">/%d</string>
+
+    <string name="post_detail_title">게시글</string>
+    <string name="post_detail_comment_input_hint">댓글 작성하기</string>
+    <string name="post_detail_login_request_message">로그인 후 댓글을 작성해보세요!</string>
+
+    <string name="facilities_search_hint">시설명을 입력해주세요</string>
+    <string name="facilities_count_format">%d 시설</string>
+    <string name="facilities_review_count_order">후기 순</string>
+    <string name="facilities_age_condition_item_format">%d살</string>
+
+    <string name="facility_detail_call">전화</string>
+    <string name="facility_detail_interest">관심</string>
+    <string name="facility_detail_review">후기 작성</string>
+    <string name="facility_detail_share">공유</string>
+    <string name="facility_detail_info_warning"><li>플레이스 정보는 업체 방문을 위한 참고 정보이며, 실제 정보와 다를 수 있습니다.</li></string>
+    <string name="facility_detail_info_homepage">홈페이지</string>
+    <string name="facility_detail_info_address">주소</string>
+    <string name="facility_detail_info_copy">복사</string>
+    <string name="facility_detail_info_time">영업안내</string>
+    <string name="facility_detail_info_info">이용안내</string>
+    <string name="facility_detail_info_is_not_saturday_operate">정기휴무</string>
+    <string name="facility_detail_info_operate">운영</string>
+    <string name="facility_detail_info_close_date">휴관일</string>
+    <string name="facility_detail_info_address_copy_message">주소가 복사되었습니다.</string>
+
+    <string name="filter_reset">초기화</string>
+    <string name="filter_apply">적용</string>
+    <string name="filter_title">시설 필터 설정</string>
+    <string name="filter_category_label">카테고리</string>
+    <string name="filter_child_care_service_select_request"><li>보육 시설에서의 세부 시설을 선택해보세요!</li></string>
+    <string name="filter_operation_label">운영 여부</string>
+    <string name="filter_saturday_operation">토요일 ○</string>
+    <string name="filter_other_facility_service_select_request"><li>기타 시설에서의 세부 시설을 선택해보세요!</li></string>
+    <string name="filter_kid_fit_label">아이 맞춤</string>
+    <string name="filter_kid_add_request"><li>등록된 아이가 없어요. 아이를 등록하고 간편하게 필터링해보세요!</li></string>
+    <string name="filter_age_label">나이</string>
+    <string name="filter_region">지역</string>
+    <string name="filter_other_facility_need_region"><li>기타 시설은 수가 많아 지역을 정해야 해요!</li></string>
+
+    <string name="review_write_request">후기를 작성해주세요</string>
+    <string name="review_write_title">후기 작성</string>
+
+    <string name="my_interest_facilities_title">내 관심 시설</string>
+
+    <string name="written_reviews_title">작성한 후기</string>
+
+    <string name="written_posts_title">작성한 게시물</string>
+
+    <string name="written_comments_title">작성한 댓글</string>
+
+    <string name="notifications_title">알림</string>
+
+    <string name="item_profile_edit_kid_add_request_message">소중한 아이를 알려주세요~!</string>
+
+    <string name="item_facility_review_count_format">후기 수 %d</string>
+
+    <string name="author_more_dialog_delete">삭제</string>
+    <string name="not_author_more_dialog_delete">신고</string>
+
+    <string name="filter_dialog_age_hint">나이를 입력하면 나이에 맞는 시설을 알려드려요!</string>
+
 </resources>

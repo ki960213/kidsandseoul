@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/app"
+    app:startDestination="@id/firstScreenFragment">
+
+    <fragment
+        android:id="@+id/firstScreenFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.firstscreen.FirstScreenFragment"
+        android:label="FirstScreenFragment">
+        <action
+            android:id="@+id/action_firstScreenFragment_to_kidAddFragment"
+            app:destination="@id/kidAddFragment" />
+        <action
+            android:id="@+id/action_firstScreenFragment_to_profileEditFragment"
+            app:destination="@id/profileEditFragment" />
+        <action
+            android:id="@+id/action_firstScreenFragment_to_chatRoomFragment"
+            app:destination="@id/chatRoomFragment" />
+        <action
+            android:id="@+id/action_firstScreenFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_firstScreenFragment_to_postWriteFragment"
+            app:destination="@id/postWriteFragment" />
+        <action
+            android:id="@+id/action_firstScreenFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment" />
+        <action
+            android:id="@+id/action_firstScreenFragment_to_writtenPostsFragment"
+            app:destination="@id/writtenPostsFragment" />
+        <action
+            android:id="@+id/action_firstScreenFragment_to_followersFragment"
+            app:destination="@id/followersFragment" />
+        <action
+            android:id="@+id/action_firstScreenFragment_to_followingsFragment"
+            app:destination="@id/followingsFragment" />
+        <action
+            android:id="@+id/action_firstScreenFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
+        <action
+            android:id="@+id/action_firstScreenFragment_to_writtenReviewsFragment"
+            app:destination="@id/writtenReviewsFragment" />
+        <action
+            android:id="@+id/action_firstScreenFragment_to_writtenCommentsFragment"
+            app:destination="@id/writtenCommentsFragment" />
+        <action
+            android:id="@+id/action_firstScreenFragment_to_myInterestFacilitiesFragment"
+            app:destination="@id/myInterestFacilitiesFragment" />
+        <action
+            android:id="@+id/action_firstScreenFragment_to_notificationsFragment"
+            app:destination="@id/notificationsFragment" />
+        <action
+            android:id="@+id/action_firstScreenFragment_to_facilityDetailFragment"
+            app:destination="@id/facilityDetailFragment" />
+        <action
+            android:id="@+id/action_firstScreenFragment_to_facilitySearchFragment"
+            app:destination="@id/facilitySearchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/kidAddFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.kidadd.KidAddFragment"
+        android:label="KidAddFragment">
+        <argument
+            android:name="parentId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileEditFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.profileedit.ProfileEditFragment"
+        android:label="ProfileEditFragment">
+        <action
+            android:id="@+id/action_profileEditFragment_to_kidAddFragment"
+            app:destination="@id/kidAddFragment" />
+        <argument
+            android:name="parentId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatRoomFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.chatroom.ChatRoomFragment"
+        android:label="ChatRoomFragment">
+        <argument
+            android:name="chatRoomId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_chatRoomFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.profile.ProfileFragment"
+        android:label="ProfileFragment">
+        <argument
+            android:name="userId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_profileFragment_to_followersFragment"
+            app:destination="@id/followersFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_writtenPostsFragment"
+            app:destination="@id/writtenPostsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_followingsFragment"
+            app:destination="@id/followingsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/followersFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.followers.FollowersFragment"
+        android:label="FollowersFragment">
+        <action
+            android:id="@+id/action_followersFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <argument
+            android:name="userId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/joinFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.join.JoinFragment"
+        android:label="JoinFragment">
+        <argument
+            android:name="authentication"
+            app:argType="com.ki960213.kidsandseoul.presentation.ui.join.AuthenticationArgs" />
+    </fragment>
+    <fragment
+        android:id="@+id/postWriteFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.postwrite.PostWriteFragment"
+        android:label="PostWriteFragment" />
+    <fragment
+        android:id="@+id/postDetailFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.postdetail.PostDetailFragment"
+        android:label="PostDetailFragment">
+        <argument
+            android:name="postId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_postDetailFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/writtenPostsFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.writtenPosts.WrittenPostsFragment"
+        android:label="WrittenPostsFragment">
+        <argument
+            android:name="userId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_writtenPostsFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/followingsFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.following.FollowingsFragment"
+        android:label="FollowingsFragment">
+        <argument
+            android:name="userId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_followingsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.webview.WebViewFragment"
+        android:label="WebViewFragment">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/writtenReviewsFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.writtenReviews.WrittenReviewsFragment"
+        android:label="WrittenReviewsFragment">
+        <argument
+            android:name="userId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/writtenCommentsFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.writtencomments.WrittenCommentsFragment"
+        android:label="WrittenCommentsFragment">
+        <argument
+            android:name="userId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/myInterestFacilitiesFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.myinterestfacilities.MyInterestFacilitiesFragment"
+        android:label="MyInterestFacilitiesFragment">
+        <argument
+            android:name="userId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_myInterestFacilitiesFragment_to_facilityDetailFragment"
+            app:destination="@id/facilityDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.notifications.NotificationsFragment"
+        android:label="NotificationsFragment" />
+    <fragment
+        android:id="@+id/facilityDetailFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.facilitydetail.FacilityDetailFragment"
+        android:label="FacilityDetailFragment">
+        <argument
+            android:name="facilityId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_facilityDetailFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
+        <action
+            android:id="@+id/action_facilityDetailFragment_to_writtenReviewsFragment"
+            app:destination="@id/writtenReviewsFragment" />
+        <action
+            android:id="@+id/action_facilityDetailFragment_to_reviewWriteFragment"
+            app:destination="@id/reviewWriteFragment" />
+        <action
+            android:id="@+id/action_facilityDetailFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/facilitySearchFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.facilitysearch.FacilitySearchFragment"
+        android:label="FacilitySearchFragment">
+        <action
+            android:id="@+id/action_facilitySearchFragment_to_kidAddFragment"
+            app:destination="@id/kidAddFragment" />
+        <argument
+            android:name="facilitySearchArg"
+            app:argType="com.ki960213.kidsandseoul.presentation.ui.facilitysearch.FacilitySearchArg" />
+        <action
+            android:id="@+id/action_facilitySearchFragment_to_facilityDetailFragment"
+            app:destination="@id/facilityDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reviewWriteFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.reviewwrite.ReviewWriteFragment"
+        android:label="ReviewWriteFragment">
+        <argument
+            android:name="facilityId"
+            app:argType="long" />
+    </fragment>
+</navigation>

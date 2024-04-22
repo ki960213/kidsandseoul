@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="uiState"
+            type="com.ki960213.kidsandseoul.presentation.ui.postdetail.uistate.PostDetailUiState" />
+
+        <variable
+            name="onProfileUiClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+
+        <variable
+            name="onLikeToggle"
+            type="kotlin.jvm.functions.Function2&lt;String, Boolean, Unit>" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_post_detail_profile_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="@dimen/horizontal_padding"
+            android:layout_marginTop="14dp"
+            android:onClick="@{() -> onProfileUiClick.invoke(uiState.post.authorId)}"
+            app:errorImage="@{@drawable/img_all_error_user}"
+            app:imageUrl="@{uiState.authorImageUrl}"
+            app:isCircle="@{true}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_post_detail_author_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:onClick="@{() -> onProfileUiClick.invoke(uiState.post.authorId)}"
+            android:text="@{uiState.authorName}"
+            android:textAppearance="@style/content_accent"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintStart_toEndOf="@id/iv_post_detail_profile_image"
+            app:layout_constraintTop_toTopOf="@id/iv_post_detail_profile_image"
+            tools:text="닉네임" />
+
+        <TextView
+            android:id="@+id/tv_post_detail_created_at"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g3"
+            app:layout_constraintStart_toStartOf="@id/tv_post_detail_author_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_post_detail_author_name"
+            app:text="@{uiState.post.createdAt}"
+            tools:text="2021. 04. 21" />
+
+        <TextView
+            android:id="@+id/tv_post_detail_updated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g3"
+            app:isVisible="@{uiState.post.updated}"
+            app:layout_constraintBottom_toBottomOf="@id/tv_post_detail_created_at"
+            app:layout_constraintStart_toEndOf="@id/tv_post_detail_created_at"
+            app:layout_constraintTop_toTopOf="@id/tv_post_detail_created_at"
+            tools:text="수정됨" />
+
+        <TextView
+            android:id="@+id/tv_post_detail_post_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_padding"
+            android:layout_marginTop="14dp"
+            android:text="@{uiState.post.title}"
+            android:textAppearance="@style/sub_title"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_post_detail_profile_image"
+            tools:text="캘리클럽 잠실점 화장실 시설 관련" />
+
+        <TextView
+            android:id="@+id/tv_post_detail_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_padding"
+            android:layout_marginTop="6dp"
+            android:text="@{uiState.post.content}"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_post_detail_post_title"
+            tools:text="소녀가 걸음을 멈추며, 너, 저 산 너머에 가 본 일 있니. 벌 끝을 가리켰다. 소년은 저도 모르게 주머니 속 호두알을 만지작거리며, 한 손으로는 수없이 갈꽃을 휘어 꺾고 있었다. 이튿날, 소년이 학교에서 돌아오니, 아버지가 나들이옷으로 갈아 입고 닭 한 마리를 안고 있었다.
+소녀와 헤어져 돌아오는 길에, 소년은 혼잣속으로, 소녀가 이사를 간다는 말을 수없이 되뇌어 보았다. 소년은 공연히 열없어, 책보를 집어던지고는 외양간으로 가, 쇠잔등을 한 번 철썩 갈겼다. 이튿날, 소년이 학교에서 돌아오니, 아버지가 나들이옷으로 갈아 입고 닭 한 마리를 안고 있었다." />
+
+        <ImageView
+            android:id="@+id/iv_post_detail_like_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="36dp"
+            android:onClick="@{() -> onLikeToggle.invoke(uiState.post.id, !uiState.like)}"
+            android:padding="5dp"
+            android:src="@{uiState.like ? @drawable/ic_all_liked : @drawable/ic_all_unliked}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_post_detail_content"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/ic_all_liked" />
+
+        <TextView
+            android:id="@+id/tv_post_detail_like_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{uiState.post.likeCount}"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintBottom_toBottomOf="@id/iv_post_detail_like_toggle"
+            app:layout_constraintStart_toEndOf="@id/iv_post_detail_like_toggle"
+            app:layout_constraintTop_toTopOf="@id/iv_post_detail_like_toggle"
+            tools:text="5" />
+
+        <ImageView
+            android:id="@+id/iv_post_detail_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/ic_post_comment"
+            app:layout_constraintBottom_toBottomOf="@id/iv_post_detail_like_toggle"
+            app:layout_constraintStart_toEndOf="@id/tv_post_detail_like_count"
+            app:layout_constraintTop_toTopOf="@id/iv_post_detail_like_toggle"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_post_detail_comment_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="@{uiState.post.commentCount}"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintBottom_toBottomOf="@id/iv_post_detail_comment"
+            app:layout_constraintStart_toEndOf="@id/iv_post_detail_comment"
+            app:layout_constraintTop_toTopOf="@id/iv_post_detail_comment"
+            tools:text="100" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_post_detail_comment"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            app:dividerColor="@color/gray_g2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_post_detail_like_toggle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

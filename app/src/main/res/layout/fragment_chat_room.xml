@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="viewModel"
+            type="com.ki960213.kidsandseoul.presentation.ui.chatroom.ChatRoomViewModel" />
+
+        <variable
+            name="onBackButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onMoreButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onImageAddButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onSendButtonClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+
+        <variable
+            name="onExitButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onNotificationToggleClick"
+            type="kotlin.jvm.functions.Function1&lt;Boolean, Unit>" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_chat_room_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:textColor="@color/gray_g5"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="캘리클럽 잠실점" />
+
+        <ImageView
+            android:id="@+id/iv_chat_room_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:onClick="@{() -> onBackButtonClick.invoke()}"
+            android:padding="10dp"
+            android:src="@drawable/ic_all_back_button"
+            app:layout_constraintBottom_toBottomOf="@id/tv_chat_room_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_chat_room_title"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/iv_chat_room_more_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:onClick="@{() -> onMoreButtonClick.invoke()}"
+            android:padding="10dp"
+            android:src="@drawable/ic_all_more_button"
+            app:layout_constraintBottom_toBottomOf="@id/tv_chat_room_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_chat_room_title"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_chat_room_app_bar"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="19dp"
+            app:dividerColor="@color/gray_g2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_chat_room_title" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_chat_room_messages"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clipToPadding="true"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/horizontal_padding"
+            android:paddingVertical="19dp"
+            app:chatRoom_messages="@{viewModel.messages}"
+            app:itemSpacing_dp="@{12}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/ll_chat_room_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_chat_room_app_bar"
+            app:layout_constraintVertical_bias="0"
+            app:stackFromEnd="true" />
+
+        <LinearLayout
+            android:id="@+id/ll_chat_room_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_padding"
+            android:layout_marginBottom="17dp"
+            android:background="@drawable/bg_all_input_text"
+            android:elevation="6dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_chat_room_image_add_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:onClick="@{() -> onImageAddButtonClick.invoke()}"
+                android:padding="7dp"
+                android:src="@drawable/ic_chat_room_image_add"
+                tools:ignore="ContentDescription" />
+
+            <EditText
+                android:id="@+id/et_chat_room_message_input"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="@string/chat_room_input_message_hint"
+                android:inputType="text|textMultiLine"
+                android:maxLength="255"
+                android:maxLines="5"
+                android:textAppearance="@style/content"
+                android:textColor="@color/gray_g5"
+                android:textColorHint="@color/gray_g3"
+                tools:ignore="Autofill" />
+
+            <ImageView
+                android:id="@+id/tv_chat_room_send_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:enabled="@{!etChatRoomMessageInput.text.toString().blank}"
+                android:onClick="@{() -> onSendButtonClick.invoke(etChatRoomMessageInput.getText().toString())}"
+                android:padding="8dp"
+                android:src="@{etChatRoomMessageInput.text.toString().blank ? @drawable/ic_all_send_button_disabled : @drawable/ic_all_send_button_enabled}"
+                tools:ignore="ContentDescription"
+                tools:src="@drawable/ic_all_send_button_enabled" />
+        </LinearLayout>
+
+        <androidx.drawerlayout.widget.DrawerLayout
+            android:id="@+id/dl_chat_room_more"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:elevation="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/white">
+
+                <TextView
+                    android:id="@+id/tv_chat_room_chat_members_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:fontFamily="@font/pretendard_semi_bold"
+                    android:paddingVertical="5dp"
+                    android:text="@string/chat_room_members_label"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_chat_room_drawer_members"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    app:dividerColor="@color/gray_g2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_chat_room_chat_members_label" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_chat_room_members"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    android:paddingVertical="6dp"
+                    app:chatRoom_members="@{viewModel.members}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_chat_room_drawer_members" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_chat_room_drawer_buttons"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    app:dividerColor="@color/gray_g2"
+                    app:layout_constraintBottom_toTopOf="@id/iv_chat_room_exit_button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_chat_room_exit_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> onExitButtonClick.invoke()}"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_chat_room_exit"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:id="@+id/iv_chat_room_notification_setting_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> onNotificationToggleClick.invoke(!viewModel.chatRoom.notificationTurnOn)}"
+                    android:padding="12dp"
+                    android:src="@{viewModel.chatRoom.notificationTurnOn ? @drawable/ic_chat_room_item_notification_on : @drawable/ic_chat_room_item_notification_off}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/divider_chat_room_drawer_buttons"
+                    tools:ignore="ContentDescription"
+                    tools:src="@drawable/ic_chat_room_item_notification_on" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.drawerlayout.widget.DrawerLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

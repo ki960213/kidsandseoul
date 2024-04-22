@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.ki960213.kidsandseoul.presentation.ui.reviewwrite.ReviewWriteViewModel" />
+
+        <variable
+            name="onBackButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onRegisterButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_review_write_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:onClick="@{() -> onBackButtonClick.invoke()}"
+            android:padding="10dp"
+            android:src="@drawable/ic_all_back_button"
+            app:layout_constraintBottom_toBottomOf="@id/tv_review_write_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_review_write_title"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_review_write_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/review_write_title"
+            android:textAppearance="@style/sub_title"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_review_write_register_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:enabled="@{viewModel.canRegister}"
+            android:onClick="@{() -> onRegisterButtonClick.invoke()}"
+            android:padding="10dp"
+            android:text="@string/all_register_button"
+            android:textAppearance="@style/content_accent"
+            android:textColor="@color/main_button"
+            app:layout_constraintBottom_toBottomOf="@id/tv_review_write_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_review_write_title" />
+
+        <ScrollView
+            android:id="@+id/sv_review_write"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_review_write_title">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_review_write_profile_image"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_margin="@dimen/horizontal_padding"
+                    app:errorImage="@{@drawable/img_all_error_user}"
+                    app:imageUrl="@{viewModel.loginUser.profileImageUrl}"
+                    app:isCircle="@{true}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription"
+                    tools:src="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/tv_review_write_author_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@{viewModel.loginUser.name}"
+                    android:textAppearance="@style/content"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_review_write_profile_image"
+                    app:layout_constraintStart_toEndOf="@id/iv_review_write_profile_image"
+                    app:layout_constraintTop_toTopOf="@id/iv_review_write_profile_image"
+                    tools:text="닉네임" />
+
+
+                <ImageView
+                    android:id="@+id/iv_review_write_star_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:onClick="@{() -> viewModel.setStarPoint(1)}"
+                    android:padding="5dp"
+                    android:src="@{viewModel.starPoint >= 1 ? @drawable/ic_review_write_selected_star : @drawable/ic_review_write_unselected_star}"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_review_write_profile_image"
+                    app:layout_constraintStart_toEndOf="@id/tv_review_write_author_name"
+                    app:layout_constraintTop_toTopOf="@id/iv_review_write_profile_image"
+                    tools:ignore="ContentDescription"
+                    tools:src="@drawable/ic_review_write_selected_star" />
+
+                <ImageView
+                    android:id="@+id/iv_review_write_star_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.setStarPoint(2)}"
+                    android:padding="5dp"
+                    android:src="@{viewModel.starPoint >= 2 ? @drawable/ic_review_write_selected_star : @drawable/ic_review_write_unselected_star}"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_review_write_profile_image"
+                    app:layout_constraintStart_toEndOf="@id/iv_review_write_star_1"
+                    app:layout_constraintTop_toTopOf="@id/iv_review_write_profile_image"
+                    tools:ignore="ContentDescription"
+                    tools:src="@drawable/ic_review_write_selected_star" />
+
+                <ImageView
+                    android:id="@+id/iv_review_write_star_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.setStarPoint(3)}"
+                    android:padding="5dp"
+                    android:src="@{viewModel.starPoint >= 3 ? @drawable/ic_review_write_selected_star : @drawable/ic_review_write_unselected_star}"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_review_write_profile_image"
+                    app:layout_constraintStart_toEndOf="@id/iv_review_write_star_2"
+                    app:layout_constraintTop_toTopOf="@id/iv_review_write_profile_image"
+                    tools:ignore="ContentDescription"
+                    tools:src="@drawable/ic_review_write_selected_star" />
+
+                <ImageView
+                    android:id="@+id/iv_review_write_star_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.setStarPoint(4)}"
+                    android:padding="5dp"
+                    android:src="@{viewModel.starPoint >= 4 ? @drawable/ic_review_write_selected_star : @drawable/ic_review_write_unselected_star}"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_review_write_profile_image"
+                    app:layout_constraintStart_toEndOf="@id/iv_review_write_star_3"
+                    app:layout_constraintTop_toTopOf="@id/iv_review_write_profile_image"
+                    tools:ignore="ContentDescription"
+                    tools:src="@drawable/ic_review_write_selected_star" />
+
+                <ImageView
+                    android:id="@+id/iv_review_write_star_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.setStarPoint(5)}"
+                    android:padding="5dp"
+                    android:src="@{viewModel.starPoint >= 5 ? @drawable/ic_review_write_selected_star : @drawable/ic_review_write_unselected_star}"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_review_write_profile_image"
+                    app:layout_constraintStart_toEndOf="@id/iv_review_write_star_4"
+                    app:layout_constraintTop_toTopOf="@id/iv_review_write_profile_image"
+                    tools:ignore="ContentDescription"
+                    tools:src="@drawable/ic_review_write_unselected_star" />
+
+                <com.smarteist.autoimageslider.SliderView
+                    android:id="@+id/slider_review_write_images"
+                    android:layout_width="0dp"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="10dp"
+                    app:isVisible="@{false}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_review_write_profile_image"
+                    app:sliderIndicatorGravity="center_horizontal|bottom"
+                    app:sliderIndicatorMargin="15dp"
+                    app:sliderIndicatorOrientation="horizontal"
+                    app:sliderIndicatorPadding="3dp"
+                    app:sliderIndicatorRadius="2dp"
+                    app:sliderIndicatorSelectedColor="@color/main"
+                    app:sliderIndicatorUnselectedColor="@color/gray_g2"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_review_write_facility_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/horizontal_padding"
+                    android:layout_marginTop="24dp"
+                    android:text="@{viewModel.facility.name}"
+                    android:textAppearance="@style/content_accent"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/slider_review_write_images"
+                    tools:text="캘리클럽 잠실점" />
+
+                <TextView
+                    android:id="@+id/tv_review_write_service"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/horizontal_padding"
+                    android:layout_marginTop="5dp"
+                    android:textAppearance="@style/content"
+                    android:textColor="@color/gray_g4"
+                    app:facilityService="@{viewModel.facility}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_review_write_facility_name"
+                    tools:text="키즈카페, 실내놀이터" />
+
+                <TextView
+                    android:id="@+id/tv_review_write_address"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/horizontal_padding"
+                    android:layout_marginTop="5dp"
+                    android:text="@{viewModel.facility.address.baseAddress}"
+                    android:textAppearance="@style/content"
+                    android:textColor="@color/gray_g3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_review_write_service"
+                    tools:text="서울특별시 송파구 000" />
+
+                <View
+                    android:id="@+id/view_review_write_input_content_background"
+                    android:layout_width="0dp"
+                    android:layout_height="196dp"
+                    android:layout_marginHorizontal="14dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_review_write_content_input"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_review_write_address" />
+
+                <EditText
+                    android:id="@+id/et_review_write_content"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginVertical="7dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="top"
+                    android:hint="@string/review_write_request"
+                    android:inputType="text|textMultiLine|textNoSuggestions"
+                    android:text="@={viewModel.review}"
+                    android:textAppearance="@style/content"
+                    android:textColor="@color/gray_g5"
+                    android:textColorHint="@color/gray_g2"
+                    app:layout_constraintBottom_toTopOf="@id/tv_review_write_content_max_length"
+                    app:layout_constraintEnd_toEndOf="@id/view_review_write_input_content_background"
+                    app:layout_constraintStart_toStartOf="@id/view_review_write_input_content_background"
+                    app:layout_constraintTop_toTopOf="@id/view_review_write_input_content_background"
+                    tools:ignore="Autofill" />
+
+                <TextView
+                    android:id="@+id/tv_review_write_content_lenght"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.review.length()}"
+                    android:textAppearance="@style/content"
+                    android:textColor="@{viewModel.review.length() > viewModel.MAX_REVIEW_LENGTH ? @color/red : @color/gray_g2}"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_review_write_content_max_length"
+                    app:layout_constraintEnd_toStartOf="@id/tv_review_write_content_max_length"
+                    app:layout_constraintTop_toTopOf="@id/tv_review_write_content_max_length"
+                    tools:text="500" />
+
+                <TextView
+                    android:id="@+id/tv_review_write_content_max_length"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="@{@string/post_write_content_max_length_format(viewModel.MAX_REVIEW_LENGTH)}"
+                    android:textAppearance="@style/content"
+                    android:textColor="@color/gray_g2"
+                    app:layout_constraintBottom_toBottomOf="@id/view_review_write_input_content_background"
+                    app:layout_constraintEnd_toEndOf="@id/view_review_write_input_content_background"
+                    tools:text="/500" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

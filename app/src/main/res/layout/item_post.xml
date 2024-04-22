@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="uiState"
+            type="com.ki960213.kidsandseoul.presentation.ui.firstscreen.community.posts.posts.PostUiState" />
+
+        <variable
+            name="onPostClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+
+        <variable
+            name="onProfileUiClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> onPostClick.invoke(uiState.post.id)}"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="6dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_item_post_profile_image"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="9dp"
+                android:onClick="@{() -> onProfileUiClick.invoke(uiState.post.authorId)}"
+                app:errorImage="@{@drawable/img_all_error_user}"
+                app:imageUrl="@{uiState.authorImageUrl}"
+                app:isCircle="@{true}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tv_item_post_author_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:onClick="@{() -> onProfileUiClick.invoke(uiState.post.authorId)}"
+                android:text="@{uiState.authorName}"
+                android:textAppearance="@style/content"
+                android:textColor="@color/gray_g5"
+                app:layout_constraintBottom_toBottomOf="@id/iv_item_post_profile_image"
+                app:layout_constraintStart_toEndOf="@id/iv_item_post_profile_image"
+                app:layout_constraintTop_toTopOf="@id/iv_item_post_profile_image"
+                tools:text="닉네임" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_item_post_author"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="9dp"
+                app:dividerColor="@color/gray_g2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_item_post_profile_image" />
+
+            <TextView
+                android:id="@+id/tv_item_post_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:fontFamily="@font/pretendard_semi_bold"
+                android:text="@{uiState.post.title}"
+                android:textColor="@color/gray_g5"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="@id/iv_item_post_like_state"
+                app:layout_constraintEnd_toStartOf="@id/iv_item_post_like_state"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/iv_item_post_like_state"
+                tools:text="캘리클럽 잠실점 화장실 시설 관련" />
+
+            <ImageView
+                android:id="@+id/iv_item_post_like_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="15dp"
+                android:src="@{uiState.like ? @drawable/ic_all_liked : @drawable/ic_all_unliked}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_item_post_author"
+                tools:ignore="ContentDescription"
+                tools:src="@drawable/ic_all_liked" />
+
+            <TextView
+                android:id="@+id/tv_item_post_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="12dp"
+                android:ellipsize="end"
+                android:maxLines="5"
+                android:text="@{uiState.post.content}"
+                android:textAppearance="@style/content"
+                android:textColor="@color/gray_g5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_item_post_like_state"
+                tools:text="소녀가 걸음을 멈추며, 너, 저 산 너머에 가 본 일 있니. 벌 끝을 가리켰다. 소년은 저도 모르게 주머니 속 호두알을 만지작거리며, 한 손으로는 수없이 갈꽃을 휘어 꺾고 있었다. 이튿날, 소년이 학교에서 돌아오니, 아버지가 나들이옷으로 갈아 입고 닭 한 마리를 안고 있었다" />
+
+            <TextView
+                android:id="@+id/tv_item_post_created_at"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="9dp"
+                android:layout_marginBottom="14dp"
+                android:textAppearance="@style/content"
+                android:textColor="@color/gray_g3"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_item_post_content"
+                app:text="@{uiState.post.createdAt.toLocalDate()}"
+                tools:text="2024. 04. 21" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

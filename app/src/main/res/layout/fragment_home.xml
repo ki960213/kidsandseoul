@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <import type="com.ki960213.kidsandseoul.presentation.common.uistate.ServiceUiState" />
+
+        <variable
+            name="viewModel"
+            type="com.ki960213.kidsandseoul.presentation.ui.firstscreen.home.HomeViewModel" />
+
+        <variable
+            name="onNotificationsButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onSearchButtonClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+
+        <variable
+            name="onFacilityServiceClick"
+            type="kotlin.jvm.functions.Function1&lt;ServiceUiState, Unit>" />
+    </data>
+
+    <ScrollView
+        android:id="@+id/sv_home"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_home_banner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/img_home_banner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/iv_home_notifications_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:onClick="@{() -> onNotificationsButtonClick.invoke()}"
+                android:padding="12dp"
+                android:src="@drawable/ic_home_bell"
+                app:isVisible="@{false}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_home_notification_indicator"
+                app:isVisible="@{false}"
+                app:layout_constraintEnd_toEndOf="@id/iv_home_notifications_button"
+                app:layout_constraintTop_toTopOf="@id/iv_home_notifications_button"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tv_home_kid_register_request"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginBottom="44dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="@string/home_kid_register_request"
+                android:textColor="@color/gray_g5"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/iv_home_banner"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_home_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="54dp"
+                android:background="@drawable/bg_all_input_text"
+                android:elevation="6dp"
+                app:layout_constraintBottom_toBottomOf="@id/iv_home_banner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_home_banner">
+
+                <EditText
+                    android:id="@+id/et_home_input"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/facilities_search_hint"
+                    android:inputType="text|textNoSuggestions"
+                    android:maxLines="1"
+                    android:paddingVertical="11dp"
+                    android:textAppearance="@style/content"
+                    android:textColor="@color/gray_g5"
+                    android:textColorHint="@color/gray_g3"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/iv_home_search_button"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="Autofill" />
+
+                <ImageView
+                    android:id="@+id/iv_home_search_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> onSearchButtonClick.invoke(etHomeInput.getText().toString())}"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp"
+                    android:src="@drawable/ic_all_search"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tv_home_child_care_facility_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_padding"
+                android:layout_marginTop="30.5dp"
+                android:text="@string/all_child_care"
+                android:textAppearance="@style/sub_title"
+                android:textColor="@color/gray_g5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_home_banner" />
+
+            <ImageView
+                android:id="@+id/iv_home_growth_center_button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/horizontal_padding"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="23dp"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.OUR_NEIGHBORHOOD_GROWING_CENTER)}"
+                android:src="@drawable/img_home_growth_center"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/iv_home_local_children_center"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_home_child_care_facility_label"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tv_home_growth_center_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.OUR_NEIGHBORHOOD_GROWING_CENTER)}"
+                android:text="@string/all_our_neighbor_growing_center"
+                android:textColor="@color/gray_g4"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@id/iv_home_growth_center_button"
+                app:layout_constraintStart_toStartOf="@id/iv_home_growth_center_button"
+                app:layout_constraintTop_toBottomOf="@id/iv_home_growth_center_button" />
+
+            <ImageView
+                android:id="@+id/iv_home_local_children_center"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="23dp"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.LOCAL_CHILDREN_CENTER)}"
+                android:src="@drawable/img_home_local_children_center"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/iv_home_co_parenting_room"
+                app:layout_constraintStart_toEndOf="@+id/iv_home_growth_center_button"
+                app:layout_constraintTop_toTopOf="@id/iv_home_growth_center_button"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tv_home_local_children_center_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.LOCAL_CHILDREN_CENTER)}"
+                android:text="@string/all_local_children_center"
+                android:textColor="@color/gray_g4"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@id/iv_home_local_children_center"
+                app:layout_constraintStart_toStartOf="@id/iv_home_local_children_center"
+                app:layout_constraintTop_toBottomOf="@id/iv_home_local_children_center" />
+
+            <ImageView
+                android:id="@+id/iv_home_co_parenting_room"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="23dp"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.CO_PARENTING_ROOM)}"
+                android:src="@drawable/img_home_co_parenting_room"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/iv_home_co_parenting_sharing_center"
+                app:layout_constraintStart_toEndOf="@+id/iv_home_local_children_center"
+                app:layout_constraintTop_toTopOf="@id/iv_home_growth_center_button"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tv_home_co_parenting_room_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.CO_PARENTING_ROOM)}"
+                android:text="@string/all_co_parenting_room"
+                android:textColor="@color/gray_g4"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@id/iv_home_co_parenting_room"
+                app:layout_constraintStart_toStartOf="@id/iv_home_co_parenting_room"
+                app:layout_constraintTop_toBottomOf="@id/iv_home_co_parenting_room" />
+
+            <ImageView
+                android:id="@+id/iv_home_co_parenting_sharing_center"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="23dp"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.CO_PARENTING_SHARING_CENTER)}"
+                android:src="@drawable/img_home_co_parenting_sharing_center"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_home_co_parenting_room"
+                app:layout_constraintTop_toTopOf="@id/iv_home_growth_center_button"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tv_home_co_parenting_room_sharing_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.CO_PARENTING_SHARING_CENTER)}"
+                android:text="@string/all_co_parenting_sharing_center"
+                android:textColor="@color/gray_g4"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@id/iv_home_co_parenting_sharing_center"
+                app:layout_constraintStart_toStartOf="@id/iv_home_co_parenting_sharing_center"
+                app:layout_constraintTop_toBottomOf="@id/iv_home_co_parenting_sharing_center" />
+
+            <TextView
+                android:id="@+id/tv_home_other_facility_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_padding"
+                android:layout_marginTop="26dp"
+                android:text="@string/all_other_facility"
+                android:textAppearance="@style/sub_title"
+                android:textColor="@color/gray_g5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_home_growth_center_button" />
+
+            <ImageView
+                android:id="@+id/iv_home_kids_cafe"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/horizontal_padding"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="12dp"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.KIDS_CAFE)}"
+                android:src="@drawable/img_all_kids_cafe"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@id/iv_home_outdoor_button"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toEndOf="@+id/iv_home_co_parenting_sharing_center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_home_other_facility_label"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tv_home_kids_cafe_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.KIDS_CAFE)}"
+                android:text="@string/all_kids_cafe"
+                android:textColor="@color/gray_g4"
+                android:textSize="11sp"
+                app:layout_constraintEnd_toEndOf="@id/iv_home_kids_cafe"
+                app:layout_constraintStart_toStartOf="@id/iv_home_kids_cafe"
+                app:layout_constraintTop_toBottomOf="@id/iv_home_kids_cafe" />
+
+            <ImageView
+                android:id="@+id/iv_home_outdoor_button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="12dp"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.OUTDOOR)}"
+                android:src="@drawable/img_all_outdoor"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/iv_home_experience_button"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toEndOf="@id/iv_home_kids_cafe"
+                app:layout_constraintTop_toTopOf="@id/iv_home_kids_cafe"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tv_home_outdoor_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.OUTDOOR)}"
+                android:text="@string/all_outdoor"
+                android:textColor="@color/gray_g4"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@id/iv_home_outdoor_button"
+                app:layout_constraintStart_toStartOf="@id/iv_home_outdoor_button"
+                app:layout_constraintTop_toBottomOf="@id/iv_home_outdoor_button" />
+
+            <ImageView
+                android:id="@+id/iv_home_experience_button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="12dp"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.EXPERIENCE)}"
+                android:src="@drawable/img_all_experience"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/iv_home_medical_button"
+                app:layout_constraintStart_toEndOf="@+id/iv_home_outdoor_button"
+                app:layout_constraintTop_toTopOf="@id/iv_home_outdoor_button"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tv_home_experience_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.EXPERIENCE)}"
+                android:text="@string/all_experience"
+                android:textColor="@color/gray_g4"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@id/iv_home_experience_button"
+                app:layout_constraintStart_toStartOf="@id/iv_home_experience_button"
+                app:layout_constraintTop_toBottomOf="@id/iv_home_experience_button" />
+
+            <ImageView
+                android:id="@+id/iv_home_medical_button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="12dp"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.MEDICAL)}"
+                android:src="@drawable/img_all_medical"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/iv_home_library_button"
+                app:layout_constraintStart_toEndOf="@+id/iv_home_experience_button"
+                app:layout_constraintTop_toTopOf="@id/iv_home_outdoor_button"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tv_home_medical_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.MEDICAL)}"
+                android:text="@string/all_medical"
+                android:textColor="@color/gray_g4"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@id/iv_home_medical_button"
+                app:layout_constraintStart_toStartOf="@id/iv_home_medical_button"
+                app:layout_constraintTop_toBottomOf="@id/iv_home_medical_button" />
+
+            <ImageView
+                android:id="@+id/iv_home_library_button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="@dimen/horizontal_padding"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.LIBRARY)}"
+                android:src="@drawable/img_all_library"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_home_medical_button"
+                app:layout_constraintTop_toTopOf="@id/iv_home_outdoor_button"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tv_home_library_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:gravity="center"
+                android:onClick="@{() -> onFacilityServiceClick.invoke(ServiceUiState.LIBRARY)}"
+                android:text="@string/all_library"
+                android:textColor="@color/gray_g4"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@id/iv_home_library_button"
+                app:layout_constraintStart_toStartOf="@id/iv_home_library_button"
+                app:layout_constraintTop_toBottomOf="@id/iv_home_library_button" />
+
+            <TextView
+                android:id="@+id/home_interest_facilities_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_padding"
+                android:layout_marginTop="17dp"
+                android:text="@string/home_interest_facility_label"
+                android:textAppearance="@style/sub_title"
+                android:textColor="@color/gray_g5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_home_outdoor_button" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_interest_facilities"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="5dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/horizontal_padding"
+                app:home_interestFacilities="@{viewModel.interestFacilities}"
+                app:itemSpacing_dp="@{9}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/home_interest_facilities_label"
+                tools:listitem="@layout/item_interest_facility" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</layout>

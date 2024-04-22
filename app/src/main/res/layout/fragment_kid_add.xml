@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.ki960213.domain.user.model.Sex" />
+
+        <variable
+            name="viewModel"
+            type="com.ki960213.kidsandseoul.presentation.ui.kidadd.KidAddViewModel" />
+
+        <variable
+            name="onBackClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onBirthDateButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onCancelButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onSaveButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_kid_add"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_kid_add_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:onClick="@{() -> onBackClick.invoke()}"
+            android:padding="10dp"
+            android:src="@drawable/ic_all_back_button"
+            app:layout_constraintBottom_toBottomOf="@id/tv_kid_add_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_kid_add_title"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_kid_add_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/kid_add_title"
+            android:textAppearance="@style/sub_title"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:id="@+id/sv_kid_add"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toTopOf="@id/ll_kid_add_buttons"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_kid_add_title">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/view_kid_add_name_background"
+                    android:layout_width="0dp"
+                    android:layout_height="74dp"
+                    android:background="@color/gray_g1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ll_kid_add_name_input"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/horizontal_padding"
+                    android:background="@drawable/bg_all_input_text"
+                    android:elevation="6dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="@id/view_kid_add_name_background"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/view_kid_add_name_background">
+
+                    <EditText
+                        android:id="@+id/et_kid_add_name_input"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:background="@android:color/transparent"
+                        android:hint="@string/kid_add_input_kid_name_hint"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:maxLength="6"
+                        android:textColorHint="@color/gray_g3"
+                        android:paddingVertical="9.5dp"
+                        android:text="@={viewModel.name}"
+                        android:textAppearance="@style/content_accent"
+                        android:textColor="@color/gray_g5"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/iv_kid_add_name_delete_button"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="LabelFor" />
+
+                    <ImageView
+                        android:id="@+id/iv_kid_add_name_delete_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:onClick="@{() -> etKidAddNameInput.getText().clear()}"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_all_delete"
+                        app:isVisible="@{!etKidAddNameInput.text.toString().empty}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="ContentDescription" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/tv_kid_add_sex_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:text="@string/kid_add_sex_label"
+                    android:textAppearance="@style/content_accent"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view_kid_add_name_background" />
+
+                <TextView
+                    android:id="@+id/tv_kid_add_male_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@{viewModel.selectedSex == Sex.MALE ? @drawable/bg_all_button_highlight : @drawable/bg_all_button_normal}"
+                    android:elevation="6dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:onClick="@{() -> viewModel.selectSex(Sex.MALE)}"
+                    android:paddingHorizontal="48dp"
+                    android:paddingVertical="10dp"
+                    android:text="@string/kid_add_male"
+                    android:textColor="@color/gray_g5"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_kid_add_female_button"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_kid_add_sex_label"
+                    tools:background="@drawable/bg_all_button_highlight" />
+
+                <TextView
+                    android:id="@+id/tv_kid_add_female_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="17dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@{viewModel.selectedSex == Sex.FEMALE ? @drawable/bg_all_button_highlight : @drawable/bg_all_button_normal}"
+                    android:elevation="6dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:onClick="@{() -> viewModel.selectSex(Sex.FEMALE)}"
+                    android:paddingHorizontal="48dp"
+                    android:paddingVertical="10dp"
+                    android:text="@string/kid_add_female"
+                    android:textColor="@color/gray_g5"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_kid_add_male_button"
+                    app:layout_constraintTop_toBottomOf="@id/tv_kid_add_sex_label"
+                    tools:background="@drawable/bg_all_button_normal" />
+
+                <TextView
+                    android:id="@+id/tv_kid_add_birth_date_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:text="@string/kid_add_birth_date_label"
+                    android:textAppearance="@style/content_accent"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_kid_add_male_button" />
+
+                <TextView
+                    android:id="@+id/tv_kid_add_birth_date_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@{viewModel.selectedBirthDate != null ?  @drawable/bg_all_button_highlight : @drawable/bg_all_button_normal}"
+                    android:drawablePadding="6dp"
+                    android:elevation="6dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:onClick="@{() -> onBirthDateButtonClick.invoke()}"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="10dp"
+                    android:textColor="@color/gray_g5"
+                    android:textSize="12sp"
+                    app:drawableStartCompat="@drawable/ic_kid_add_calendar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_kid_add_birth_date_label"
+                    app:text="@{viewModel.selectedBirthDate}"
+                    tools:background="@drawable/bg_all_button_highlight"
+                    tools:text="2024. 02. 13" />
+
+                <TextView
+                    android:id="@+id/tv_kid_add_region_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:text="@string/all_region_label"
+                    android:textAppearance="@style/content_accent"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_kid_add_birth_date_button" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_kid_add_header_top"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    app:dividerColor="@color/gray_g2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_kid_add_region_label" />
+
+                <TextView
+                    android:id="@+id/tv_kid_add_borough_header"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray_g1"
+                    android:gravity="center"
+                    android:paddingVertical="8dp"
+                    android:text="@string/all_borough_header"
+                    android:textAppearance="@style/content"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintEnd_toStartOf="@+id/divider_kid_add_borough_and_administrative_dong"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_kid_add_header_top" />
+
+                <TextView
+                    android:id="@+id/tv_kid_add_administrative_dong_header"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray_g1"
+                    android:gravity="center"
+                    android:paddingVertical="8dp"
+                    android:text="@string/all_dong_header"
+                    android:textAppearance="@style/content"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintEnd_toStartOf="@+id/divider_kid_add_administrative_dong_and_selected_region"
+                    app:layout_constraintStart_toEndOf="@+id/divider_kid_add_borough_and_administrative_dong"
+                    app:layout_constraintTop_toTopOf="@id/tv_kid_add_borough_header" />
+
+                <TextView
+                    android:id="@+id/tv_kid_add_selected_region_header"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray_g1"
+                    android:gravity="center"
+                    android:paddingVertical="8dp"
+                    android:text="@string/all_selected_region_header"
+                    android:textAppearance="@style/content"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/divider_kid_add_administrative_dong_and_selected_region"
+                    app:layout_constraintTop_toTopOf="@id/tv_kid_add_borough_header" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_kid_add_header_bottom"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    app:dividerColor="@color/gray_g2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_kid_add_borough_header" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_kid_add_boroughs"
+                    android:layout_width="0dp"
+                    android:layout_height="215dp"
+                    android:orientation="vertical"
+                    app:all_boroughs="@{viewModel.boroughs}"
+                    app:itemAnimator="@{null}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toTopOf="@id/divider_kid_add_buttons"
+                    app:layout_constraintEnd_toStartOf="@id/divider_kid_add_borough_and_administrative_dong"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_kid_add_header_bottom" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_kid_add_borough_and_administrative_dong"
+                    android:layout_width="0.5dp"
+                    android:layout_height="0dp"
+                    app:dividerColor="@color/gray_g2"
+                    app:layout_constraintBottom_toTopOf="@id/divider_kid_add_buttons"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.291"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_kid_add_header_top" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_kid_add_administrative_dongs"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    app:all_administrativeDongs="@{viewModel.administrativeDongs}"
+                    app:itemAnimator="@{null}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toTopOf="@id/divider_kid_add_buttons"
+                    app:layout_constraintEnd_toStartOf="@id/divider_kid_add_administrative_dong_and_selected_region"
+                    app:layout_constraintStart_toEndOf="@id/divider_kid_add_borough_and_administrative_dong"
+                    app:layout_constraintTop_toBottomOf="@id/divider_kid_add_header_bottom" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_kid_add_administrative_dong_and_selected_region"
+                    android:layout_width="0.5dp"
+                    android:layout_height="0dp"
+                    app:dividerColor="@color/gray_g2"
+                    app:layout_constraintBottom_toTopOf="@id/divider_kid_add_buttons"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.583"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_kid_add_header_top" />
+
+                <TextView
+                    android:id="@+id/tv_kid_add_selected_region"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_all_chip"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:textColor="@color/main"
+                    android:textSize="12sp"
+                    app:all_selectedAdministrativeDong="@{viewModel.selectedAdministrativeDong}"
+                    app:isVisible="@{viewModel.selectedAdministrativeDong != null}"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/divider_kid_add_administrative_dong_and_selected_region"
+                    app:layout_constraintTop_toBottomOf="@id/divider_kid_add_header_bottom"
+                    tools:text="서울 강남구 개포2동" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_kid_add_buttons"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginBottom="13dp"
+                    app:dividerColor="@color/gray_g2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rv_kid_add_boroughs" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/ll_kid_add_buttons"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:clickable="true"
+            android:elevation="20dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tv_kid_add_cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/bg_all_button_highlight"
+                android:elevation="4dp"
+                android:fontFamily="@font/pretendard_semi_bold"
+                android:onClick="@{() -> onCancelButtonClick.invoke()}"
+                android:paddingHorizontal="52dp"
+                android:paddingVertical="10dp"
+                android:text="@string/all_cancel"
+                android:textColor="@color/gray_g5"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_kid_add_save_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/bg_all_button_main"
+                android:elevation="4dp"
+                android:enabled="@{viewModel.isComplete}"
+                android:fontFamily="@font/pretendard_semi_bold"
+                android:onClick="@{() -> onSaveButtonClick.invoke()}"
+                android:paddingHorizontal="52dp"
+                android:paddingVertical="10dp"
+                android:text="@string/kid_add_save"
+                android:textColor="@{tvKidAddSaveButton.enabled ? @color/white : @color/gray_g3}"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

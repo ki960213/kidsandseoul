@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="facility"
+            type="com.ki960213.domain.facility.model.Facility" />
+
+        <variable
+            name="onFacilityClick"
+            type="kotlin.jvm.functions.Function1&lt;Long, Unit>" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> onFacilityClick.invoke(facility.id)}">
+
+        <ImageView
+            android:id="@+id/iv_facility_item_thumbnail"
+            android:layout_width="80dp"
+            android:layout_height="84dp"
+            app:all_facilityServiceImage="@{facility}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/img_all_kids_cafe" />
+
+        <TextView
+            android:id="@+id/tv_facility_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="6dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{facility.name}"
+            android:textAppearance="@style/content_accent"
+            android:textColor="@color/gray_g5"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@+id/tv_facility_item_service"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/iv_facility_item_thumbnail"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="서울형 키즈카페 종로구 혜화동점(종로 혜명 아이들 상상놀이터)" />
+
+        <TextView
+            android:id="@+id/tv_facility_item_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g4"
+            app:facilityService="@{facility}"
+            app:layout_constraintBottom_toBottomOf="@id/tv_facility_item_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_facility_item_name"
+            tools:text="키즈카페" />
+
+        <TextView
+            android:id="@+id/tv_facility_item_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{facility.address.baseAddress}"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_facility_item_thumbnail"
+            app:layout_constraintTop_toBottomOf="@id/tv_facility_item_name"
+            tools:text="서울특별시 송파구 000" />
+
+        <ImageView
+            android:id="@+id/iv_facility_item_star_point"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="6dp"
+            android:src="@drawable/ic_all_star_point"
+            app:layout_constraintStart_toEndOf="@id/iv_facility_item_thumbnail"
+            app:layout_constraintTop_toBottomOf="@id/tv_facility_item_address"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_facility_item_star_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintBottom_toBottomOf="@id/iv_facility_item_star_point"
+            app:layout_constraintStart_toEndOf="@id/iv_facility_item_star_point"
+            app:layout_constraintTop_toTopOf="@id/iv_facility_item_star_point"
+            app:starPointAvg="@{facility.starPointAvg}"
+            tools:text="4.9" />
+
+        <TextView
+            android:id="@+id/tv_facility_item_review_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@{@string/item_facility_review_count_format(facility.reviewCount)}"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintBottom_toBottomOf="@id/iv_facility_item_star_point"
+            app:layout_constraintStart_toEndOf="@id/tv_facility_item_star_point"
+            app:layout_constraintTop_toTopOf="@id/iv_facility_item_star_point"
+            tools:text="후기 수 81" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

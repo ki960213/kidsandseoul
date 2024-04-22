@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="onKakaoLoginButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onGoogleLoginButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_login_dialog">
+
+        <ImageView
+            android:id="@+id/iv_login_dialog_handle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/img_all_bottom_dialog_handle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_login_dialog_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="44dp"
+            android:text="@string/login_dialog_title"
+            android:textAppearance="@style/title"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_login_dialog_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/login_dialog_description"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g4"
+            app:layout_constraintStart_toStartOf="@id/tv_login_dialog_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_login_dialog_title" />
+
+        <TextView
+            android:id="@+id/tv_login_dialog_kakao_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="44dp"
+            android:layout_marginTop="33dp"
+            android:background="@drawable/bg_login_dialog_kakao_button"
+            android:drawablePadding="25dp"
+            android:gravity="center_vertical"
+            android:onClick="@{() -> onKakaoLoginButtonClick.invoke()}"
+            android:paddingHorizontal="28dp"
+            android:paddingVertical="11dp"
+            android:text="@string/login_dialog_kakao_button"
+            android:textAppearance="@style/content_accent"
+            android:textColor="#2c2c2c"
+            android:visibility="gone"
+            app:drawableStartCompat="@drawable/ic_login_dialog_kakao"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_login_dialog_description" />
+
+        <TextView
+            android:id="@+id/tv_login_dialog_google_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="44dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="56dp"
+            android:background="@drawable/bg_login_dialog_google_button"
+            android:drawablePadding="17dp"
+            android:gravity="center_vertical"
+            android:onClick="@{() -> onGoogleLoginButtonClick.invoke()}"
+            android:paddingHorizontal="28dp"
+            android:paddingVertical="8dp"
+            android:text="@string/login_dialog_google_button"
+            android:textAppearance="@style/content_accent"
+            android:textColor="#2c2c2c"
+            app:drawableStartCompat="@drawable/ic_login_dialog_google"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_login_dialog_kakao_button"
+            app:layout_goneMarginTop="33dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

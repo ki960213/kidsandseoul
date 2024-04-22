@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <import type="com.ki960213.domain.user.model.Sex" />
+
+        <variable
+            name="kid"
+            type="com.ki960213.domain.kid.model.Kid" />
+
+        <variable
+            name="onKidClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_profile_kid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_kid_clickable"
+        android:elevation="6dp"
+        android:onClick="@{() -> onKidClick.invoke(kid.id)}"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="16dp">
+
+        <ImageView
+            android:id="@+id/iv_filter_kid_image"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@{kid.sex == Sex.MALE ? @drawable/img_profile_son : @drawable/img_profile_daughter}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/img_profile_daughter" />
+
+        <TextView
+            android:id="@+id/tv_filter_kid_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:text="@{kid.name}"
+            android:textColor="@color/gray_g5"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/iv_filter_kid_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="지현이" />
+
+        <ImageView
+            android:id="@+id/iv_filter_kid_sex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:src="@{kid.sex == Sex.MALE ? @drawable/ic_profile_kid_male : @drawable/ic_profile_kid_female}"
+            app:layout_constraintBottom_toBottomOf="@id/tv_filter_kid_name"
+            app:layout_constraintStart_toEndOf="@id/tv_filter_kid_name"
+            app:layout_constraintTop_toTopOf="@id/tv_filter_kid_name"
+            tools:ignore="ContentDescription"
+            tools:src="drawable/ic_filter_kid_female" />
+
+        <TextView
+            android:id="@+id/tv_filter_kid_birth_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g4"
+            app:layout_constraintStart_toEndOf="@id/iv_filter_kid_image"
+            app:layout_constraintTop_toBottomOf="@id/tv_filter_kid_name"
+            app:text="@{kid.birthDate}"
+            tools:text="2014. 02. 13" />
+
+        <TextView
+            android:id="@+id/tv_filter_kid_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/my_profile_kid_age_format(kid.age)}"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g4"
+            app:layout_constraintBottom_toBottomOf="@id/tv_filter_kid_birth_date"
+            app:layout_constraintStart_toEndOf="@id/tv_filter_kid_birth_date"
+            app:layout_constraintTop_toTopOf="@id/tv_filter_kid_birth_date"
+            tools:text=" | 10살" />
+
+        <TextView
+            android:id="@+id/tv_filter_kid_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g4"
+            app:administrativeDongText="@{kid.livingDong}"
+            app:layout_constraintStart_toEndOf="@id/iv_filter_kid_image"
+            app:layout_constraintTop_toBottomOf="@id/tv_filter_kid_birth_date"
+            tools:text="서울특별시 남동구 남촌동" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

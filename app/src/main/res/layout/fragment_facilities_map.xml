@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <import type="com.ki960213.kidsandseoul.presentation.common.uistate.ServiceUiState" />
+
+        <variable
+            name="viewModel"
+            type="com.ki960213.kidsandseoul.presentation.ui.firstscreen.facilitiesmap.FacilitiesMapViewModel" />
+
+        <variable
+            name="onSearchButtonClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+
+        <variable
+            name="onServiceClick"
+            type="kotlin.jvm.functions.Function1&lt;ServiceUiState, Unit>" />
+
+        <variable
+            name="onFacilityInfoClick"
+            type="kotlin.jvm.functions.Function1&lt;Long, Unit>" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fcv_facilities_map"
+            android:name="com.naver.maps.map.MapFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_facilities_map_search"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#D9FFFFFF"
+            android:elevation="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_facilities_map_name_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_padding"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="13dp"
+                android:background="@drawable/bg_all_input_text"
+                android:elevation="6dp"
+                app:layout_constraintEnd_toStartOf="@id/iv_facilities_map_search_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <EditText
+                    android:id="@+id/et_facilities_map_name_input"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:textColorHint="@color/gray_g3"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/facilities_search_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:paddingVertical="9.5dp"
+                    android:text="@{viewModel.searchKeyword}"
+                    android:textAppearance="@style/content_accent"
+                    android:textColor="@color/gray_g5"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/iv_facilities_map_name_delete_button"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="LabelFor" />
+
+                <ImageView
+                    android:id="@+id/iv_facilities_map_name_delete_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:onClick="@{() -> etFacilitiesMapNameInput.getText().clear()}"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_all_delete"
+                    app:isVisible="@{!etFacilitiesMapNameInput.text.toString().empty}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/iv_facilities_map_search_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                android:onClick="@{() -> onSearchButtonClick.invoke(etFacilitiesMapNameInput.getText().toString())}"
+                android:padding="10dp"
+                android:src="@drawable/ic_facilities_search"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/sv_facilities_map_service_buttons"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_facilities_map_search">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_facilities_map_growing_center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="12dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@{viewModel.selectedService == ServiceUiState.OUR_NEIGHBORHOOD_GROWING_CENTER ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:elevation="6dp"
+                    android:enabled="@{!viewModel.isLoading}"
+                    android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.OUR_NEIGHBORHOOD_GROWING_CENTER)}"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/all_our_neighbor_growing_center"
+                    android:textColor="@{viewModel.selectedService == ServiceUiState.OUR_NEIGHBORHOOD_GROWING_CENTER ? @color/white : @color/gray_g5}"
+                    tools:background="@drawable/bg_all_button_highlight"
+                    tools:textColor="@color/gray_g5" />
+
+                <TextView
+                    android:id="@+id/tv_facilities_map_locac_children_center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="@{viewModel.selectedService == ServiceUiState.LOCAL_CHILDREN_CENTER ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:elevation="6dp"
+                    android:enabled="@{!viewModel.isLoading}"
+                    android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.LOCAL_CHILDREN_CENTER)}"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/all_local_children_center"
+                    android:textColor="@{viewModel.selectedService == ServiceUiState.LOCAL_CHILDREN_CENTER ? @color/white : @color/gray_g5}"
+                    tools:background="@drawable/bg_all_button_highlight"
+                    tools:textColor="@color/gray_g5" />
+
+                <TextView
+                    android:id="@+id/tv_facilities_map_co_parenting_room"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="@{viewModel.selectedService == ServiceUiState.CO_PARENTING_ROOM ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:elevation="6dp"
+                    android:enabled="@{!viewModel.isLoading}"
+                    android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.CO_PARENTING_ROOM)}"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/all_co_parenting_room"
+                    android:textColor="@{viewModel.selectedService == ServiceUiState.CO_PARENTING_ROOM ? @color/white : @color/gray_g5}"
+                    tools:background="@drawable/bg_all_button_selected"
+                    tools:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/tv_facilities_map_co_parenting_sharing_center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="@{viewModel.selectedService == ServiceUiState.CO_PARENTING_SHARING_CENTER ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:elevation="6dp"
+                    android:enabled="@{!viewModel.isLoading}"
+                    android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.CO_PARENTING_SHARING_CENTER)}"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/all_co_parenting_sharing_center"
+                    android:textColor="@{viewModel.selectedService == ServiceUiState.CO_PARENTING_SHARING_CENTER ? @color/white : @color/gray_g5}"
+                    tools:background="@drawable/bg_all_button_highlight"
+                    tools:textColor="@color/gray_g5" />
+
+                <TextView
+                    android:id="@+id/tv_facilities_map_kids_cafe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="@{viewModel.selectedService == ServiceUiState.KIDS_CAFE ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:elevation="6dp"
+                    android:enabled="@{!viewModel.isLoading}"
+                    android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.KIDS_CAFE)}"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/all_kids_cafe"
+                    android:textColor="@{viewModel.selectedService == ServiceUiState.KIDS_CAFE ? @color/white : @color/gray_g5}"
+                    tools:background="@drawable/bg_all_button_highlight"
+                    tools:textColor="@color/gray_g5" />
+
+                <TextView
+                    android:id="@+id/tv_facilities_map_outdoor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="@{viewModel.selectedService == ServiceUiState.OUTDOOR ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:elevation="6dp"
+                    android:enabled="@{!viewModel.isLoading}"
+                    android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.OUTDOOR)}"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/all_outdoor"
+                    android:textColor="@{viewModel.selectedService == ServiceUiState.OUTDOOR ? @color/white : @color/gray_g5}"
+                    tools:background="@drawable/bg_all_button_highlight"
+                    tools:textColor="@color/gray_g5" />
+
+                <TextView
+                    android:id="@+id/tv_facilities_map_experience"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="@{viewModel.selectedService == ServiceUiState.EXPERIENCE ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:elevation="6dp"
+                    android:enabled="@{!viewModel.isLoading}"
+                    android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.EXPERIENCE)}"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/all_experience"
+                    android:textColor="@{viewModel.selectedService == ServiceUiState.EXPERIENCE ? @color/white : @color/gray_g5}"
+                    tools:background="@drawable/bg_all_button_highlight"
+                    tools:textColor="@color/gray_g5" />
+
+                <TextView
+                    android:id="@+id/tv_facilities_map_medical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="@{viewModel.selectedService == ServiceUiState.MEDICAL ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:elevation="6dp"
+                    android:enabled="@{!viewModel.isLoading}"
+                    android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.MEDICAL)}"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/all_medical"
+                    android:textColor="@{viewModel.selectedService == ServiceUiState.MEDICAL ? @color/white : @color/gray_g5}"
+                    tools:background="@drawable/bg_all_button_highlight"
+                    tools:textColor="@color/gray_g5" />
+
+                <TextView
+                    android:id="@+id/tv_facilities_map_library"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@{viewModel.selectedService == ServiceUiState.LIBRARY ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:elevation="6dp"
+                    android:enabled="@{!viewModel.isLoading}"
+                    android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.LIBRARY)}"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/all_library"
+                    android:textColor="@{viewModel.selectedService == ServiceUiState.LIBRARY ? @color/white : @color/gray_g5}"
+                    tools:background="@drawable/bg_all_button_highlight"
+                    tools:textColor="@color/gray_g5" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_facilities_map_facility"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_all_bottom_sheet_dialog"
+            android:clickable="true"
+            android:elevation="10dp"
+            app:isVisible="@{viewModel.selectedFacility != null}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_facilities_map_handle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/img_all_bottom_dialog_handle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/iv_facilities_map_facility_service"
+                android:layout_width="92dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="@dimen/horizontal_padding"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="20dp"
+                app:all_facilityServiceImage="@{viewModel.selectedFacility}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_facilities_map_handle"
+                tools:ignore="ContentDescription"
+                tools:src="@drawable/img_all_kids_cafe" />
+
+            <View
+                android:id="@+id/view_facilities_map_clickable"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="@dimen/horizontal_padding"
+                android:onClick="@{() -> onFacilityInfoClick.invoke(viewModel.selectedFacility.id)}"
+                app:layout_constraintBottom_toBottomOf="@id/iv_facilities_map_facility_service"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/iv_facilities_map_facility_service" />
+
+            <TextView
+                android:id="@+id/tv_facilities_map_facility_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="@dimen/horizontal_padding"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{viewModel.selectedFacility.name}"
+                android:textAppearance="@style/sub_title"
+                android:textColor="@color/gray_g5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_facilities_map_facility_service"
+                app:layout_constraintTop_toTopOf="@id/iv_facilities_map_facility_service"
+                tools:text="서울형 키즈카페 종로구 혜화동점(종로 혜명 아이들 상상놀이터)" />
+
+            <TextView
+                android:id="@+id/tv_facilities_map_service_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/content"
+                android:textColor="@color/gray_g4"
+                app:facilityService="@{viewModel.selectedFacility}"
+                app:layout_constraintStart_toStartOf="@id/tv_facilities_map_facility_name"
+                app:layout_constraintTop_toBottomOf="@id/tv_facilities_map_facility_name"
+                tools:text="키즈카페, 실내놀이터" />
+
+            <ImageView
+                android:id="@+id/iv_facilities_map_star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_all_star_point"
+                app:layout_constraintStart_toStartOf="@id/tv_facilities_map_service_name"
+                app:layout_constraintTop_toBottomOf="@id/tv_facilities_map_service_name"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tv_facilities_map_star_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:textColor="@color/gray_g5"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/iv_facilities_map_star"
+                app:layout_constraintStart_toEndOf="@id/iv_facilities_map_star"
+                app:layout_constraintTop_toTopOf="@id/iv_facilities_map_star"
+                app:starPointAvg="@{viewModel.selectedFacility.starPointAvg}"
+                tools:text="4.9" />
+
+            <TextView
+                android:id="@+id/tv_facilities_map_review_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="@{@string/item_facility_review_count_format(viewModel.selectedFacility.reviewCount)}"
+                android:textColor="@color/gray_g5"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/iv_facilities_map_star"
+                app:layout_constraintStart_toEndOf="@id/tv_facilities_map_star_point"
+                app:layout_constraintTop_toTopOf="@id/iv_facilities_map_star"
+                tools:text="후기 수 81" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ProgressBar
+            android:id="@+id/pb_facilities_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:isVisible="@{viewModel.isLoading}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

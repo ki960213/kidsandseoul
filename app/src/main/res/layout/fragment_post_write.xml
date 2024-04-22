@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.ki960213.kidsandseoul.presentation.ui.postwrite.PostWriteViewModel" />
+
+        <variable
+            name="onBackButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onRegisterButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_post_write_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:onClick="@{() -> onBackButtonClick.invoke()}"
+            android:padding="12dp"
+            android:src="@drawable/ic_all_back_button"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_post_write_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_post_write_title"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_post_write_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/post_write_title"
+            android:textAppearance="@style/sub_title"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_post_write_write_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:enabled="@{viewModel.canRegister}"
+            android:onClick="@{() -> onRegisterButtonClick.invoke()}"
+            android:padding="10dp"
+            android:text="@string/all_register_button"
+            android:textAppearance="@style/content_accent"
+            android:textColor="@color/main_button"
+            app:layout_constraintBottom_toBottomOf="@id/iv_post_write_back_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_post_write_back_button" />
+
+        <EditText
+            android:id="@+id/et_post_write_title_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_padding"
+            android:layout_marginTop="14dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/pretendard_regular"
+            android:hint="@string/post_write_post_title_hint"
+            android:inputType="text|textNoSuggestions"
+            android:maxLength="100"
+            android:maxLines="1"
+            android:paddingVertical="6dp"
+            android:text="@={viewModel.title}"
+            android:textColor="@color/gray_g5"
+            android:textColorHint="@color/gray_g3"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_post_write_back_button"
+            tools:ignore="Autofill" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_post_write_title_input"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="@dimen/horizontal_padding"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_post_write_title_input" />
+
+        <EditText
+            android:id="@+id/et_post_write_content_input"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="@dimen/horizontal_padding"
+            android:background="@android:color/transparent"
+            android:gravity="top"
+            android:hint="@string/post_write_content_hint"
+            android:importantForAutofill="no"
+            android:inputType="text|textMultiLine|textNoSuggestions"
+            android:paddingVertical="10dp"
+            android:text="@={viewModel.content}"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g5"
+            android:textColorHint="@color/gray_g3"
+            app:layout_constraintBottom_toTopOf="@id/tv_post_write_max_length"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_post_write_title_input" />
+
+        <TextView
+            android:id="@+id/tv_post_write_content_length_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.content.length}"
+            android:textAppearance="@style/content"
+            android:textColor="@{viewModel.content.length > viewModel.CONTENT_MAX_LENGTH ? @color/red : @color/gray_g2}"
+            app:layout_constraintBottom_toBottomOf="@id/tv_post_write_max_length"
+            app:layout_constraintEnd_toStartOf="@id/tv_post_write_max_length"
+            tools:text="500" />
+
+        <TextView
+            android:id="@+id/tv_post_write_max_length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/horizontal_padding"
+            android:layout_marginBottom="28dp"
+            android:text="@{@string/post_write_content_max_length_format(viewModel.CONTENT_MAX_LENGTH)}"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="/500" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

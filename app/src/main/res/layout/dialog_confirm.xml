@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="message"
+            type="String" />
+
+        <variable
+            name="positiveButtonLabel"
+            type="String" />
+
+        <variable
+            name="negativeButtonLabel"
+            type="String" />
+
+        <variable
+            name="onPositiveButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onNegativeButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_all_dialog">
+
+
+        <TextView
+            android:id="@+id/tv_confirm_dialog_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="29dp"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:text="@{title}"
+            android:textColor="@color/gray_g5"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="댓글 삭제" />
+
+        <TextView
+            android:id="@+id/tv_confirm_dialog_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_g5"
+            android:layout_marginStart="29dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="29dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:gravity="center"
+            android:text="@{message}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_confirm_dialog_title"
+            tools:text="댓글 삭제" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/view_confirm_dialog_horizontaldivider"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="24dp"
+            app:dividerColor="@color/gray_g2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_confirm_dialog_message" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/view_confirm_dialog_verticaldivider"
+            android:layout_width="0.5dp"
+            android:layout_height="0dp"
+            android:background="@color/gray_g2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_confirm_dialog_horizontaldivider" />
+
+        <TextView
+            android:id="@+id/tv_confirmdialog_okbuttonlabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:fontFamily="@font/pretendard_regular"
+            android:gravity="center"
+            android:onClick="@{() -> onPositiveButtonClick.invoke()}"
+            android:paddingVertical="20dp"
+            android:text="@{positiveButtonLabel}"
+            android:textColor="@color/main"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/view_confirm_dialog_verticaldivider"
+            app:layout_constraintTop_toTopOf="@+id/view_confirm_dialog_verticaldivider"
+            tools:text="확인" />
+
+        <TextView
+            android:id="@+id/tv_confirm_dialog_cancelbuttonlabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:fontFamily="@font/pretendard_regular"
+            android:gravity="center"
+            android:onClick="@{() -> onNegativeButtonClick.invoke()}"
+            android:paddingVertical="20dp"
+            android:text="@{negativeButtonLabel}"
+            android:textSize="14sp"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/view_confirm_dialog_verticaldivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view_confirm_dialog_verticaldivider"
+            tools:text="취소" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

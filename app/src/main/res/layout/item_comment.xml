@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="onProfileUiClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+
+        <variable
+            name="onDeleteButtonClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+
+        <variable
+            name="onChildCommentsButtonClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+
+        <variable
+            name="uiState"
+            type="com.ki960213.kidsandseoul.presentation.ui.postdetail.uistate.CommentUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/horizontal_padding">
+
+        <ImageView
+            android:id="@+id/iv_item_comment_child_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/ic_comment_child_button"
+            app:isVisible="@{uiState.comment.childComment}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/iv_item_comment_author_image_url"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:onClick="@{() -> onProfileUiClick.invoke(uiState.comment.authorId)}"
+            app:errorImage="@{@drawable/img_all_error_user}"
+            app:imageUrl="@{uiState.authorImageUrl}"
+            app:isCircle="@{true}"
+            app:layout_constraintStart_toEndOf="@id/iv_item_comment_child_indicator"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_goneMarginStart="0dp"
+            tools:ignore="ContentDescription"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_item_comment_author_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:onClick="@{() -> onProfileUiClick.invoke(uiState.comment.authorId)}"
+            android:text="@{uiState.authorName}"
+            android:textAppearance="@style/content_accent"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintStart_toEndOf="@id/iv_item_comment_author_image_url"
+            app:layout_constraintTop_toTopOf="@id/iv_item_comment_author_image_url"
+            tools:text="김대현" />
+
+        <ImageView
+            android:id="@+id/iv_item_comment_delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> onDeleteButtonClick.invoke(uiState.comment.id)}"
+            android:padding="6dp"
+            android:src="@drawable/ic_comment_delete"
+            app:isVisible="@{uiState.deletable}"
+            app:layout_constraintBottom_toBottomOf="@id/tv_item_comment_author_name"
+            app:layout_constraintStart_toEndOf="@id/tv_item_comment_author_name"
+            app:layout_constraintTop_toTopOf="@id/tv_item_comment_author_name"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_item_comment_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="6dp"
+            android:text="@{uiState.comment.content}"
+            android:textAppearance="@style/content"
+            android:textColor="@color/gray_g5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iv_item_comment_child_button"
+            app:layout_constraintStart_toStartOf="@id/tv_item_comment_author_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_comment_author_name"
+            tools:text="그러나, 겨울이 지나고 나의 별에도 봄이 오면  " />
+
+        <ImageView
+            android:id="@+id/iv_item_comment_child_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:onClick="@{() -> onChildCommentsButtonClick.invoke(uiState.comment.id)}"
+            android:padding="9dp"
+            android:src="@drawable/ic_comment_child_button"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
