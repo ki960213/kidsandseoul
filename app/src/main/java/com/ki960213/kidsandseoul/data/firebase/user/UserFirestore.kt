@@ -1,26 +1,21 @@
 package com.ki960213.kidsandseoul.data.firebase.user
 
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Transaction
-import com.google.firebase.firestore.snapshots
-import com.google.firebase.firestore.toObject
-import com.google.firebase.firestore.toObjects
-import com.ki960213.kidsandseoul.data.firebase.COLLECTION_FACILITY_CHAT_ROOMS
-import com.ki960213.kidsandseoul.data.firebase.COLLECTION_GROUP_CHAT_ROOMS
 import com.ki960213.kidsandseoul.data.firebase.COLLECTION_KIDS
 import com.ki960213.kidsandseoul.data.firebase.COLLECTION_POSTS
 import com.ki960213.kidsandseoul.data.firebase.COLLECTION_USERS
 import com.ki960213.kidsandseoul.data.firebase.FIRESTORE_MAX_LIMIT
-import com.ki960213.kidsandseoul.data.firebase.chatroom.FacilityChatRoomDocument
-import com.ki960213.kidsandseoul.data.firebase.chatroom.GroupChatRoomDocument
+import com.ki960213.kidsandseoul.data.firebase.documentFlow
+import com.ki960213.kidsandseoul.data.firebase.fetchDocument
+import com.ki960213.kidsandseoul.data.firebase.fetchDocuments
 import com.ki960213.kidsandseoul.data.firebase.post.PostDocument
+import dev.gitlive.firebase.firestore.DocumentReference
+import dev.gitlive.firebase.firestore.FirebaseFirestore
+import dev.gitlive.firebase.firestore.Transaction
+import dev.gitlive.firebase.firestore.where
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -28,13 +23,13 @@ class UserFirestore @Inject constructor(
     private val db: FirebaseFirestore,
 ) {
 
-    suspend fun isExist(userId: String): Boolean = withContext(Dispatchers.IO) {
-        db.collection(COLLECTION_USERS)
-            .document(userId)
-            .get()
-            .await()
-            .exists()
-    }
+    suspend fun isExist(userId: String): Boolean =
+        withContext(Dispatchers.IO) {
+            db.collection(COLLECTION_USERS)
+                .document(userId)
+                .get()
+                .exists
+        }
 
     suspend fun createUser(
         userId: String,
@@ -56,23 +51,24 @@ class UserFirestore @Inject constructor(
             userIds.chunked(FIRESTORE_MAX_LIMIT)
                 .flatMap { ids ->
                     db.collection(COLLECTION_USERS)
-                        .whereIn(UserDocument.FIELD_ID, ids)
-                        .get()
-                        .await()
-                        .toObjects()
+                        .where { UserDocument::id.name inArray ids }
+                        .fetchDocuments()
                 }
         }
 
-    fun getUser(userId: String): Flow<UserDocument?> = db.collection(COLLECTION_USERS)
-        .document(userId)
-        .snapshots()
-        .map { it.toObject<UserDocument>() }
-        .flowOn(Dispatchers.IO)
-
-    suspend fun changeName(userId: String, name: String) = withContext(Dispatchers.IO) {
+    fun getUser(userId: String): Flow<UserDocument?> =
         db.collection(COLLECTION_USERS)
             .document(userId)
-            .update(UserDocument.FIELD_NAME, name)
+            .documentFlow<UserDocument>()
+            .flowOn(Dispatchers.IO)
+
+    suspend fun changeName(
+        userId: String,
+        name: String,
+    ) = withContext(Dispatchers.IO) {
+        db.collection(COLLECTION_USERS)
+            .document(userId)
+            .update(UserDocument::name.name to name)
     }
 
     suspend fun changeProfileImageUrl(
@@ -81,7 +77,7 @@ class UserFirestore @Inject constructor(
     ) = withContext(Dispatchers.IO) {
         db.collection(COLLECTION_USERS)
             .document(userId)
-            .update(UserDocument.FIELD_PROFILE_IMAGE_URL, profileImageUrl)
+            .update(UserDocument::profileImageUrl.name to profileImageUrl)
     }
 
     suspend fun changeLivingDongId(
@@ -90,183 +86,106 @@ class UserFirestore @Inject constructor(
     ) = withContext(Dispatchers.IO) {
         db.collection(COLLECTION_USERS)
             .document(userId)
-            .update(UserDocument.FIELD_ADMINISTRATIVE_DONG_ID, administrativeDongId)
+            .update(UserDocument::administrativeDongId.name to administrativeDongId)
     }
 
-    fun getFollowingUserIds(userId: String): Flow<List<String>> = db.collection(COLLECTION_USERS)
-        .document(userId)
-        .snapshots()
-        .map { it.asFollowingUserIds() }
-        .flowOn(Dispatchers.IO)
+    fun getInterestFacilityIds(userId: String): Flow<List<Long>> =
+        db.collection(COLLECTION_USERS)
+            .document(userId)
+            .documentFlow<UserDocument>()
+            .map { it?.interestFacilityIds ?: emptyList() }
+            .flowOn(Dispatchers.IO)
 
-    private fun DocumentSnapshot.asFollowingUserIds(): List<String> =
-        this[UserDocument.FIELD_FOLLOWING_USER_IDS].asStringList()
+    fun getFollowingUserIds(userId: String): Flow<List<String>> =
+        db.collection(COLLECTION_USERS)
+            .document(userId)
+            .documentFlow<UserDocument>()
+            .map { it?.followingUserIds ?: emptyList() }
+            .flowOn(Dispatchers.IO)
 
-    fun getFollowerIds(userId: String): Flow<List<String>> = db.collection(COLLECTION_USERS)
-        .document(userId)
-        .snapshots()
-        .map { it.asFollowerIds() }
-        .flowOn(Dispatchers.IO)
+    fun getFollowerIds(userId: String): Flow<List<String>> =
+        db.collection(COLLECTION_USERS)
+            .document(userId)
+            .documentFlow<UserDocument>()
+            .map { it?.followerUserIds ?: emptyList() }
+            .flowOn(Dispatchers.IO)
 
-    private fun DocumentSnapshot.asFollowerIds(): List<String> =
-        this[UserDocument.FIELD_FOLLOWER_USER_IDS].asStringList()
-
-    private fun Any?.asStringList(): List<String> {
-        if (this !is List<*>) return emptyList()
-        return filterIsInstance<String>()
-    }
-
-    suspend fun follow(userId: String, targetUserId: String) = withContext(Dispatchers.IO) {
+    suspend fun follow(
+        userId: String,
+        targetUserId: String,
+    ) = withContext(Dispatchers.IO) {
         if (userId == targetUserId) return@withContext
         val userRef = db.collection(COLLECTION_USERS).document(userId)
         val targetUserRef = db.collection(COLLECTION_USERS).document(targetUserId)
-        db.runTransaction { transaction ->
-            val followingUserIds = transaction.get(userRef).asFollowingUserIds()
-            val followerIds = transaction.get(targetUserRef).asFollowerIds()
-            transaction.update(
+        db.runTransaction {
+            val user = get(userRef).fetchDocument<UserDocument>() ?: return@runTransaction
+            val targetUser = get(targetUserRef).fetchDocument<UserDocument>() ?: return@runTransaction
+            update(
                 userRef,
-                UserDocument.FIELD_FOLLOWING_USER_IDS,
-                (followingUserIds + targetUserId).distinct(),
+                UserDocument::followingUserIds.name to (user.followingUserIds + targetUserId).distinct(),
             )
-            transaction.update(
+            update(
                 targetUserRef,
-                UserDocument.FIELD_FOLLOWER_USER_IDS,
-                (followerIds + userId).distinct(),
+                UserDocument::followerUserIds.name to (targetUser.followerUserIds + userId).distinct()
             )
         }
     }
 
-    suspend fun unfollow(userId: String, targetUserId: String) = withContext(Dispatchers.IO) {
-        if (userId == targetUserId) return@withContext
+    suspend fun unfollow(userId: String, targetUserId: String) {
+        if (userId == targetUserId) return
         val userRef = db.collection(COLLECTION_USERS).document(userId)
         val targetUserRef = db.collection(COLLECTION_USERS).document(targetUserId)
-        db.runTransaction { transaction ->
-            val followingUserIds = transaction.get(userRef).asFollowingUserIds()
-            val followerIds = transaction.get(targetUserRef).asFollowerIds()
-            transaction.update(
+        db.runTransaction {
+            val user = get(userRef).fetchDocument<UserDocument>() ?: return@runTransaction
+            val targetUser = get(targetUserRef).fetchDocument<UserDocument>() ?: return@runTransaction
+            update(
                 userRef,
-                UserDocument.FIELD_FOLLOWING_USER_IDS,
-                followingUserIds - targetUserId,
+                UserDocument::followingUserIds.name to user.followingUserIds - targetUserId,
             )
-            transaction.update(
+            update(
                 targetUserRef,
-                UserDocument.FIELD_FOLLOWER_USER_IDS,
-                followerIds - userId,
+                UserDocument::followerUserIds.name to targetUser.followerUserIds - userId,
             )
         }
     }
 
     suspend fun leave(userId: String) = withContext(Dispatchers.IO) {
-        val userDocument = fetchUserDocument(userId)
+        val userRef = db.collection(COLLECTION_USERS).document(userId)
         val kidDocumentRefs = fetchKidDocumentRefs(userId)
-        val facilityChatRoomRefs = userDocument?.joinedFacilityChatRoomIds
-            ?.takeIf { it.isNotEmpty() }
-            ?.let { fetchFacilityChatRoomRefs(it) }
-        val groupChatRoomRefs = userDocument?.joinedGroupChatRoomIds
-            ?.takeIf { it.isNotEmpty() }
-            ?.let { fetchGroupChatRoomRefs(it) }
-        val followerUserRefs = userDocument?.followerUserIds
-            ?.takeIf { it.isNotEmpty() }
-            ?.let { fetchUserRefs(it) }
-        val followingUserRefs = userDocument?.followingUserIds
-            ?.takeIf { it.isNotEmpty() }
-            ?.let { fetchUserRefs(it) }
-        db.runTransaction { transaction ->
-            kidDocumentRefs.forEach { transaction.delete(it) }
-            if (userDocument == null) return@runTransaction
-            facilityChatRoomRefs?.also { transaction.exitFacilityChatRooms(it, userId) }
-            groupChatRoomRefs?.also { transaction.exitGroupChatRooms(it, userId) }
-            followerUserRefs?.also { transaction.cleanUpFollowerUsers(it, userId) }
-            followingUserRefs?.also { transaction.cleanUpFollowingUsers(it, userId) }
-            transaction.delete(db.collection(COLLECTION_USERS).document(userId))
+        db.runTransaction {
+            val userDocument = get(userRef).fetchDocument<UserDocument>() ?: return@runTransaction
+            val followerUsers = fetchUsers(userDocument.followerUserIds)
+            val followingUsers = fetchUsers(userDocument.followingUserIds)
+            val followerUserRefs = followerUsers.map { db.collection(COLLECTION_USERS).document(it.id) }
+            val followingUserRefs = followingUsers.map { db.collection(COLLECTION_USERS).document(it.id) }
+            kidDocumentRefs.forEach { delete(it) }
+            unfollowFollowersOfLeavingUser(followerUserRefs, followerUsers, userId)
+            unfollowFollowingUsersOfLeavingUser(followingUserRefs, followingUsers, userId)
+            delete(db.collection(COLLECTION_USERS).document(userId))
         }
     }
-
-    private suspend fun fetchUserDocument(userId: String): UserDocument? =
-        db.collection(COLLECTION_USERS)
-            .document(userId)
-            .get()
-            .await()
-            .toObject()
 
     private suspend fun fetchKidDocumentRefs(userId: String): List<DocumentReference> =
         db.collection(COLLECTION_USERS)
             .document(userId)
             .collection(COLLECTION_KIDS)
             .get()
-            .await()
-            .map { it.reference }
-
-    private suspend fun fetchFacilityChatRoomRefs(
-        facilityChatRoomIds: List<String>,
-    ): List<DocumentReference> = facilityChatRoomIds.chunked(FIRESTORE_MAX_LIMIT)
-        .flatMap { ids ->
-            db.collection(COLLECTION_FACILITY_CHAT_ROOMS)
-                .whereIn(FacilityChatRoomDocument.FIELD_ID, ids)
-                .get()
-                .await()
-                .map { it.reference }
-        }
-
-    private fun Transaction.exitFacilityChatRooms(
-        facilityChatRoomRefs: List<DocumentReference>,
-        userId: String,
-    ) {
-        facilityChatRoomRefs.forEach { ref ->
-            val chatRoomDocument = get(ref).toObject<FacilityChatRoomDocument>() ?: return@forEach
-            update(
-                ref,
-                FacilityChatRoomDocument.FIELD_MEMBER_IDS,
-                chatRoomDocument.memberIds - userId
-            )
-        }
-    }
-
-    private suspend fun fetchGroupChatRoomRefs(
-        groupChatRoomIds: List<String>,
-    ): List<DocumentReference> = groupChatRoomIds.chunked(FIRESTORE_MAX_LIMIT)
-        .flatMap { ids ->
-            db.collection(COLLECTION_GROUP_CHAT_ROOMS)
-                .whereIn(FacilityChatRoomDocument.FIELD_ID, ids)
-                .get()
-                .await()
-                .map { it.reference }
-        }
-
-    private fun Transaction.exitGroupChatRooms(
-        groupChatRoomRefs: List<DocumentReference>,
-        userId: String,
-    ) {
-        groupChatRoomRefs.forEach { ref ->
-            val chatRoomDocument = get(ref).toObject<GroupChatRoomDocument>() ?: return@forEach
-            update(
-                ref,
-                GroupChatRoomDocument.FIELD_MEMBER_IDS,
-                chatRoomDocument.memberIds - userId
-            )
-        }
-    }
-
-    private suspend fun fetchUserRefs(userIds: List<String>): List<DocumentReference> =
-        db.collection(COLLECTION_USERS)
-            .whereIn(UserDocument.FIELD_ID, userIds)
-            .get()
-            .await()
+            .documents
             .map { it.reference }
 
     /**
      * 탈퇴하려는 유저가 언팔로우 하는 것이므로 팔로우 하고 있던 유저의 팔로워 유저 아이디 목록을 수정
      */
-    private fun Transaction.cleanUpFollowingUsers(
+    private fun Transaction.unfollowFollowingUsersOfLeavingUser(
         followingUserRefs: List<DocumentReference>,
+        followingUsers: List<UserDocument>,
         leavingUserId: String,
     ) {
-        followingUserRefs.forEach { ref ->
-            val userDocument = get(ref).toObject<UserDocument>() ?: return@forEach
+        followingUserRefs.zip(followingUsers).forEach { (userRef, userDocument) ->
+            val newFollowerUserIds = userDocument.followerUserIds - leavingUserId
             update(
-                ref,
-                UserDocument.FIELD_FOLLOWER_USER_IDS,
-                userDocument.followerUserIds - leavingUserId,
+                userRef,
+                UserDocument::followerUserIds.name to newFollowerUserIds,
             )
         }
     }
@@ -275,16 +194,16 @@ class UserFirestore @Inject constructor(
      * 탈퇴하려는 유저를 팔로우 하는 유저의 팔로잉을 끊어야 하므로
      * 탈퇴하려는 유저를 팔로잉하는 유저의 팔로잉 유저 아이디 목록을 수정
      */
-    private fun Transaction.cleanUpFollowerUsers(
-        followerUserRefs: List<DocumentReference>,
+    private fun Transaction.unfollowFollowersOfLeavingUser(
+        followerRefs: List<DocumentReference>,
+        followers: List<UserDocument>,
         leavingUserId: String,
     ) {
-        followerUserRefs.forEach { ref ->
-            val userDocument = get(ref).toObject<UserDocument>() ?: return@forEach
+        followerRefs.zip(followers).forEach { (userRef, userDocument) ->
+            val newFollowingUserIds = userDocument.followingUserIds - leavingUserId
             update(
-                ref,
-                UserDocument.FIELD_FOLLOWING_USER_IDS,
-                userDocument.followingUserIds - leavingUserId,
+                userRef,
+                UserDocument::followingUserIds.name to newFollowingUserIds,
             )
         }
     }
@@ -295,14 +214,12 @@ class UserFirestore @Inject constructor(
     ) = withContext(Dispatchers.IO) {
         val userRef = db.collection(COLLECTION_USERS).document(userId)
 
-        db.runTransaction { transaction ->
-            val userDocument = transaction.get(userRef)
-                .toObject<UserDocument>()
-                ?: return@runTransaction
-            transaction.update(
+        db.runTransaction {
+            val userDocument = get(userRef).fetchDocument<UserDocument>() ?: return@runTransaction
+            val newInterestFacilityIds = (userDocument.interestFacilityIds + facilityId).distinct()
+            update(
                 userRef,
-                UserDocument.FIELD_INTEREST_FACILITY_IDS,
-                (userDocument.interestFacilityIds + facilityId).distinct()
+                UserDocument::interestFacilityIds.name to newInterestFacilityIds,
             )
         }
     }
@@ -313,14 +230,12 @@ class UserFirestore @Inject constructor(
     ) = withContext(Dispatchers.IO) {
         val userRef = db.collection(COLLECTION_USERS).document(userId)
 
-        db.runTransaction { transaction ->
-            val userDocument = transaction.get(userRef)
-                .toObject<UserDocument>()
-                ?: return@runTransaction
-            transaction.update(
+        db.runTransaction {
+            val userDocument = get(userRef).fetchDocument<UserDocument>() ?: return@runTransaction
+            val newInterestFacilityIds = userDocument.interestFacilityIds - facilityId
+            update(
                 userRef,
-                UserDocument.FIELD_INTEREST_FACILITY_IDS,
-                userDocument.interestFacilityIds - facilityId
+                UserDocument::interestFacilityIds.name to newInterestFacilityIds,
             )
         }
     }
@@ -332,24 +247,19 @@ class UserFirestore @Inject constructor(
         val userRef = db.collection(COLLECTION_USERS).document(userId)
         val postRef = db.collection(COLLECTION_POSTS).document(postId)
 
-        db.runTransaction { transaction ->
-            val likePostIds = transaction.get(userRef)
-                .get(UserDocument.FIELD_LIKE_POST_IDS)
-                .asStringList()
-                .toSet()
-            val post = transaction.get(postRef)
-                .toObject<PostDocument>()
-                ?: return@runTransaction
-            transaction.update(
+        db.runTransaction {
+            val user = get(userRef).fetchDocument<UserDocument>() ?: return@runTransaction
+            val post = get(postRef).fetchDocument<PostDocument>() ?: return@runTransaction
+            val newLikePostIds = (user.likePostIds + postId).distinct()
+            update(
                 userRef,
-                UserDocument.FIELD_LIKE_POST_IDS,
-                (likePostIds + postId).toList()
+                UserDocument::likePostIds.name to newLikePostIds
             )
-            if (postId !in likePostIds) {
-                transaction.update(
+            if (postId !in user.likePostIds) {
+                val newLikeCount = post.likeCount + 1
+                update(
                     postRef,
-                    PostDocument.FIELD_LIKE_COUNT,
-                    post.likeCount + 1
+                    PostDocument::likeCount.name to newLikeCount
                 )
             }
         }
@@ -362,24 +272,18 @@ class UserFirestore @Inject constructor(
         val userRef = db.collection(COLLECTION_USERS).document(userId)
         val postRef = db.collection(COLLECTION_POSTS).document(postId)
 
-        db.runTransaction { transaction ->
-            val likePostIds = transaction.get(userRef)
-                .get(UserDocument.FIELD_LIKE_POST_IDS)
-                .asStringList()
-                .toSet()
-            val post = transaction.get(postRef)
-                .toObject<PostDocument>()
-                ?: return@runTransaction
-            transaction.update(
+        db.runTransaction {
+            val user = get(userRef).fetchDocument<UserDocument>() ?: return@runTransaction
+            val post = get(postRef).fetchDocument<PostDocument>() ?: return@runTransaction
+            val newLikePostIds = user.likePostIds - postId
+            update(
                 userRef,
-                UserDocument.FIELD_LIKE_POST_IDS,
-                (likePostIds - postId).toList()
+                UserDocument::likePostIds.name to newLikePostIds,
             )
-            if (postId in likePostIds) {
-                transaction.update(
+            if (postId in user.likePostIds) {
+                update(
                     postRef,
-                    PostDocument.FIELD_LIKE_COUNT,
-                    post.likeCount - 1
+                    PostDocument::likeCount.name to post.likeCount - 1
                 )
             }
         }

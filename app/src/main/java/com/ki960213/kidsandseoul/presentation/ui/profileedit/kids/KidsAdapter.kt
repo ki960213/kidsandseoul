@@ -15,7 +15,7 @@ class KidsAdapter(
     ): RecyclerView.ViewHolder = when (viewType) {
         KID_ADD_VIEW_TYPE -> KidAddViewHolder(parent, onKidAddClick)
         KID_VIEW_TYPE -> KidViewHolder(parent, onKidDeleteClick)
-        else -> throw AssertionError("뷰타입 잘못 구현됨.")
+        else -> throw AssertionError("KidsAdapter의 뷰타입 잘못 구현됨.")
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

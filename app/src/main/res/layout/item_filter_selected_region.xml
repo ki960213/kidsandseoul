@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="regionId"
+            type="Long" />
+
+        <variable
+            name="regionName"
+            type="String" />
+
+        <variable
+            name="onRegionClick"
+            type="kotlin.jvm.functions.Function1&lt;Long, Unit>" />
+    </data>
+
+    <TextView
+        android:id="@+id/tv_filter_selected_region"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{regionName}"
+        android:onClick="@{() -> onRegionClick.invoke(regionId)}"
+        android:background="@drawable/bg_all_chip"
+        android:fontFamily="@font/pretendard_medium"
+        android:textColor="@color/main"
+        android:textSize="12sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/divider_filter_administrative_dong_and_selected_region"
+        app:layout_constraintTop_toBottomOf="@id/divider_filter_header_bottom"
+        tools:text="서울 강남구 개포2동" />
+</layout>

@@ -11,17 +11,19 @@ interface PostRepository {
     fun getPost(postId: String): Flow<Post?>
 
     /**
-     * 100개만큼 자유게시글 목록 조회
+     * 최신 100개 게시글 목록 조회
      * @return [Post] 목록
      */
     fun getRecentPosts(): Flow<List<Post>>
 
     /**
-     * 유저가 작성한 자유게시글 목록 조회
+     * 유저가 작성한 게시글 목록 조회
      * @param[userId] 유저 아이디
      * @return [Review] 목록 [Flow]
      */
     fun getPostsOfUser(userId: String): Flow<List<Post>>
+
+    fun getLatestPostOfUser(userId: String): Flow<Post?>
 
     /**
      * @return 게시글 아이디

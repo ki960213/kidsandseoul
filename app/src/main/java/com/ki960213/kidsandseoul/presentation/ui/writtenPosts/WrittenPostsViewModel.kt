@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -28,15 +29,15 @@ class WrittenPostsViewModel @Inject constructor(
     private val postRepository: PostRepository,
 ) : BaseViewModel() {
 
-    private val writtenUserId: String = savedStateHandle[WrittenPostsFragment.KEY_WRITTEN_USER_ID]
+    private val authorId: String = savedStateHandle[WrittenPostsFragment.KEY_WRITTEN_USER_ID]
         ?: throw IllegalArgumentException("작성한 게시물 화면으로 이동할 때 유저 아이디 안넘겼음")
 
     val loginUserId: StateFlow<String?> = authRepository.loginUserId
         .viewModelStateIn(initialValue = null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val loginUser: StateFlow<JoinedUser?> = loginUserId.flatMapLatest {
-        if (it == null) flowOf(null) else userRepository.getUser(userId = it)
+    val loginUser: StateFlow<JoinedUser?> = loginUserId.flatMapLatest { loginUserId ->
+        if (loginUserId == null) flowOf(null) else userRepository.getUser(userId = loginUserId)
     }
         .map { user ->
             when (user) {
@@ -51,22 +52,16 @@ class WrittenPostsViewModel @Inject constructor(
 
     val posts: StateFlow<List<PostUiState>> = combine(
         loginUser,
-        postRepository.getPostsOfUser(writtenUserId),
-    ) { loginUser, posts ->
-        val authorIds = posts.map { it.authorId }.distinct()
-        val authors = userRepository.getUsers(authorIds)
-            .filterIsInstance<JoinedUser>()
-            .associateBy { it.id }
-        when (loginUser) {
-            is JoinedUser -> posts.mapNotNull { post ->
-                val author = authors[post.authorId] ?: return@mapNotNull null
-                PostUiState(post, author, post.id in loginUser.likePostIds)
-            }
-
-            else -> posts.mapNotNull { post ->
-                val author = authors[post.authorId] ?: return@mapNotNull null
-                PostUiState(post, author, false)
-            }
+        userRepository.getUser(authorId).filterIsInstance<JoinedUser>(),
+        postRepository.getPostsOfUser(authorId),
+    ) { loginUser, author, posts ->
+        posts.map { post ->
+            val loginUserLikeThisPost = loginUser?.likePostIds?.contains(post.id) ?: false
+            PostUiState(
+                post = post,
+                author = author,
+                isLike = loginUserLikeThisPost,
+            )
         }
     }.onEach { _isLoading.value = false }
         .viewModelStateIn(initialValue = emptyList())

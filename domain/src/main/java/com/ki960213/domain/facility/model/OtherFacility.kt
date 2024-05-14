@@ -8,5 +8,5 @@ data class OtherFacility(
     override val detailUrl: String,
     override val reviewCount: Int,
     override val starPointAvg: Double,
-    val type: FacilityType,
+    val type: OtherFacilityType,
 ) : Facility

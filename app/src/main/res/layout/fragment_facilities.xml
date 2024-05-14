@@ -7,6 +7,8 @@
 
         <import type="kotlin.Unit" />
 
+        <import type="com.ki960213.domain.facility.model.FacilityOrder" />
+
         <variable
             name="viewModel"
             type="com.ki960213.kidsandseoul.presentation.ui.facilitysearch.FacilitySearchViewModel" />
@@ -17,10 +19,14 @@
 
         <variable
             name="onSearchButtonClick"
-            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+            type="kotlin.jvm.functions.Function0" />
 
         <variable
             name="onFilterButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onOrderButtonClick"
             type="kotlin.jvm.functions.Function0" />
     </data>
 
@@ -58,16 +64,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
-                android:textColorHint="@color/gray_g3"
                 android:background="@android:color/transparent"
                 android:hint="@string/facilities_search_hint"
+                android:imeOptions="actionSearch"
                 android:importantForAutofill="no"
                 android:inputType="text"
-                android:maxLength="6"
                 android:paddingVertical="9.5dp"
-                android:text="@{viewModel.appliedCondition.keyword}"
+                android:text="@={viewModel.keyword}"
                 android:textAppearance="@style/content_accent"
                 android:textColor="@color/gray_g5"
+                android:textColorHint="@color/gray_g3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/iv_facilities_name_delete_button"
                 app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="12dp"
-            android:onClick="@{() -> onSearchButtonClick.invoke(etFacilitiesNameInput.getText().toString())}"
+            android:onClick="@{() -> onSearchButtonClick.invoke()}"
             android:padding="10dp"
             android:src="@drawable/ic_facilities_search"
             app:layout_constraintEnd_toEndOf="parent"
@@ -117,14 +123,14 @@
             tools:ignore="ContentDescription" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_facilities_filter_condition_items"
+            android:id="@+id/rv_facilities_filter_conditions_items"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:clipToPadding="false"
             android:orientation="horizontal"
             android:paddingEnd="8dp"
-            app:facilities_filterCondition="@{viewModel.appliedCondition}"
+            app:facilities_filterConditions="@{viewModel.appliedConditions}"
             app:itemSpacing_dp="@{8}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="@id/iv_facilities_filter_button"
@@ -132,7 +138,7 @@
             app:layout_constraintStart_toEndOf="@id/iv_facilities_filter_button"
             app:layout_constraintTop_toTopOf="@id/iv_facilities_filter_button"
             tools:ignore="RtlSymmetry"
-            tools:listitem="@layout/item_filter_condition" />
+            tools:listitem="@layout/item_filter_conditions" />
 
         <TextView
             android:id="@+id/tv_facilities_count"
@@ -140,7 +146,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_padding"
             android:layout_marginTop="21dp"
-            android:text="@{@string/facilities_count_format(viewModel.facilities.allCount)}"
+            android:text="@{@string/facilities_count_format(viewModel.facilitiesCount)}"
             android:textAppearance="@style/content"
             android:textColor="@color/gray_g4"
             app:layout_constraintStart_toStartOf="parent"
@@ -148,39 +154,20 @@
             tools:text="75 시설" />
 
         <TextView
-            android:id="@+id/tv_facilities_order_ascending"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:drawablePadding="3dp"
-            android:onClick="@{() -> viewModel.setIsDescending(true)}"
-            android:padding="10dp"
-            android:text="@string/facilities_review_count_order"
-            android:textAppearance="@style/content"
-            android:textColor="@color/gray_g4"
-            app:drawableEndCompat="@drawable/ic_facilities_order_ascending"
-            app:isVisible="@{!viewModel.isReviewCountDescending}"
-            app:layout_constraintBottom_toBottomOf="@id/tv_facilities_count"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_facilities_count" />
-
-        <TextView
             android:id="@+id/tv_facilities_order_descending"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
             android:drawablePadding="3dp"
-            android:onClick="@{() -> viewModel.setIsDescending(false)}"
+            android:onClick="@{() -> onOrderButtonClick.invoke()}"
             android:padding="10dp"
-            android:text="@string/facilities_review_count_order"
+            android:text="@{viewModel.facilityOrder instanceof FacilityOrder.ReviewCount ? @string/facilities_review_count_order : @string/facilities_star_point_avg_order}"
             android:textAppearance="@style/content"
             android:textColor="@color/gray_g4"
             app:drawableEndCompat="@drawable/ic_facilities_order_descending"
-            app:isVisible="@{viewModel.isReviewCountDescending}"
             app:layout_constraintBottom_toBottomOf="@id/tv_facilities_count"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_facilities_count"
-            tools:visibility="gone" />
+            app:layout_constraintTop_toTopOf="@id/tv_facilities_count" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_facilities"
@@ -189,7 +176,6 @@
             android:layout_marginTop="16dp"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/horizontal_padding"
-            app:facilities_facilities="@{viewModel.facilities}"
             app:itemSpacing_dp="@{12}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"

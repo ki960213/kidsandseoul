@@ -1,7 +1,6 @@
 package com.ki960213.domain.facility.model
 
 import java.time.DayOfWeek
-import java.time.LocalDate
 
 data class KidsCafe(
     override val id: Long,
@@ -13,6 +12,5 @@ data class KidsCafe(
     override val starPointAvg: Double,
     val contact: String,
     val operatingDays: List<DayOfWeek>,
-    val closeDays: Set<LocalDate>,
     val appliableAges: IntRange,
 ) : Facility

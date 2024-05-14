@@ -2,74 +2,70 @@ package com.ki960213.kidsandseoul.presentation.ui.facilitysearch
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.ki960213.domain.administrativedong.model.AdministrativeDong
 import com.ki960213.domain.administrativedong.model.Borough
 import com.ki960213.domain.administrativedong.repository.AdministrativeDongRepository
 import com.ki960213.domain.auth.repository.AuthRepository
-import com.ki960213.domain.facility.model.ChildCareService
-import com.ki960213.domain.facility.model.Facilities
-import com.ki960213.domain.facility.model.FacilityType
+import com.ki960213.domain.facility.model.ChildCareFacilityType
+import com.ki960213.domain.facility.model.Facility
+import com.ki960213.domain.facility.model.FacilityOrder
+import com.ki960213.domain.facility.model.OtherFacilityType
 import com.ki960213.domain.facility.repository.FacilityRepository
 import com.ki960213.domain.kid.model.Kid
 import com.ki960213.domain.kid.repository.KidRepository
+import com.ki960213.kidsandseoul.data.pagesource.FacilitiesPagingSource
 import com.ki960213.kidsandseoul.presentation.common.base.BaseViewModel
-import com.ki960213.kidsandseoul.presentation.common.uistate.ServiceUiState
-import com.ki960213.kidsandseoul.presentation.ui.kidadd.administrativedongs.AdministrativeDongUiState
+import com.ki960213.kidsandseoul.presentation.ui.facilitysearch.uistate.ChildCareFilterConditionsUiState
+import com.ki960213.kidsandseoul.presentation.ui.facilitysearch.uistate.DetailFilterConditionsUiState
+import com.ki960213.kidsandseoul.presentation.ui.facilitysearch.uistate.FilterConditionsUiState
+import com.ki960213.kidsandseoul.presentation.ui.facilitysearch.uistate.KidsCafeConditionsUiState
+import com.ki960213.kidsandseoul.presentation.ui.facilitysearch.uistate.OtherDetailFilterConditionsUiState
+import com.ki960213.kidsandseoul.presentation.ui.facilitysearch.uistate.RegionUiState
+import com.ki960213.kidsandseoul.presentation.ui.facilitysearch.uistate.SelectableRegionUiState
 import com.ki960213.kidsandseoul.presentation.ui.kidadd.boroughs.BoroughUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import javax.inject.Inject
 
 @HiltViewModel
 class FacilitySearchViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
+    authRepository: AuthRepository,
+    administrativeDongRepository: AdministrativeDongRepository,
     private val facilityRepository: FacilityRepository,
-    private val administrativeDongRepository: AdministrativeDongRepository,
-    private val authRepository: AuthRepository,
     private val kidRepository: KidRepository,
 ) : BaseViewModel() {
-
-    private val _uiEvent = MutableSharedFlow<FacilitiesUiEvent>()
-    val uiEvent: SharedFlow<FacilitiesUiEvent> = _uiEvent.asSharedFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    private val facilitySearchArg: StateFlow<FacilitySearchArg> = savedStateHandle.getStateFlow(
-        FacilitySearchFragment.KEY_FACILITY_SEARCH_ARG,
-        FacilitySearchArg.Keyword("")
-    )
+    private val facilitySearchArg: FacilitySearchArg = savedStateHandle[FacilitySearchFragment.KEY_FACILITY_SEARCH_ARG]
+        ?: throw IllegalArgumentException("시설 목록 화면으로 이동할 때 시설 필터 조건을 안넘겼음")
 
-    private val keywordArg: MutableStateFlow<String?> = facilitySearchArg
-        .filterIsInstance<FacilitySearchArg.Keyword>()
-        .map { it.keyword }
-        .viewModelMutableStateIn(initialValue = "")
+    private val keywordArg: FacilitySearchArg.Keyword? = facilitySearchArg.takeIf { it is FacilitySearchArg.Keyword }
+        ?.let { it as FacilitySearchArg.Keyword }
 
-    val serviceArg: StateFlow<ServiceUiState?> = facilitySearchArg
-        .filterIsInstance<FacilitySearchArg.Service>()
-        .map { it.type }
-        .viewModelStateIn(initialValue = null)
+    private val serviceArg: FacilitySearchArg.Service? = facilitySearchArg.takeIf { it is FacilitySearchArg.Service }
+        ?.let { it as FacilitySearchArg.Service }
 
-    private val _detailCondition: MutableStateFlow<DetailFilterConditionUiState?> = serviceArg
-        .map { serviceUiState -> serviceUiState?.toDetailFilterCondition() }
-        .viewModelMutableStateIn(initialValue = null)
-    val detailCondition: StateFlow<DetailFilterConditionUiState?> = _detailCondition.asStateFlow()
+    private val _detailConditions: MutableStateFlow<DetailFilterConditionsUiState?> =
+        MutableStateFlow(serviceArg?.type?.let { DetailFilterConditionsUiState.from(it) })
+    val detailConditions: StateFlow<DetailFilterConditionsUiState?> = _detailConditions.asStateFlow()
 
     val loginUserId: StateFlow<String?> = authRepository.loginUserId
         .viewModelStateIn(initialValue = null)
@@ -87,8 +83,10 @@ class FacilitySearchViewModel @Inject constructor(
         .map { it.replace(NOT_NUMBER_REGEX, "") }
         .viewModelMutableStateIn(initialValue = "")
 
-    private val _administrativeDongs: MutableStateFlow<Map<Borough, List<AdministrativeDong>>> =
-        MutableStateFlow(emptyMap())
+    private val _administrativeDongs: StateFlow<Map<Borough, List<AdministrativeDong>>> =
+        administrativeDongRepository.administrativeDongs
+            .map { it.values.groupBy { dong -> dong.borough } }
+            .viewModelStateIn(initialValue = emptyMap())
 
     private val _boroughs: StateFlow<List<Borough>> = _administrativeDongs.map { it.keys.toList() }
         .viewModelStateIn(initialValue = emptyList())
@@ -104,192 +102,168 @@ class FacilitySearchViewModel @Inject constructor(
         }
     }.viewModelStateIn(initialValue = emptyList())
 
-    private val currentAdministrativeDongs: StateFlow<List<AdministrativeDong>> = combine(
-        _administrativeDongs, selectedBorough
+    private val regionsOfSelectedBorough: StateFlow<List<RegionUiState>> = combine(
+        _administrativeDongs,
+        selectedBorough.filterNotNull(),
     ) { dongs, selectedBorough ->
-        dongs[selectedBorough] ?: emptyList()
+        listOf(RegionUiState.Borough(selectedBorough)) +
+                (dongs[selectedBorough]?.map { RegionUiState.Dong(it) } ?: emptyList())
     }.viewModelStateIn(initialValue = emptyList())
-    val selectedAdministrativeDong: MutableStateFlow<AdministrativeDong?> =
-        MutableStateFlow(null)
-    val administrativeDongs: StateFlow<List<AdministrativeDongUiState>> = combine(
-        currentAdministrativeDongs, selectedAdministrativeDong
-    ) { dongs, selectedDongs ->
-        dongs.map {
-            AdministrativeDongUiState(
-                isSelected = it.id == selectedDongs?.id,
-                administrativeDong = it,
+
+    private val _selectedRegions: MutableStateFlow<List<RegionUiState>> = MutableStateFlow(emptyList())
+    val selectedRegions: StateFlow<List<RegionUiState>> = _selectedRegions.asStateFlow()
+
+    val currentSelectableRegions: StateFlow<List<SelectableRegionUiState>> = combine(
+        regionsOfSelectedBorough,
+        _selectedRegions
+    ) { selectableRegions, selectedRegions ->
+        selectableRegions.map {
+            SelectableRegionUiState(
+                isSelected = it in selectedRegions,
+                region = it,
             )
         }
     }.viewModelStateIn(initialValue = emptyList())
 
-    val canFiltering: StateFlow<Boolean> = combine(
-        _detailCondition, selectedAdministrativeDong
-    ) { detailCondition, selectedAdministrativeDong ->
-        if (detailCondition?.isComplete != true) return@combine false
-        if (detailCondition is OtherDetailFilterConditionUiState) return@combine selectedAdministrativeDong != null
-        true
-    }.viewModelStateIn(initialValue = false)
+    val keyword: MutableStateFlow<String> = MutableStateFlow(keywordArg?.keyword ?: "")
 
-    private val _appliedCondition: MutableStateFlow<FilterConditionUiState> =
-        keywordArg.combine(serviceArg) { keyword, service ->
-            keyword to service
-        }.filter { (keyword, service) ->
-            keyword?.isNotBlank() == true || service?.isNotOtherFacility == true
-        }.map { (keyword, service) ->
-            FilterConditionUiState(
-                keyword = keyword,
-                detailCondition = service?.toDetailFilterCondition()
-            )
-        }.viewModelMutableStateIn(initialValue = FilterConditionUiState())
-    val appliedCondition: StateFlow<FilterConditionUiState> = _appliedCondition.asStateFlow()
+    private val _appliedConditions: MutableStateFlow<FilterConditionsUiState> = MutableStateFlow(
+        FilterConditionsUiState(
+            keyword = keywordArg?.keyword ?: "",
+            detailConditions = serviceArg?.type?.let { DetailFilterConditionsUiState.from(it) }
+        )
+    )
+    val appliedConditions: StateFlow<FilterConditionsUiState> = _appliedConditions.asStateFlow()
 
-    private val _isReviewCountDescending = MutableStateFlow(true)
-    val isReviewCountDescending: StateFlow<Boolean> = _isReviewCountDescending.asStateFlow()
+    private val _facilityOrder: MutableStateFlow<FacilityOrder> = MutableStateFlow(FacilityOrder.ReviewCount())
+    val facilityOrder: StateFlow<FacilityOrder> = _facilityOrder.asStateFlow()
 
-    private val _facilities: Flow<Facilities> = appliedCondition
-        .filter { it.isNotEmpty }
-        .map { condition ->
-            _isLoading.value = true
-            facilityRepository.getFacilities(condition.asFacilityFilterCondition())
+    val facilitiesCount: StateFlow<Int> = appliedConditions.map {
+        facilityRepository.getFacilitiesCount(it.asFacilityFilterConditions())
+    }.viewModelStateIn(initialValue = 0)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val facilities: Flow<PagingData<Facility>> = combine(
+        _appliedConditions,
+        _facilityOrder
+    ) { appliedConditions, facilityOrder ->
+        appliedConditions to facilityOrder
+    }.onEach { _isLoading.value = true }
+        .flatMapLatest { (appliedConditions, facilityOrder) ->
+            Pager(PagingConfig(pageSize = 30)) {
+                FacilitiesPagingSource(
+                    facilityRepository = facilityRepository,
+                    filterConditions = appliedConditions.asFacilityFilterConditions(),
+                    facilityOrder = facilityOrder,
+                )
+            }.flow
+                .cachedIn(viewModelScope)
         }.onEach { _isLoading.value = false }
-    val facilities: StateFlow<Facilities> = combine(
-        _facilities,
-        isReviewCountDescending,
-    ) { facilities, isDescending ->
-        facilities.sortedByReviewCount(isDescending)
-    }.viewModelStateIn(initialValue = Facilities(allCount = 0, value = emptyList()))
 
-    init {
-        fetchAdministrativeDongs()
+    fun selectReviewCountOrder() {
+        _facilityOrder.value = FacilityOrder.ReviewCount()
     }
 
-    private fun fetchAdministrativeDongs() = viewModelScope.launch {
-        _administrativeDongs.value = administrativeDongRepository.getAdministrativeDongs()
-            .let { it.values.groupBy { dong -> dong.borough } }
+    fun selectStarPointAvgOrder() {
+        _facilityOrder.value = FacilityOrder.StarPointAvg()
     }
 
-    private fun ServiceUiState.toDetailFilterCondition(): DetailFilterConditionUiState =
-        when (this) {
-            ServiceUiState.OUR_NEIGHBORHOOD_GROWING_CENTER -> ChildCareFilterConditionUiState(
-                service = ChildCareService.OUR_NEIGHBORHOOD_GROWING_CENTER,
-            )
-
-            ServiceUiState.CO_PARENTING_ROOM -> ChildCareFilterConditionUiState(
-                service = ChildCareService.CO_PARENTING_ROOM,
-            )
-
-            ServiceUiState.LOCAL_CHILDREN_CENTER -> ChildCareFilterConditionUiState(
-                service = ChildCareService.LOCAL_CHILDREN_CENTER,
-            )
-
-            ServiceUiState.CO_PARENTING_SHARING_CENTER -> ChildCareFilterConditionUiState(
-                service = ChildCareService.CO_PARENTING_SHARING_CENTER,
-            )
-
-            ServiceUiState.KIDS_CAFE -> KidsCafeConditionUiState()
-            ServiceUiState.OUTDOOR -> OtherDetailFilterConditionUiState(
-                type = FacilityType.OUTDOOR,
-            )
-
-            ServiceUiState.EXPERIENCE -> OtherDetailFilterConditionUiState(
-                type = FacilityType.EXPERIENCE
-            )
-
-            ServiceUiState.MEDICAL -> OtherDetailFilterConditionUiState(
-                type = FacilityType.MEDICAL
-            )
-
-            ServiceUiState.LIBRARY -> OtherDetailFilterConditionUiState(
-                type = FacilityType.LIBRARY
-            )
-        }
-
-    fun setIsDescending(isDescending: Boolean) {
-        _isReviewCountDescending.value = isDescending
+    fun setChildCareDetailConditions() {
+        if (_detailConditions.value is ChildCareFilterConditionsUiState) return
+        _detailConditions.value = ChildCareFilterConditionsUiState()
     }
 
-    fun setKeyword(keyword: String) = viewModelScope.launch {
-        val prevKeyword = _appliedCondition.value.keyword ?: return@launch
-        if ((prevKeyword.isNotBlank() && keyword.isEmpty()) || keyword.length >= 2) {
-            _appliedCondition.value = _appliedCondition.value.copy(keyword = keyword)
-            return@launch
-        }
-        _uiEvent.emit(FacilitiesUiEvent.KeywordTooShort)
+    fun setKidsCafeDetailConditions() {
+        if (_detailConditions.value is KidsCafeConditionsUiState) return
+        _detailConditions.value = KidsCafeConditionsUiState()
     }
 
-    fun setChildCareDetailCondition() {
-        if (_detailCondition.value is ChildCareFilterConditionUiState) return
-        _detailCondition.value = ChildCareFilterConditionUiState()
+    fun setOtherDetailConditions() {
+        if (_detailConditions.value is OtherDetailFilterConditionsUiState) return
+        _detailConditions.value = OtherDetailFilterConditionsUiState()
     }
 
-    fun setKidsCafeDetailCondition() {
-        if (_detailCondition.value is KidsCafeConditionUiState) return
-        _detailCondition.value = KidsCafeConditionUiState()
-    }
-
-    fun setOtherDetailCondition() {
-        if (_detailCondition.value is OtherDetailFilterConditionUiState) return
-        _detailCondition.value = OtherDetailFilterConditionUiState()
-    }
-
-    fun setChildCareService(childCareService: ChildCareService) {
-        val detailCondition = _detailCondition.value
-        if (detailCondition !is ChildCareFilterConditionUiState) return
-        _detailCondition.value = detailCondition.copy(service = childCareService)
+    fun setChildCareFacilityType(childCareFacilityType: ChildCareFacilityType) {
+        val detailConditions = _detailConditions.value
+        if (detailConditions !is ChildCareFilterConditionsUiState) return
+        _detailConditions.value = detailConditions.copy(type = childCareFacilityType)
     }
 
     fun setMustOperateSaturday(value: Boolean) {
-        val detailCondition = _detailCondition.value
-        if (detailCondition !is ChildCareFilterConditionUiState) return
-        _detailCondition.value = detailCondition.copy(mustSaturdayOperate = value)
+        val detailConditions = _detailConditions.value
+        if (detailConditions !is ChildCareFilterConditionsUiState) return
+        _detailConditions.value = detailConditions.copy(mustSaturdayOperate = value)
     }
 
     fun toggleDayOfWeek(dayOfWeek: DayOfWeek) {
-        val detailCondition = _detailCondition.value
-        if (detailCondition !is KidsCafeConditionUiState) return
-        if (dayOfWeek in detailCondition.daysOfWeek) {
-            _detailCondition.value =
-                detailCondition.copy(daysOfWeek = detailCondition.daysOfWeek - dayOfWeek)
+        val detailConditions = _detailConditions.value
+        if (detailConditions !is KidsCafeConditionsUiState) return
+        if (dayOfWeek in detailConditions.daysOfWeek) {
+            _detailConditions.value = detailConditions.copy(daysOfWeek = detailConditions.daysOfWeek - dayOfWeek)
         } else {
-            _detailCondition.value =
-                detailCondition.copy(daysOfWeek = detailCondition.daysOfWeek + dayOfWeek)
+            _detailConditions.value = detailConditions.copy(daysOfWeek = detailConditions.daysOfWeek + dayOfWeek)
         }
     }
 
-    fun setFacilityType(facilityType: FacilityType) {
-        val detailCondition = _detailCondition.value
-        if (detailCondition !is OtherDetailFilterConditionUiState) return
-        _detailCondition.value = detailCondition.copy(type = facilityType)
+    fun setOtherFacilityType(otherFacilityType: OtherFacilityType) {
+        val detailConditions = _detailConditions.value
+        if (detailConditions !is OtherDetailFilterConditionsUiState) return
+        _detailConditions.value = detailConditions.copy(type = otherFacilityType)
     }
 
-    fun changeConditionToFitKid(kidId: String) {
+    fun changeConditionsToFitKid(kidId: String) {
         val kid = kids.value.find { it.id == kidId } ?: return
         age.value = kid.age.toString()
-        selectedAdministrativeDong.value = kid.livingDong
+        _selectedRegions.value = listOf(RegionUiState.Dong(kid.livingDong))
     }
 
     fun selectBorough(boroughId: Long) {
         selectedBorough.value = _boroughs.value.firstOrNull { it.id == boroughId }
     }
 
-    fun selectAdministrativeDong(administrativeDongId: Long) {
-        selectedAdministrativeDong.value =
-            currentAdministrativeDongs.value.firstOrNull { it.id == administrativeDongId }
+    // TODO: 여기 코드 리팩토링 해야함
+    fun addBoroughCondition(boroughId: Long) {
+        _selectedRegions.value = (_selectedRegions.value.filterNot { it is RegionUiState.Dong && it.administrativeDong.borough.id == boroughId } +
+                RegionUiState.Borough(_boroughs.value.find { it.id == boroughId } ?: return)).distinct()
     }
 
-    fun resetFilterCondition() {
-        _detailCondition.value = null
+    fun removeBoroughCondition(boroughId: Long) {
+        _selectedRegions.value = _selectedRegions.value.filterNot { it is RegionUiState.Borough && it.borough.id == boroughId }
+    }
+
+    fun addDongCondition(administrativeDongId: Long) {
+        val dong = _administrativeDongs.value.values.flatten().find { it.id == administrativeDongId } ?: return
+        _selectedRegions.value = (_selectedRegions.value.filterNot { it is RegionUiState.Borough && it.borough.id == dong.borough.id } + RegionUiState.Dong(dong)).distinct()
+    }
+
+    fun removeDongCondition(administrativeDongId: Long) {
+        _selectedRegions.value = _selectedRegions.value.filterNot { it is RegionUiState.Dong && it.administrativeDong.id == administrativeDongId }
+    }
+
+    fun resetFilterConditions() {
+        _detailConditions.value = null
         age.value = ""
-        selectedBorough.value = null
-        selectedAdministrativeDong.value = null
+        _selectedRegions.value = emptyList()
     }
 
-    fun applyFilterCondition() {
-        _appliedCondition.value = _appliedCondition.value.copy(
-            detailCondition = _detailCondition.value,
+    fun applyFilterConditions() {
+        val selectedBoroughs = _selectedRegions.value
+            .filterIsInstance<RegionUiState.Borough>()
+            .map { it.borough }
+        val selectedAdministrativeDongs = _selectedRegions.value
+            .filterIsInstance<RegionUiState.Dong>()
+            .map { it.administrativeDong }
+        _appliedConditions.value = _appliedConditions.value.copy(
+            keyword = keyword.value,
+            detailConditions = _detailConditions.value,
             age = age.value.toIntOrNull(),
-            region = selectedAdministrativeDong.value
+            boroughs = selectedBoroughs.toSet(),
+            administrativeDongs = selectedAdministrativeDongs.toSet(),
         )
+    }
+
+    fun searchWithKeyword() {
+        _appliedConditions.value = _appliedConditions.value.copy(keyword = keyword.value)
     }
 
     companion object {

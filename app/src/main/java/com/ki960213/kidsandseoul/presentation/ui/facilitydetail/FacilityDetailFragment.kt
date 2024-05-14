@@ -13,6 +13,8 @@ import com.ki960213.kidsandseoul.R
 import com.ki960213.kidsandseoul.databinding.FragmentFacilityDetailBinding
 import com.ki960213.kidsandseoul.presentation.common.base.BaseFragment
 import com.ki960213.kidsandseoul.presentation.common.extension.navigateSafely
+import com.ki960213.kidsandseoul.presentation.common.extension.repeatOnStarted
+import com.ki960213.kidsandseoul.presentation.common.extension.showToast
 import com.ki960213.kidsandseoul.presentation.ui.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,12 +25,18 @@ class FacilityDetailFragment :
     private val mainViewModel: MainViewModel by activityViewModels()
     private val facilityDetailViewModel: FacilityDetailViewModel by viewModels()
 
+    private var isNotLogin: Boolean = true
+    private var isAlreadyReviewRegistered: Boolean = true
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupDataBinding()
         setupViewPager()
         setupTabLayout()
+
+        observeLoginUser()
+        observeIsAlreadyReviewRegistered()
     }
 
     private fun setupDataBinding() {
@@ -48,7 +56,7 @@ class FacilityDetailFragment :
     }
 
     private fun handleInterestButtonClick(willInterestAdd: Boolean) {
-        if (facilityDetailViewModel.loginUser.value == null) {
+        if (isNotLogin) {
             mainViewModel.dispatchLoginEvent()
             return
         }
@@ -56,8 +64,12 @@ class FacilityDetailFragment :
     }
 
     private fun handleReviewButtonClick() {
-        if (facilityDetailViewModel.loginUser.value == null) {
+        if (isNotLogin) {
             mainViewModel.dispatchLoginEvent()
+            return
+        }
+        if (isAlreadyReviewRegistered) {
+            requireContext().showToast(R.string.facility_detail_review_already_registered)
             return
         }
         navigateToReviewWrite()
@@ -72,6 +84,7 @@ class FacilityDetailFragment :
 
     private fun setupViewPager() {
         binding.vpFacilityDetail.adapter = FacilityDetailFragmentsAdapter(this)
+        binding.vpFacilityDetail.isUserInputEnabled = false
     }
 
     private fun setupTabLayout() {
@@ -81,6 +94,20 @@ class FacilityDetailFragment :
                 else -> "후기"
             }
         }.attach()
+    }
+
+    private fun observeLoginUser() {
+        repeatOnStarted {
+            facilityDetailViewModel.loginUser.collect { isNotLogin = it == null }
+        }
+    }
+
+    private fun observeIsAlreadyReviewRegistered() {
+        repeatOnStarted {
+            facilityDetailViewModel.isAlreadyReviewRegistered.collect {
+                isAlreadyReviewRegistered = it
+            }
+        }
     }
 
     companion object {

@@ -9,7 +9,7 @@ class AdministrativeDongsAdapter(
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): AdministrativeDongViewHolder =
         AdministrativeDongViewHolder(parent, onAdministrativeDongClick)
 

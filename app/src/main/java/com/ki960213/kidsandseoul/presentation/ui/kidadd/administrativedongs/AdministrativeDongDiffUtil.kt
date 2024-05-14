@@ -6,13 +6,11 @@ class AdministrativeDongDiffUtil : DiffUtil.ItemCallback<AdministrativeDongUiSta
 
     override fun areItemsTheSame(
         oldItem: AdministrativeDongUiState,
-        newItem: AdministrativeDongUiState
-    ): Boolean =
-        oldItem.administrativeDong.id == newItem.administrativeDong.id
+        newItem: AdministrativeDongUiState,
+    ): Boolean = oldItem.administrativeDong.id == newItem.administrativeDong.id
 
     override fun areContentsTheSame(
         oldItem: AdministrativeDongUiState,
-        newItem: AdministrativeDongUiState
-    ): Boolean =
-        oldItem == newItem
+        newItem: AdministrativeDongUiState,
+    ): Boolean = oldItem == newItem
 }

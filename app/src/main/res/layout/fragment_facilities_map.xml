@@ -15,7 +15,7 @@
 
         <variable
             name="onSearchButtonClick"
-            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+            type="kotlin.jvm.functions.Function0" />
 
         <variable
             name="onServiceClick"
@@ -38,7 +38,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:navermap_contentPaddingTop="?attr/actionBarSize"
+            app:navermap_locationButtonEnabled="true"
+            app:navermap_minZoom="8.0" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_facilities_map_search"
@@ -68,15 +71,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:textColorHint="@color/gray_g3"
                     android:background="@android:color/transparent"
                     android:hint="@string/facilities_search_hint"
+                    android:imeOptions="actionSearch"
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:paddingVertical="9.5dp"
-                    android:text="@{viewModel.searchKeyword}"
+                    android:text="@={viewModel.keyword}"
                     android:textAppearance="@style/content_accent"
                     android:textColor="@color/gray_g5"
+                    android:textColorHint="@color/gray_g3"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/iv_facilities_map_name_delete_button"
                     app:layout_constraintStart_toStartOf="parent"
@@ -105,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="12dp"
-                android:onClick="@{() -> onSearchButtonClick.invoke(etFacilitiesMapNameInput.getText().toString())}"
+                android:onClick="@{() -> onSearchButtonClick.invoke()}"
                 android:padding="10dp"
                 android:src="@drawable/ic_facilities_search"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -135,14 +139,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="12dp"
                     android:layout_marginStart="12dp"
-                    android:background="@{viewModel.selectedService == ServiceUiState.OUR_NEIGHBORHOOD_GROWING_CENTER ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:background="@{viewModel.searchConditions.service == ServiceUiState.OUR_NEIGHBORHOOD_GROWING_CENTER ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
                     android:elevation="6dp"
                     android:enabled="@{!viewModel.isLoading}"
                     android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.OUR_NEIGHBORHOOD_GROWING_CENTER)}"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
                     android:text="@string/all_our_neighbor_growing_center"
-                    android:textColor="@{viewModel.selectedService == ServiceUiState.OUR_NEIGHBORHOOD_GROWING_CENTER ? @color/white : @color/gray_g5}"
+                    android:textAppearance="@style/content"
+                    android:textColor="@{viewModel.searchConditions.service == ServiceUiState.OUR_NEIGHBORHOOD_GROWING_CENTER ? @color/white : @color/gray_g5}"
                     tools:background="@drawable/bg_all_button_highlight"
                     tools:textColor="@color/gray_g5" />
 
@@ -151,14 +156,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:background="@{viewModel.selectedService == ServiceUiState.LOCAL_CHILDREN_CENTER ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:background="@{viewModel.searchConditions.service == ServiceUiState.LOCAL_CHILDREN_CENTER ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
                     android:elevation="6dp"
                     android:enabled="@{!viewModel.isLoading}"
                     android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.LOCAL_CHILDREN_CENTER)}"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
                     android:text="@string/all_local_children_center"
-                    android:textColor="@{viewModel.selectedService == ServiceUiState.LOCAL_CHILDREN_CENTER ? @color/white : @color/gray_g5}"
+                    android:textAppearance="@style/content"
+                    android:textColor="@{viewModel.searchConditions.service == ServiceUiState.LOCAL_CHILDREN_CENTER ? @color/white : @color/gray_g5}"
                     tools:background="@drawable/bg_all_button_highlight"
                     tools:textColor="@color/gray_g5" />
 
@@ -167,14 +173,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:background="@{viewModel.selectedService == ServiceUiState.CO_PARENTING_ROOM ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:background="@{viewModel.searchConditions.service == ServiceUiState.CO_PARENTING_ROOM ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
                     android:elevation="6dp"
                     android:enabled="@{!viewModel.isLoading}"
                     android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.CO_PARENTING_ROOM)}"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
                     android:text="@string/all_co_parenting_room"
-                    android:textColor="@{viewModel.selectedService == ServiceUiState.CO_PARENTING_ROOM ? @color/white : @color/gray_g5}"
+                    android:textAppearance="@style/content"
+                    android:textColor="@{viewModel.searchConditions.service == ServiceUiState.CO_PARENTING_ROOM ? @color/white : @color/gray_g5}"
                     tools:background="@drawable/bg_all_button_selected"
                     tools:textColor="@color/white" />
 
@@ -183,14 +190,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:background="@{viewModel.selectedService == ServiceUiState.CO_PARENTING_SHARING_CENTER ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:background="@{viewModel.searchConditions.service == ServiceUiState.CO_PARENTING_SHARING_CENTER ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
                     android:elevation="6dp"
                     android:enabled="@{!viewModel.isLoading}"
                     android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.CO_PARENTING_SHARING_CENTER)}"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
                     android:text="@string/all_co_parenting_sharing_center"
-                    android:textColor="@{viewModel.selectedService == ServiceUiState.CO_PARENTING_SHARING_CENTER ? @color/white : @color/gray_g5}"
+                    android:textAppearance="@style/content"
+                    android:textColor="@{viewModel.searchConditions.service == ServiceUiState.CO_PARENTING_SHARING_CENTER ? @color/white : @color/gray_g5}"
                     tools:background="@drawable/bg_all_button_highlight"
                     tools:textColor="@color/gray_g5" />
 
@@ -199,14 +207,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:background="@{viewModel.selectedService == ServiceUiState.KIDS_CAFE ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:background="@{viewModel.searchConditions.service == ServiceUiState.KIDS_CAFE ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
                     android:elevation="6dp"
                     android:enabled="@{!viewModel.isLoading}"
                     android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.KIDS_CAFE)}"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
                     android:text="@string/all_kids_cafe"
-                    android:textColor="@{viewModel.selectedService == ServiceUiState.KIDS_CAFE ? @color/white : @color/gray_g5}"
+                    android:textAppearance="@style/content"
+                    android:textColor="@{viewModel.searchConditions.service == ServiceUiState.KIDS_CAFE ? @color/white : @color/gray_g5}"
                     tools:background="@drawable/bg_all_button_highlight"
                     tools:textColor="@color/gray_g5" />
 
@@ -215,14 +224,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:background="@{viewModel.selectedService == ServiceUiState.OUTDOOR ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:background="@{viewModel.searchConditions.service == ServiceUiState.OUTDOOR ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
                     android:elevation="6dp"
                     android:enabled="@{!viewModel.isLoading}"
                     android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.OUTDOOR)}"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
                     android:text="@string/all_outdoor"
-                    android:textColor="@{viewModel.selectedService == ServiceUiState.OUTDOOR ? @color/white : @color/gray_g5}"
+                    android:textAppearance="@style/content"
+                    android:textColor="@{viewModel.searchConditions.service == ServiceUiState.OUTDOOR ? @color/white : @color/gray_g5}"
                     tools:background="@drawable/bg_all_button_highlight"
                     tools:textColor="@color/gray_g5" />
 
@@ -231,14 +241,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:background="@{viewModel.selectedService == ServiceUiState.EXPERIENCE ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:background="@{viewModel.searchConditions.service == ServiceUiState.EXPERIENCE ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
                     android:elevation="6dp"
                     android:enabled="@{!viewModel.isLoading}"
                     android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.EXPERIENCE)}"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
                     android:text="@string/all_experience"
-                    android:textColor="@{viewModel.selectedService == ServiceUiState.EXPERIENCE ? @color/white : @color/gray_g5}"
+                    android:textAppearance="@style/content"
+                    android:textColor="@{viewModel.searchConditions.service == ServiceUiState.EXPERIENCE ? @color/white : @color/gray_g5}"
                     tools:background="@drawable/bg_all_button_highlight"
                     tools:textColor="@color/gray_g5" />
 
@@ -247,14 +258,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:background="@{viewModel.selectedService == ServiceUiState.MEDICAL ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:background="@{viewModel.searchConditions.service == ServiceUiState.MEDICAL ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
                     android:elevation="6dp"
                     android:enabled="@{!viewModel.isLoading}"
                     android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.MEDICAL)}"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
                     android:text="@string/all_medical"
-                    android:textColor="@{viewModel.selectedService == ServiceUiState.MEDICAL ? @color/white : @color/gray_g5}"
+                    android:textAppearance="@style/content"
+                    android:textColor="@{viewModel.searchConditions.service == ServiceUiState.MEDICAL ? @color/white : @color/gray_g5}"
                     tools:background="@drawable/bg_all_button_highlight"
                     tools:textColor="@color/gray_g5" />
 
@@ -264,18 +276,39 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:layout_marginEnd="12dp"
-                    android:background="@{viewModel.selectedService == ServiceUiState.LIBRARY ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
+                    android:background="@{viewModel.searchConditions.service == ServiceUiState.LIBRARY ? @drawable/bg_all_button_selected : @drawable/bg_all_button_highlight}"
                     android:elevation="6dp"
                     android:enabled="@{!viewModel.isLoading}"
                     android:onClick="@{() -> onServiceClick.invoke(ServiceUiState.LIBRARY)}"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
                     android:text="@string/all_library"
-                    android:textColor="@{viewModel.selectedService == ServiceUiState.LIBRARY ? @color/white : @color/gray_g5}"
+                    android:textAppearance="@style/content"
+                    android:textColor="@{viewModel.searchConditions.service == ServiceUiState.LIBRARY ? @color/white : @color/gray_g5}"
                     tools:background="@drawable/bg_all_button_highlight"
                     tools:textColor="@color/gray_g5" />
             </LinearLayout>
         </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/tv_facilities_map_search_at_current_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_all_button_highlight"
+            android:drawablePadding="4dp"
+            android:elevation="6dp"
+            android:gravity="center_vertical"
+            android:onClick="@{() -> onSearchButtonClick.invoke()}"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            android:text="@string/facilities_map_refresh_button_text"
+            android:textAppearance="@style/content"
+            android:textColor="@color/main"
+            app:drawableStartCompat="@drawable/ic_facilities_map_refresh"
+            app:isVisible="@{viewModel.isReSearchMeaningful}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sv_facilities_map_service_buttons" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_facilities_map_facility"

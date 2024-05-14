@@ -18,18 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_posts_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/community_title"
-            android:textAppearance="@style/sub_title"
-            android:textColor="@color/gray_g5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ProgressBar
             android:id="@+id/pb_posts"
             android:layout_width="wrap_content"
@@ -44,7 +32,6 @@
             android:id="@+id/rv_posts"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="20dp"
             android:clipToPadding="false"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/horizontal_padding"
@@ -54,7 +41,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_posts_title"
+            app:layout_constraintTop_toTopOf="parent"
             app:posts_posts="@{viewModel.posts}"
             tools:listitem="@layout/item_post" />
 
@@ -69,6 +56,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:ignore="ContentDescription" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

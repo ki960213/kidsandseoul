@@ -174,18 +174,17 @@
                     android:layout_width="0dp"
                     android:layout_height="180dp"
                     android:layout_marginTop="10dp"
-                    app:isVisible="@{false}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/iv_review_write_profile_image"
+                    app:reviewWrite_images="@{viewModel.images}"
                     app:sliderIndicatorGravity="center_horizontal|bottom"
                     app:sliderIndicatorMargin="15dp"
                     app:sliderIndicatorOrientation="horizontal"
                     app:sliderIndicatorPadding="3dp"
                     app:sliderIndicatorRadius="2dp"
                     app:sliderIndicatorSelectedColor="@color/main"
-                    app:sliderIndicatorUnselectedColor="@color/gray_g2"
-                    tools:visibility="gone" />
+                    app:sliderIndicatorUnselectedColor="@color/gray_g2" />
 
                 <TextView
                     android:id="@+id/tv_review_write_facility_name"
@@ -251,7 +250,7 @@
                     android:gravity="top"
                     android:hint="@string/review_write_request"
                     android:inputType="text|textMultiLine|textNoSuggestions"
-                    android:text="@={viewModel.review}"
+                    android:text="@={viewModel.content}"
                     android:textAppearance="@style/content"
                     android:textColor="@color/gray_g5"
                     android:textColorHint="@color/gray_g2"
@@ -265,9 +264,9 @@
                     android:id="@+id/tv_review_write_content_lenght"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.review.length()}"
+                    android:text="@{viewModel.content.length()}"
                     android:textAppearance="@style/content"
-                    android:textColor="@{viewModel.review.length() > viewModel.MAX_REVIEW_LENGTH ? @color/red : @color/gray_g2}"
+                    android:textColor="@{viewModel.content.length() > viewModel.MAX_REVIEW_LENGTH ? @color/red : @color/gray_g2}"
                     app:layout_constraintBottom_toBottomOf="@id/tv_review_write_content_max_length"
                     app:layout_constraintEnd_toStartOf="@id/tv_review_write_content_max_length"
                     app:layout_constraintTop_toTopOf="@id/tv_review_write_content_max_length"
@@ -288,5 +287,16 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/pb_review_write"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            app:isVisible="@{viewModel.isLoading}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

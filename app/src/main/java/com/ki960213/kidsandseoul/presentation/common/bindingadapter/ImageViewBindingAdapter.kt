@@ -10,9 +10,9 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.ki960213.domain.facility.model.ChildCareFacility
 import com.ki960213.domain.facility.model.Facility
-import com.ki960213.domain.facility.model.FacilityType
 import com.ki960213.domain.facility.model.KidsCafe
 import com.ki960213.domain.facility.model.OtherFacility
+import com.ki960213.domain.facility.model.OtherFacilityType
 import com.ki960213.kidsandseoul.R
 import com.stfalcon.imageviewer.StfalconImageViewer
 
@@ -71,10 +71,10 @@ fun ImageView.setFacilityServiceImage(facility: Facility?) {
         is ChildCareFacility -> R.drawable.img_all_child_care
         is KidsCafe -> R.drawable.img_all_kids_cafe
         is OtherFacility -> when (facility.type) {
-            FacilityType.OUTDOOR -> R.drawable.img_all_outdoor
-            FacilityType.EXPERIENCE -> R.drawable.img_all_experience
-            FacilityType.MEDICAL -> R.drawable.img_all_medical
-            FacilityType.LIBRARY -> R.drawable.img_all_library
+            OtherFacilityType.OUTDOOR -> R.drawable.img_all_outdoor
+            OtherFacilityType.EXPERIENCE -> R.drawable.img_all_experience
+            OtherFacilityType.MEDICAL -> R.drawable.img_all_medical
+            OtherFacilityType.LIBRARY -> R.drawable.img_all_library
         }
     }
     val drawable = ContextCompat.getDrawable(context, drawableRes)

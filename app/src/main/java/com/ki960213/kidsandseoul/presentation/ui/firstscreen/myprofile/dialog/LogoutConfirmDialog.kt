@@ -11,7 +11,7 @@ class LogoutConfirmDialog : ConfirmDialogFragment() {
     override val title: String
         get() = "로그아웃"
     override val message: String
-        get() = "로그아웃하면 대화 내역과 알림 목록이\n모두 사라집니다.\n그래도 로그아웃 하시겠습니까?"
+        get() = "로그아웃 하시겠습니까?"
 
     override fun action() {
         viewModel.logout()

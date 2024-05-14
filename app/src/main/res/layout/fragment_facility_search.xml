@@ -7,7 +7,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fcv_facility_search"
-        android:name="com.ki960213.kidsandseoul.presentation.ui.facilitysearch.FacilitiesFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.facilitysearch.subfragments.FacilitiesFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </layout>

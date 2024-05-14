@@ -17,7 +17,7 @@ import com.ki960213.kidsandseoul.presentation.common.extension.repeatOnStarted
 import com.ki960213.kidsandseoul.presentation.ui.MainViewModel
 import com.ki960213.kidsandseoul.presentation.ui.postdetail.dialog.AuthorMoreDialog
 import com.ki960213.kidsandseoul.presentation.ui.postdetail.dialog.DeleteCommentConfirmDialog
-import com.ki960213.kidsandseoul.presentation.ui.postdetail.dialog.DeleteFetchDialog
+import com.ki960213.kidsandseoul.presentation.ui.postdetail.dialog.DeletedPostFetchDialog
 import com.ki960213.kidsandseoul.presentation.ui.postdetail.dialog.NotAuthorMoreDialog
 import com.ki960213.kidsandseoul.presentation.ui.postdetail.recyclerview.PostDetailItemsAdapter
 import com.ki960213.kidsandseoul.presentation.ui.postdetail.uistate.PostDetailItemUiState
@@ -112,7 +112,7 @@ class PostDetailFragment :
     }
 
     private fun showDeleteFetchDialog() {
-        DeleteFetchDialog().show(childFragmentManager, null)
+        DeletedPostFetchDialog().show(childFragmentManager, null)
     }
 
     companion object {

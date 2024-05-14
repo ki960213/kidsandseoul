@@ -30,5 +30,6 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(R.layout.fragme
 
     private fun setupCommunitiesViewPager() {
         binding.vpCommunity.adapter = CommunityFragmentsAdapter(this)
+        binding.vpCommunity.isUserInputEnabled = false
     }
 }

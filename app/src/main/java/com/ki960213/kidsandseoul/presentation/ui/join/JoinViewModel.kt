@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.ki960213.domain.administrativedong.model.AdministrativeDong
 import com.ki960213.domain.administrativedong.model.Borough
 import com.ki960213.domain.administrativedong.repository.AdministrativeDongRepository
-import com.ki960213.domain.auth.JoinResult
 import com.ki960213.domain.auth.model.Authentication
 import com.ki960213.domain.auth.repository.AuthRepository
 import com.ki960213.kidsandseoul.presentation.common.base.BaseViewModel
@@ -27,8 +26,8 @@ import javax.inject.Inject
 @HiltViewModel
 class JoinViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    administrativeDongRepository: AdministrativeDongRepository,
     private val authRepository: AuthRepository,
-    private val administrativeDongRepository: AdministrativeDongRepository,
 ) : BaseViewModel() {
 
     private val _uiEvent: MutableSharedFlow<JoinUiEvent> = MutableSharedFlow()
@@ -41,8 +40,10 @@ class JoinViewModel @Inject constructor(
 
     val name = MutableStateFlow("")
 
-    private val _administrativeDongs: MutableStateFlow<Map<Borough, List<AdministrativeDong>>> =
-        MutableStateFlow(emptyMap())
+    private val _administrativeDongs: StateFlow<Map<Borough, List<AdministrativeDong>>> =
+        administrativeDongRepository.administrativeDongs
+            .map { it.values.groupBy { dong -> dong.borough } }
+            .viewModelStateIn(initialValue = emptyMap())
 
     private val _boroughs: StateFlow<List<Borough>> = _administrativeDongs.map { it.keys.toList() }
         .viewModelStateIn(initialValue = emptyList())
@@ -92,15 +93,6 @@ class JoinViewModel @Inject constructor(
         viewModelScope.launch { _uiEvent.emit(JoinUiEvent.JoinFail) }
     }
 
-    init {
-        fetchAdministrativeDongs()
-    }
-
-    private fun fetchAdministrativeDongs() = viewModelScope.launch {
-        _administrativeDongs.value = administrativeDongRepository.getAdministrativeDongs()
-            .let { it.values.groupBy { dong -> dong.borough } }
-    }
-
     fun selectBorough(boroughId: Long) {
         selectedBorough.value = _boroughs.value.first { it.id == boroughId }
     }
@@ -112,15 +104,18 @@ class JoinViewModel @Inject constructor(
 
     fun join() = viewModelScope.launch(joinHandler) {
         _isJoinWaiting.value = true
-        val joinResult =
-            authRepository.join(authentication, name.value, selectedAdministrativeDong.value!!.id)
-        when (joinResult) {
-            JoinResult.Fail -> _uiEvent.emit(JoinUiEvent.JoinFail)
-            JoinResult.Success -> {
-                _isJustJoinSuccess.value = true
-                authRepository.login(authentication)
-            }
+
+        authRepository.join(
+            authentication = authentication,
+            name = name.value,
+            administrativeDongId = selectedAdministrativeDong.value!!.id
+        ).onSuccess {
+            _isJustJoinSuccess.value = true
+            authRepository.login(authentication)
+        }.onFailure {
+            _uiEvent.emit(JoinUiEvent.JoinFail)
         }
+
         _isJoinWaiting.value = false
     }
 }

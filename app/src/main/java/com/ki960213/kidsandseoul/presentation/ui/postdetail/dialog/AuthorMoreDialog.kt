@@ -6,8 +6,7 @@ import com.ki960213.kidsandseoul.R
 import com.ki960213.kidsandseoul.databinding.DialogAuthorMoreBinding
 import com.ki960213.kidsandseoul.presentation.common.base.KasBottomSheetDialogFragment
 
-class AuthorMoreDialog :
-    KasBottomSheetDialogFragment<DialogAuthorMoreBinding>(R.layout.dialog_author_more) {
+class AuthorMoreDialog : KasBottomSheetDialogFragment<DialogAuthorMoreBinding>(R.layout.dialog_author_more) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

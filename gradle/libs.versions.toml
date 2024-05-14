@@ -1,11 +1,11 @@
 [versions]
 # Gradle Versions
-agp = "8.3.2"
+agp = "8.4.1"
 kotlin = "1.9.23"
 
 # 안드로이드
 coreKtx = "1.13.1"
-appcompat = "1.6.1"
+appcompat = "1.7.0"
 activity = "1.9.0"
 constraintlayout = "2.1.4"
 material = "1.12.0"
@@ -29,11 +29,11 @@ navigation = "2.7.7"
 hilt = "2.50"
 hiltNavigation = "1.2.0"
 
-# Preferences DataStore
-preferencesDataStore = "1.1.1"
-
 # Room
 room = "2.6.1"
+
+# Paging
+paging = "3.3.0"
 
 # OkHttp
 okhttp = "4.12.0"
@@ -58,17 +58,18 @@ assertj = "3.25.3"
 # 네이버 지도 SDK
 naverMapSdk = "3.18.0"
 
-# Kakao SDK
-kakaoSdk = "2.20.0"
-
 # Google Service
-playServicesBase = "18.4.0"
-playServicesAuth = "21.1.1"
-googleServices = "4.4.1"
+playServicesBase = "18.5.0"
+playServicesAuth = "21.2.0"
+playServicesLocation = "21.3.0"
+googleServices = "4.4.2"
 playAppUpdate = "2.1.0"
 
 # Firebase Bom
-firebaseBom = "33.0.0"
+firebaseBom = "33.1.0"
+
+# Firebase Kotlin SDK
+firebaseKotlinSdk = "1.12.0"
 
 [libraries]
 # 안드로이드
@@ -95,13 +96,13 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt"
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 hilt-navigation-fragment = { module = "androidx.hilt:hilt-navigation-fragment", version.ref = "hiltNavigation" }
 
-# DataStroe
-preferences-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "preferencesDataStore" }
-
 # Room
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+
+# Paging
+paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 
 # OkHttp
 okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
@@ -133,22 +134,21 @@ assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 # 네이버 지도 SDK
 naver-map = { module = "com.naver.maps:map-sdk", version.ref = "naverMapSdk" }
 
-# Kakao SDK 의존성
-kakao-sdk-all = { module = "com.kakao.sdk:v2-all", version.ref = "kakaoSdk" }
-
 # Google Services
 play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 google-services = { group = "com.google.gms", name = "google-services", version.ref = "googleServices" }
 play-app-update = { module = "com.google.android.play:app-update-ktx", version.ref = "playAppUpdate" }
 
-# firebase
+# Firebase
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
-firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
-firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx" }
-firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
-firebase-storage = { module = "com.google.firebase:firebase-storage" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+
+# Firebase Kotlin SDK
+firebase-auth-kotlin = { module = "dev.gitlive:firebase-auth", version.ref = "firebaseKotlinSdk" }
+firebase-firestore-kotlin = { module = "dev.gitlive:firebase-firestore", version.ref = "firebaseKotlinSdk" }
+firebase-storage-kotlin = { module = "dev.gitlive:firebase-storage", version.ref = "firebaseKotlinSdk" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -158,3 +158,13 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+
+[bundles]
+android-base = ["androidx-core-ktx", "androidx-appcompat", "androidx-activity", "androidx-constraintlayout", "material", "androidx-core-splashscreen"]
+hilt = ["hilt-android", "hilt-navigation-fragment"]
+navigation = ["androidx-navigation-fragment", "androidx-navigation-ui"]
+room = ["room-runtime", "room-ktx"]
+retrofit = ["okhttp", "okhttp-logging-interceptor", "retrofit"]
+kotlinx-serialization = ["kotlinx-serialization-json", "kotlinx-serialization-converter"]
+google-play = ["play-services-auth", "play-services-base", "play-services-location", "play-app-update"]
+firebase-kotlin = ["firebase-firestore-kotlin", "firebase-auth-kotlin", "firebase-storage-kotlin", "firebase-analytics"]

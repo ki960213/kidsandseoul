@@ -2,6 +2,7 @@ package com.ki960213.kidsandseoul.presentation.ui.facilitydetail.reviews.reviews
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,7 @@ import com.ki960213.domain.review.model.Review
 import com.ki960213.domain.user.model.JoinedUser
 import com.ki960213.kidsandseoul.R
 import com.ki960213.kidsandseoul.databinding.ItemReviewBinding
+import com.smarteist.autoimageslider.SliderView
 
 class ReviewsAdapter(
     private val onProfileClick: (userId: String) -> Unit,
@@ -39,7 +41,7 @@ data class ReviewUiState(
         author: JoinedUser,
         isDeletable: Boolean,
         facility: Facility,
-        review: Review
+        review: Review,
     ) : this(
         authorId = author.id,
         authorProfileImageUrl = author.profileImageUrl,
@@ -65,11 +67,18 @@ class ReviewViewHolder(
         binding.onProfileUiClick = onProfileClick
         binding.onFacilityNameClick = onFacilityNameClick
         binding.onDeleteButtonClick = onDeleteButtonClick
+        binding.sliderReviewItemImages.setSliderAdapter(ReviewImageAdapter(), false)
     }
 
     fun bind(uiState: ReviewUiState) {
         binding.uiState = uiState
     }
+}
+
+@BindingAdapter("app:all_reviewImages")
+fun SliderView.setReviewImages(reviewImages: List<String>?) {
+    if (reviewImages == null) return
+    (sliderAdapter as ReviewImageAdapter).submitList(reviewImages)
 }
 
 class ReviewDiffUtil : DiffUtil.ItemCallback<ReviewUiState>() {

@@ -2,6 +2,7 @@ package com.ki960213.kidsandseoul.presentation.ui
 
 import android.app.Activity
 import androidx.activity.OnBackPressedCallback
+import com.ki960213.kidsandseoul.R
 import com.ki960213.kidsandseoul.presentation.common.extension.showToast
 
 class SafeExitCallback(private val activity: Activity) : OnBackPressedCallback(true) {
@@ -14,7 +15,7 @@ class SafeExitCallback(private val activity: Activity) : OnBackPressedCallback(t
             activity.finish()
         } else {
             backPressedTime = currentTime
-            activity.showToast("한 번 더 누르면 종료됩니다.")
+            activity.showToast(R.string.all_app_exit_when_one_more_click)
         }
     }
 

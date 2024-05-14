@@ -1,6 +1,7 @@
 package com.ki960213.kidsandseoul.presentation.ui
 
 import androidx.lifecycle.viewModelScope
+import com.ki960213.domain.administrativedong.repository.AdministrativeDongRepository
 import com.ki960213.domain.auth.model.Authentication
 import com.ki960213.domain.auth.model.LoginResult
 import com.ki960213.domain.auth.repository.AuthRepository

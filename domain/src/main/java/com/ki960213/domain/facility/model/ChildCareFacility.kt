@@ -8,6 +8,6 @@ data class ChildCareFacility(
     override val detailUrl: String,
     override val reviewCount: Int,
     override val starPointAvg: Double,
-    val childCareService: ChildCareService,
+    val childCareFacilityType: ChildCareFacilityType,
     val isSaturdayOperate: Boolean,
 ) : Facility

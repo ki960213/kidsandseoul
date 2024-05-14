@@ -7,6 +7,7 @@ import com.ki960213.kidsandseoul.data.firebase.post.PostDocument
 import com.ki960213.kidsandseoul.data.firebase.post.PostFirestore
 import com.ki960213.kidsandseoul.data.firebase.user.UserFirestore
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -24,7 +25,7 @@ class DefaultPostRepository @Inject constructor(
         .map { it?.asPost() }
 
     override fun getRecentPosts(): Flow<List<Post>> = postFirestore
-        .fetchPosts(TEMP_POST_COUNT)
+        .getRecentPosts(RECENT_POST_COUNT)
         .map { it.toPosts() }
 
     override fun getPostsOfUser(
@@ -33,32 +34,34 @@ class DefaultPostRepository @Inject constructor(
         .getPostsOfUser(userId)
         .map { it.toPosts() }
 
-    private fun List<PostDocument>.toPosts(): List<Post> = map { it.asPost() }
+    override fun getLatestPostOfUser(userId: String): Flow<Post?> = postFirestore
+        .getLatestPostOfUser(userId)
+        .map { it?.asPost() }
+
+    private fun List<PostDocument>.toPosts(): List<Post> = map(PostDocument::asPost)
 
     override suspend fun createPost(
         authorId: String,
         title: String,
         content: String,
-    ): String = postFirestore.createPost(
-        authorId = authorId,
-        title = title,
-        content = content,
-    )
+    ): String = externalScope.async {
+        postFirestore.createPost(authorId, title, content)
+    }.await()
 
     override suspend fun deletePost(postId: String) = externalScope.launch {
         postFirestore.deletePost(postId)
     }.join()
 
     override suspend fun like(userId: String, postId: String) = externalScope.launch {
-        userFirestore.addLikePostId(userId = userId, postId = postId)
+        userFirestore.addLikePostId(userId, postId)
     }.join()
 
     override suspend fun unlike(userId: String, postId: String) = externalScope.launch {
-        userFirestore.deleteLikePostId(userId = userId, postId = postId)
+        userFirestore.deleteLikePostId(userId, postId)
     }.join()
 
     companion object {
 
-        private const val TEMP_POST_COUNT = 100L
+        private const val RECENT_POST_COUNT = 100
     }
 }

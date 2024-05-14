@@ -1,7 +1,7 @@
 package com.ki960213.kidsandseoul.presentation.ui.firstscreen.home
 
 import com.ki960213.domain.auth.repository.AuthRepository
-import com.ki960213.domain.facility.model.Facilities
+import com.ki960213.domain.facility.model.Facility
 import com.ki960213.domain.facility.repository.FacilityRepository
 import com.ki960213.kidsandseoul.presentation.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,17 +13,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
+    authRepository: AuthRepository,
     private val facilityRepository: FacilityRepository,
 ) : BaseViewModel() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val interestFacilities: StateFlow<Facilities> = authRepository.loginUserId
+    val interestFacilities: StateFlow<List<Facility>> = authRepository.loginUserId
         .flatMapLatest { loginUserId ->
             if (loginUserId == null) {
-                return@flatMapLatest flowOf(Facilities(allCount = 0, value = emptyList()))
+                return@flatMapLatest flowOf(emptyList())
             }
             facilityRepository.getInterestFacilities(loginUserId)
         }
-        .viewModelStateIn(initialValue = Facilities(allCount = 0, value = emptyList()))
+        .viewModelStateIn(initialValue = emptyList())
 }

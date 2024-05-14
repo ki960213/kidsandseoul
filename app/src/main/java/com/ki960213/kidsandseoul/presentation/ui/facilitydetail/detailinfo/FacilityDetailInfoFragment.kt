@@ -1,15 +1,18 @@
 package com.ki960213.kidsandseoul.presentation.ui.facilitydetail.detailinfo
 
+import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ki960213.domain.facility.model.ChildCareFacility
-import com.ki960213.domain.facility.model.ChildCareService
+import com.ki960213.domain.facility.model.ChildCareFacilityType
 import com.ki960213.domain.facility.model.Facility
 import com.ki960213.domain.facility.model.KidsCafe
 import com.ki960213.domain.facility.model.OtherFacility
@@ -38,6 +41,7 @@ class FacilityDetailInfoFragment :
     private fun setupDataBinding() {
         binding.viewModel = viewModel
         binding.onAddressCopyButtonClick = ::handleAddressCopyButtonClick
+        binding.onMapSearchButtonClick = ::navigateToMapApp
         binding.onInformationUseClick = ::handleInformationUseClick
         binding.onHomepageButtonClick = ::handleHomepageButtonClick
     }
@@ -56,30 +60,38 @@ class FacilityDetailInfoFragment :
         clipboardManager.setPrimaryClip(clipData)
     }
 
+    private fun navigateToMapApp(location: String) {
+        val uri = Uri.parse("geo:0,0?q=${location}")
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+
+        runCatching { startActivity(intent) }
+            .onFailure {
+                if (it is ActivityNotFoundException) requireContext().showToast("검색할 수 있는 지도 앱이 없습니다.")
+            }
+    }
+
     private fun handleInformationUseClick(facility: Facility) {
         when (facility) {
-            is ChildCareFacility -> when (facility.childCareService) {
-                ChildCareService.OUR_NEIGHBORHOOD_GROWING_CENTER -> navigateToWebView(
+            is ChildCareFacility -> when (facility.childCareFacilityType) {
+                ChildCareFacilityType.OUR_NEIGHBORHOOD_GROWING_CENTER -> navigateToWebView(
                     title = "우리동네키움센터 소개",
                     url = WebViewFragment.OUR_NEIGHBOR_GROWING_CENTER_INFORMATION_USE_URL
                 )
 
-                ChildCareService.CO_PARENTING_ROOM -> navigateToWebView(
+                ChildCareFacilityType.CO_PARENTING_ROOM -> navigateToWebView(
                     title = "공동육아방 소개",
                     url = WebViewFragment.CO_PARENTING_ROOM_INFORMATION_USE_URL
                 )
 
-                ChildCareService.LOCAL_CHILDREN_CENTER -> navigateToWebView(
+                ChildCareFacilityType.LOCAL_CHILDREN_CENTER -> navigateToWebView(
                     title = "지역아동센터 소개",
                     url = WebViewFragment.LOCAL_CHILDREN_CENTER_INFORMATION_USE_URL
                 )
 
-                ChildCareService.CO_PARENTING_SHARING_CENTER -> navigateToWebView(
+                ChildCareFacilityType.CO_PARENTING_SHARING_CENTER -> navigateToWebView(
                     title = "공동육아나눔터 소개",
                     url = WebViewFragment.CO_PARENTING_SHARING_CENTER_INFORMATION_USE_URL
                 )
-
-                ChildCareService.YOUTH_AFTER_SCHOOL_ACADEMY -> return
             }
 
             is KidsCafe -> navigateToWebView(
@@ -92,7 +104,11 @@ class FacilityDetailInfoFragment :
     }
 
     private fun handleHomepageButtonClick(facility: Facility) {
-        navigateToWebView(facility.name, facility.detailUrl)
+        val browserIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(facility.detailUrl),
+        )
+        startActivity(browserIntent)
     }
 
     private fun navigateToWebView(title: String, url: String) {

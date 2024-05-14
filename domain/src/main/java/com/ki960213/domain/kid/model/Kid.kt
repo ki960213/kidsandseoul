@@ -13,5 +13,6 @@ data class Kid(
     val livingDong: AdministrativeDong,
 ) {
 
+    // 예전 한국식 나이로 계산
     val age: Int = ChronoUnit.YEARS.between(birthDate, LocalDate.now()).toInt() + 1
 }

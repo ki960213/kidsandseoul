@@ -25,7 +25,7 @@ class PostDetailItemsAdapter(
             parent = parent,
             onProfileUiClick = onProfileUiClick,
             onDeleteButtonClick = onDeleteButtonClick,
-            onChildCommentButtonClick = onChildCommentButtonClick,
+            onChildCommentButtonClick = onChildCommentButtonClick
         )
 
         else -> throw AssertionError("그럴리 없음")

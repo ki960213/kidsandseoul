@@ -1,17 +1,18 @@
 package com.ki960213.kidsandseoul.presentation.common.bindingadapter
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
 import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import com.ki960213.domain.administrativedong.model.AdministrativeDong
 import com.ki960213.domain.facility.model.ChildCareFacility
-import com.ki960213.domain.facility.model.ChildCareService
+import com.ki960213.domain.facility.model.ChildCareFacilityType
 import com.ki960213.domain.facility.model.Facility
-import com.ki960213.domain.facility.model.FacilityType
 import com.ki960213.domain.facility.model.KidsCafe
 import com.ki960213.domain.facility.model.OtherFacility
+import com.ki960213.domain.facility.model.OtherFacilityType
 import com.ki960213.kidsandseoul.R
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -74,24 +75,28 @@ fun TextView.setNumberText(numberText: Int) {
     text = numberText.toString()
 }
 
+@BindingAdapter("app:drawableEndCompat")
+fun TextView.setDrawableEndCompat(drawable: Drawable) {
+    setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
+}
+
 @BindingAdapter("app:facilityService")
 fun TextView.setService(facility: Facility?) {
     if (facility == null) return
     val stringRes = when (facility) {
-        is ChildCareFacility -> when (facility.childCareService) {
-            ChildCareService.OUR_NEIGHBORHOOD_GROWING_CENTER -> R.string.all_our_neighbor_growing_center
-            ChildCareService.CO_PARENTING_ROOM -> R.string.all_co_parenting_room
-            ChildCareService.LOCAL_CHILDREN_CENTER -> R.string.all_local_children_center
-            ChildCareService.CO_PARENTING_SHARING_CENTER -> R.string.all_co_parenting_sharing_center
-            ChildCareService.YOUTH_AFTER_SCHOOL_ACADEMY -> throw AssertionError("청소년 방과후 아카데미가 있을 리 없음. 백엔드에도 안 넣었음.")
+        is ChildCareFacility -> when (facility.childCareFacilityType) {
+            ChildCareFacilityType.OUR_NEIGHBORHOOD_GROWING_CENTER -> R.string.all_our_neighbor_growing_center
+            ChildCareFacilityType.CO_PARENTING_ROOM -> R.string.all_co_parenting_room
+            ChildCareFacilityType.LOCAL_CHILDREN_CENTER -> R.string.all_local_children_center
+            ChildCareFacilityType.CO_PARENTING_SHARING_CENTER -> R.string.all_co_parenting_sharing_center
         }
 
         is KidsCafe -> R.string.all_kids_cafe
         is OtherFacility -> when (facility.type) {
-            FacilityType.OUTDOOR -> R.string.all_outdoor
-            FacilityType.EXPERIENCE -> R.string.all_experience
-            FacilityType.MEDICAL -> R.string.all_medical
-            FacilityType.LIBRARY -> R.string.all_library
+            OtherFacilityType.OUTDOOR -> R.string.all_outdoor
+            OtherFacilityType.EXPERIENCE -> R.string.all_experience
+            OtherFacilityType.MEDICAL -> R.string.all_medical
+            OtherFacilityType.LIBRARY -> R.string.all_library
         }
     }
     text = context.getString(stringRes)

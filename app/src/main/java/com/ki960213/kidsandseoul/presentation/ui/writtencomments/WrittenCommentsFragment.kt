@@ -6,6 +6,5 @@ import com.ki960213.kidsandseoul.presentation.common.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WrittenCommentsFragment :
-    BaseFragment<FragmentWrittenCommentsBinding>(R.layout.fragment_written_comments) {
+class WrittenCommentsFragment : BaseFragment<FragmentWrittenCommentsBinding>(R.layout.fragment_written_comments) {
 }

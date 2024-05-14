@@ -14,8 +14,7 @@ import com.ki960213.kidsandseoul.presentation.ui.firstscreen.community.posts.pos
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WrittenPostsFragment :
-    BaseFragment<FragmentWrittenPostsBinding>(R.layout.fragment_written_posts) {
+class WrittenPostsFragment : BaseFragment<FragmentWrittenPostsBinding>(R.layout.fragment_written_posts) {
 
     private val viewModel: WrittenPostsViewModel by viewModels()
 

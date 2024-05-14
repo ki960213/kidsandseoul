@@ -21,7 +21,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
             requireContext(),
             this,
             date.year,
-            date.monthValue - 1,
+            date.monthValue - 1,    // 0 ~ 11로 입력해야 함
             date.dayOfMonth
         )
         datePickerDialog.datePicker.minDate = Calendar.getInstance()

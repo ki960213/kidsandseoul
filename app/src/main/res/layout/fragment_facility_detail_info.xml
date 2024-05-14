@@ -28,6 +28,10 @@
             type="kotlin.jvm.functions.Function0" />
 
         <variable
+            name="onMapSearchButtonClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+
+        <variable
             name="onInformationUseClick"
             type="kotlin.jvm.functions.Function1&lt;Facility, Unit>" />
 
@@ -120,13 +124,33 @@
                     android:drawablePadding="4dp"
                     android:fontFamily="@font/pretendard_regular"
                     android:onClick="@{() -> onAddressCopyButtonClick.invoke()}"
-                    android:padding="8dp"
+                    android:paddingVertical="8dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="4dp"
                     android:text="@string/facility_detail_info_copy"
                     android:textColor="#4946CF"
                     android:textSize="14sp"
                     app:drawableStartCompat="@drawable/ic_facility_detail_info_copy"
                     app:layout_constraintBottom_toBottomOf="@id/iv_facility_detail_info_address"
                     app:layout_constraintStart_toEndOf="@id/tv_facility_detail_info_address_label"
+                    app:layout_constraintTop_toTopOf="@id/iv_facility_detail_info_address" />
+
+                <TextView
+                    android:id="@+id/tv_facility_detail_info_map_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:onClick="@{() -> onMapSearchButtonClick.invoke(viewModel.facility.address.baseAddress)}"
+                    android:paddingVertical="8dp"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="8dp"
+                    android:text="@string/facility_detail_info_map"
+                    android:textColor="#4946CF"
+                    android:textSize="14sp"
+                    app:drawableStartCompat="@drawable/ic_facility_detail_info_map"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_facility_detail_info_address"
+                    app:layout_constraintStart_toEndOf="@id/tv_facility_detail_info_copy"
                     app:layout_constraintTop_toTopOf="@id/iv_facility_detail_info_address" />
 
                 <TextView

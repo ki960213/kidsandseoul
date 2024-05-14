@@ -237,7 +237,6 @@
                 android:drawablePadding="13dp"
                 android:onClick="@{() -> onMyReviewButtonClick.invoke()}"
                 android:text="@string/my_profile_my_review"
-                android:visibility="gone"
                 app:drawableTopCompat="@drawable/ic_my_profile_my_review"
                 app:layout_constraintEnd_toStartOf="@+id/tv_my_profile_follow_label"
                 app:layout_constraintStart_toEndOf="@+id/tv_my_profile_my_interest_button"

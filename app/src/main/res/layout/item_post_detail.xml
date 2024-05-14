@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:onClick="@{() -> onProfileUiClick.invoke(uiState.post.authorId)}"
-            android:text="@{uiState.authorName}"
+            android:text="@{uiState.authorName != null ? uiState.authorName : @string/all_leaved_user_name}"
             android:textAppearance="@style/content_accent"
             android:textColor="@color/gray_g5"
             app:layout_constraintStart_toEndOf="@id/iv_post_detail_profile_image"

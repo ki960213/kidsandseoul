@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="16dp"
+        android:height="16dp"
+        android:drawable="@drawable/ic_select_facility_order_radio_background" />
+    <item
+        android:width="10dp"
+        android:height="10dp"
+        android:drawable="@drawable/ic_select_facility_order_radio_indicator"
+        android:gravity="center" />
+</layer-list>

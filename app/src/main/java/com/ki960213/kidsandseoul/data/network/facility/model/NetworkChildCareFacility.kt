@@ -1,35 +1,28 @@
 package com.ki960213.kidsandseoul.data.network.facility.model
 
 import com.ki960213.domain.facility.model.ChildCareFacility
+import com.ki960213.domain.facility.model.Facility
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("CHILD_CARE")
+@SerialName("NetworkChildCareFacility")
 data class NetworkChildCareFacility(
-    @SerialName("id")
     override val id: Long,
-    @SerialName("name")
     override val name: String,
-    @SerialName("service")
-    val service: NetworkService,
-    @SerialName("point")
+    val childCareFacilityType: NetworkChildCareFacilityType,
     override val point: NetworkPoint,
-    @SerialName("address")
     override val address: NetworkAddress,
-    @SerialName("detailUrl")
     override val detailUrl: String,
-    @SerialName("isSaturdayOperate")
+    override val reviewCount: Int,
+    override val starPointAvg: Double,
     val isSaturdayOperate: Boolean,
-) : NetworkFacility() {
+) : NetworkFacility {
 
-    fun toChildCareFacility(
-        reviewCount: Int,
-        starPointAvg: Double,
-    ) = ChildCareFacility(
+    override fun asFacility(): Facility = ChildCareFacility(
         id = id,
         name = name,
-        childCareService = service.asService(),
+        childCareFacilityType = childCareFacilityType.asChildCareFacilityType(),
         point = point.asPoint(),
         address = address.asAddress(),
         detailUrl = detailUrl,

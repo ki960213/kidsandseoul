@@ -101,6 +101,7 @@
                     android:layout_marginStart="16dp"
                     android:background="@android:color/transparent"
                     android:hint="@string/facilities_search_hint"
+                    android:imeOptions="actionSearch"
                     android:inputType="text|textNoSuggestions"
                     android:maxLines="1"
                     android:paddingVertical="11dp"

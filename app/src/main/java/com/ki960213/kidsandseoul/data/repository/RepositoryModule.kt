@@ -2,7 +2,6 @@ package com.ki960213.kidsandseoul.data.repository
 
 import com.ki960213.domain.administrativedong.repository.AdministrativeDongRepository
 import com.ki960213.domain.auth.repository.AuthRepository
-import com.ki960213.domain.chat.repository.ChatRoomRepository
 import com.ki960213.domain.comment.repository.CommentRepository
 import com.ki960213.domain.facility.repository.FacilityRepository
 import com.ki960213.domain.kid.repository.KidRepository
@@ -25,9 +24,6 @@ abstract class RepositoryModule {
     abstract fun bindsAdministrativeDongRepository(
         administrativeDongRepository: DefaultAdministrativeDongRepository,
     ): AdministrativeDongRepository
-
-    @Binds
-    abstract fun bindsChatRoomRepository(chatRoomRepository: DefaultChatRoomRepository): ChatRoomRepository
 
     @Binds
     abstract fun bindsCommentRepository(commentRepository: DefaultCommentRepository): CommentRepository

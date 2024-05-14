@@ -47,6 +47,9 @@ abstract class InfoDialogFragment : DialogFragment() {
         dismiss()
     }
 
+    /**
+     * 버튼을 눌렀을 때 실행할 함수
+     */
     open fun action() {}
 
     private fun setupWindow() {

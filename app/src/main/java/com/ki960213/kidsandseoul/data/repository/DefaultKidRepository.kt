@@ -25,14 +25,12 @@ class DefaultKidRepository @Inject constructor(
 ) : KidRepository {
 
     override fun getKids(userId: String): Flow<Kids> = combine(
-        kidFirestore.getSelectedKidId(userId),
         kidFirestore.getKids(userId),
-    ) { selectedKidId, kidDocuments ->
-        val administrativeDongs = administrativeDongRepository.getAdministrativeDongs()
+        administrativeDongRepository.administrativeDongs,
+    ) { kidDocuments, administrativeDongs ->
         val kids = kidDocuments.toKids(administrativeDongs)
         Kids(
             parentId = userId,
-            selectedKid = kids.firstOrNull { it.id == selectedKidId },
             kids = kids,
         )
     }
@@ -57,7 +55,10 @@ class DefaultKidRepository @Inject constructor(
         )
     }.join()
 
-    override suspend fun deleteKid(parentId: String, kidId: String) = externalScope.launch {
+    override suspend fun deleteKid(
+        parentId: String,
+        kidId: String,
+    ) = externalScope.launch {
         kidFirestore.deleteKid(parentId, kidId)
     }.join()
 }

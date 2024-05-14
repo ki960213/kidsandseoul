@@ -8,12 +8,11 @@ import com.ki960213.kidsandseoul.R
 import com.ki960213.kidsandseoul.databinding.FragmentMyInterestFacilitiesBinding
 import com.ki960213.kidsandseoul.presentation.common.base.BaseFragment
 import com.ki960213.kidsandseoul.presentation.common.extension.navigateSafely
-import com.ki960213.kidsandseoul.presentation.ui.facilitysearch.facilities.FacilitiesAdapter
+import com.ki960213.kidsandseoul.presentation.ui.facilitysearch.recyclerview.facilities.FacilitiesAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyInterestFacilitiesFragment :
-    BaseFragment<FragmentMyInterestFacilitiesBinding>(R.layout.fragment_my_interest_facilities) {
+class MyInterestFacilitiesFragment : BaseFragment<FragmentMyInterestFacilitiesBinding>(R.layout.fragment_my_interest_facilities) {
 
     private val viewModel: MyInterestFacilitiesViewModel by viewModels()
 

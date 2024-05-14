@@ -11,6 +11,7 @@ import com.ki960213.kidsandseoul.presentation.common.base.BaseFragment
 import com.ki960213.kidsandseoul.presentation.common.extension.navigateSafely
 import com.ki960213.kidsandseoul.presentation.common.extension.repeatOnStarted
 import com.ki960213.kidsandseoul.presentation.ui.MainViewModel
+import com.ki960213.kidsandseoul.presentation.ui.facilitydetail.reviews.reviews.ReviewImageAdapter
 import com.ki960213.kidsandseoul.presentation.ui.firstscreen.myprofile.kids.KidsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,7 +36,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
         binding.onFollowerClick = ::navigateToFollowers
         binding.onFollowingClick = ::navigateToFollowings
         binding.onFollowToggle = ::handleFollowToggle
+        binding.includeProfilePost.onPostClick = ::navigateToPostDetail
         binding.onWrittenPostMoreButtonClick = ::navigateToWrittenPosts
+        binding.onWrittenReviewMoreButtonClick = ::navigateToWrittenReviews
+        binding.includeProfileReview.sliderReviewItemImages.setSliderAdapter(ReviewImageAdapter(), false)
     }
 
     private fun navigateToFollowers(userId: String) {
@@ -58,14 +62,26 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
         }
     }
 
+    private fun navigateToPostDetail(postId: String) {
+        findNavController().navigateSafely(
+            ProfileFragmentDirections.actionProfileFragmentToPostDetailFragment(postId)
+        )
+    }
+
     private fun navigateToWrittenPosts(userId: String) {
         findNavController().navigateSafely(
             ProfileFragmentDirections.actionProfileFragmentToWrittenPostsFragment(userId)
         )
     }
 
+    private fun navigateToWrittenReviews(userId: String) {
+        findNavController().navigateSafely(
+            ProfileFragmentDirections.actionProfileFragmentToWrittenReviewsFragment(userId)
+        )
+    }
+
     private fun setupKidsRecyclerView() {
-        binding.rvProfileKids.adapter = KidsAdapter {}
+        binding.rvProfileKids.adapter = KidsAdapter(onKidAddClick = {})
     }
 
     private fun observeProfileUiEvent() {

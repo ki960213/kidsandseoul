@@ -12,7 +12,7 @@ interface UserRepository {
      * @param[userIds] 유저 아이디 목록
      * @return [User] 목록
      */
-    suspend fun getUsers(userIds: List<String>): List<User>
+    fun getUsers(userIds: List<String>): Flow<List<User>>
 
     /**
      * 유저 단건 조회
@@ -58,10 +58,4 @@ interface UserRepository {
      * @param[targetUserId] 언팔로우 당할 유저 아이디
      */
     suspend fun unfollow(userId: String, targetUserId: String)
-
-    /**
-     * 회원 탈퇴
-     * @param[userId] 유저 아이디
-     */
-    suspend fun leave(userId: String)
 }

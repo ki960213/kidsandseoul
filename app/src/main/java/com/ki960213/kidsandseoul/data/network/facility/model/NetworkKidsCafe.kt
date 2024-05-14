@@ -1,38 +1,27 @@
 package com.ki960213.kidsandseoul.data.network.facility.model
 
+import com.ki960213.domain.facility.model.Facility
 import com.ki960213.domain.facility.model.KidsCafe
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.DayOfWeek
-import java.time.LocalDate
 
 @Serializable
-@SerialName("KIDS_CAFE")
+@SerialName("NetworkKidsCafe")
 data class NetworkKidsCafe(
-    @SerialName("id")
     override val id: Long,
-    @SerialName("name")
     override val name: String,
-    @SerialName("point")
     override val point: NetworkPoint,
-    @SerialName("address")
     override val address: NetworkAddress,
-    @SerialName("detailUrl")
     override val detailUrl: String,
-    @SerialName("contact")
+    override val reviewCount: Int,
+    override val starPointAvg: Double,
     val contact: String,
-    @SerialName("operatingDays")
     val operatingDays: List<String>,    // DayOfWeek
-    @SerialName("closedDays")
-    val closeDays: List<String>,    // LocalDate
-    @SerialName("appliableAges")
     val appliableAges: List<Int>,
-) : NetworkFacility() {
+) : NetworkFacility {
 
-    fun toKidsCafe(
-        reviewCount: Int,
-        starPointAvg: Double,
-    ) = KidsCafe(
+    override fun asFacility(): Facility = KidsCafe(
         id = id,
         name = name,
         point = point.asPoint(),
@@ -41,7 +30,6 @@ data class NetworkKidsCafe(
         contact = contact,
         operatingDays = operatingDays.asDayOfWeeks(),
         appliableAges = appliableAges[0]..appliableAges[1],
-        closeDays = closeDays.map { LocalDate.parse(it) }.toSet(),
         reviewCount = reviewCount,
         starPointAvg = starPointAvg,
     )

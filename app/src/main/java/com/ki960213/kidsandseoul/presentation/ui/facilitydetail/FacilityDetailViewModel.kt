@@ -7,6 +7,7 @@ import com.ki960213.domain.facility.model.ChildCareFacility
 import com.ki960213.domain.facility.model.Facility
 import com.ki960213.domain.facility.model.KidsCafe
 import com.ki960213.domain.facility.repository.FacilityRepository
+import com.ki960213.domain.review.model.Review
 import com.ki960213.domain.review.repository.ReviewRepository
 import com.ki960213.domain.user.model.JoinedUser
 import com.ki960213.domain.user.repository.UserRepository
@@ -14,6 +15,7 @@ import com.ki960213.kidsandseoul.presentation.common.base.BaseViewModel
 import com.ki960213.kidsandseoul.presentation.ui.facilitydetail.reviews.reviews.ReviewUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,7 +32,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FacilityDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val authRepository: AuthRepository,
+    authRepository: AuthRepository,
     private val userRepository: UserRepository,
     private val facilityRepository: FacilityRepository,
     private val reviewRepository: ReviewRepository,
@@ -45,6 +47,12 @@ class FacilityDetailViewModel @Inject constructor(
         .flatMapLatest { userRepository.getUser(it) }
         .filterIsInstance<JoinedUser>()
         .viewModelStateIn(initialValue = null)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val isAlreadyReviewRegistered: StateFlow<Boolean> = loginUser.filterNotNull()
+        .flatMapLatest { loginUser ->
+            reviewRepository.isExistReviewOfUser(facilityId, loginUser.id)
+        }.viewModelStateIn(initialValue = true)
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -61,19 +69,40 @@ class FacilityDetailViewModel @Inject constructor(
         .map { it.operatingDays.toSet() }
         .viewModelStateIn(initialValue = emptySet())
 
-    val reviews: StateFlow<List<ReviewUiState>> = combine(
-        facility.filterNotNull(),
-        reviewRepository.getReviews(facilityId)
-    ) { facility, reviews ->
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val reviews: StateFlow<List<ReviewUiState>> = reviewRepository.getReviews(facilityId)
+        .flatMapLatest { reviews ->
+            combine(
+                userRepository.getAuthorsOf(reviews),
+                facilityRepository.getFacility(facilityId),
+                loginUser,
+            ) { authors, facility, loginUser ->
+                reviews.toReviewUiStates(authors, facility, loginUser)
+            }
+        }.viewModelStateIn(initialValue = emptyList())
+
+    private fun UserRepository.getAuthorsOf(reviews: List<Review>): Flow<Map<String, JoinedUser>> {
         val authorIds = reviews.map { it.authorId }.distinct()
-        val authors = userRepository.getUsers(authorIds)
-            .filterIsInstance<JoinedUser>()
-            .associateBy { it.id }
-        reviews.mapNotNull { review ->
-            val author = authors[review.authorId] ?: return@mapNotNull null
-            ReviewUiState(author, loginUser.value?.id == author.id, facility, review)
-        }
-    }.viewModelStateIn(initialValue = emptyList())
+        return getUsers(authorIds)
+            .map { users ->
+                users.filterIsInstance<JoinedUser>()
+                    .associateBy { it.id }
+            }
+    }
+
+    private fun List<Review>.toReviewUiStates(
+        authors: Map<String, JoinedUser>,
+        facility: Facility,
+        loginUser: JoinedUser?,
+    ): List<ReviewUiState> = mapNotNull { review ->
+        val author = authors[review.authorId] ?: return@mapNotNull null
+        ReviewUiState(
+            author = author,
+            isDeletable = loginUser?.id == author.id,
+            facility = facility,
+            review = review
+        )
+    }
 
     fun changeInterestFacility(willAdd: Boolean) = viewModelScope.launch {
         val facilityId = facility.value?.id ?: return@launch

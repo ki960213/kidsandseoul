@@ -11,9 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -21,10 +18,13 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.ki960213.domain.auth.model.Authentication
 import com.ki960213.kidsandseoul.R
 import com.ki960213.kidsandseoul.databinding.ActivityMainBinding
+import com.ki960213.kidsandseoul.presentation.NetworkMonitor
+import com.ki960213.kidsandseoul.presentation.common.extension.repeatOnStarted
 import com.ki960213.kidsandseoul.presentation.common.extension.showToast
 import com.ki960213.kidsandseoul.presentation.ui.join.JoinFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.distinctUntilChanged
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -41,6 +41,9 @@ class MainActivity : AppCompatActivity() {
 
     private val exitCallback: SafeExitCallback by lazy { SafeExitCallback(this) }
 
+    @Inject
+    lateinit var networkMonitor: NetworkMonitor
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
@@ -53,6 +56,7 @@ class MainActivity : AppCompatActivity() {
         setupWindowInsetListener()
         setupBackPressedDispatcher()
 
+        observeNetworkState()
         observeUiEvent()
     }
 
@@ -101,19 +105,32 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeUiEvent() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiEvent.collect(::handleUiEvent)
-            }
+    private fun observeNetworkState() {
+        repeatOnStarted { networkMonitor.isOnline.distinctUntilChanged().collect(::handleIsOnline) }
+    }
+
+    private fun handleIsOnline(isOnline: Boolean) {
+        if (!isOnline) {
+            showNotOnlineDialog()
+            return
         }
+        val notOnlineDialog = supportFragmentManager.findFragmentByTag(NotOnlineDialog.TAG) as NotOnlineDialog?
+        notOnlineDialog?.dismiss()
+    }
+
+    private fun showNotOnlineDialog() {
+        NotOnlineDialog().show(supportFragmentManager, NotOnlineDialog.TAG)
+    }
+
+    private fun observeUiEvent() {
+        repeatOnStarted { viewModel.uiEvent.collect(::handleUiEvent) }
     }
 
     private fun handleUiEvent(uiEvent: MainUiEvent) {
         when (uiEvent) {
             is MainUiEvent.NavigateToJoin -> navigateToJoin(uiEvent.authentication)
             MainUiEvent.ShowLoginDialog -> showLoginDialog()
-            MainUiEvent.LoginFail -> showToast("로그인에 실패했어요")
+            MainUiEvent.LoginFail -> showToast(R.string.all_login_fail)
         }
     }
 

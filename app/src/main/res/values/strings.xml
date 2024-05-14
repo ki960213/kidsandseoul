@@ -31,6 +31,11 @@
     <string name="all_use_of_term">서비스 이용약관</string>
     <string name="all_privacy_policy">개인정보 처리방침</string>
     <string name="all_search_too_short_message">두 글자 이상 입력해주세요.</string>
+    <string name="all_no_result_message">검색 결과가 없습니다.</string>
+    <string name="all_choose_gallery_type">갤러리 종류를 선택해주세요.</string>
+    <string name="all_login_fail">로그인에 실패했어요.</string>
+    <string name="all_app_exit_when_one_more_click">한 번 더 누르면 종료됩니다.</string>
+    <string name="all_leaved_user_name">탈퇴한 사용자</string>
 
     <string name="first_screen_bottom_navigation_home_label">홈</string>
     <string name="first_screen_bottom_navigation_map_label">지도</string>
@@ -40,6 +45,8 @@
     <string name="home_search_hint">검색어를 입력해주세요</string>
     <string name="home_kid_register_request">아이를 등록한 후\n관련 시설을 찾아보세요~</string>
     <string name="home_interest_facility_label">관심 시설</string>
+
+    <string name="facilities_map_refresh_button_text">현 지도에서 검색</string>
 
     <string name="join_welcome">회원가입 완료!\n키즈앤서울 회원이 되신 것을 환영합니다.</string>
     <string name="join_start">시작하기</string>
@@ -55,12 +62,6 @@
     <string name="login_dialog_description">간편하게 로그인 후 시작해보세요.</string>
     <string name="login_dialog_kakao_button">카카오로 로그인/회원가입</string>
     <string name="login_dialog_google_button">Google로 로그인/회원가입</string>
-
-    <string name="chat_room_input_message_hint">채팅 작성하기</string>
-    <string name="chat_room_members_label">대화 상대</string>
-
-    <string name="chat_rooms_facility_label">시설 단체 채팅</string>
-    <string name="chat_rooms_private_label">채팅</string>
 
     <string name="community_title">커뮤니티</string>
 
@@ -91,6 +92,7 @@
     <string name="my_profile_my_post">나의 게시글</string>
     <string name="my_profile_my_comments">나의 작성 댓글</string>
     <string name="my_profile_login_request_message">로그인 하시면 편리하고 다양한 경험을 하실 수 있어요!</string>
+    <string name="my_profile_leave_fail">회원 탈퇴에 실패했어요!\n회원 탈퇴하려면 다시 로그인해주세요!</string>
 
     <string name="profile_title">프로필</string>
     <string name="profile_follower_format">팔로워 "<b>"%d"</b>"</string>
@@ -107,6 +109,18 @@
     <string name="profile_edit_kid_edit_label">아이들 수정</string>
     <string name="profile_edit_region_edit_label">지역 수정</string>
     <string name="profile_edit_change">변경</string>
+    <string name="profile_edit_kid_order_format">%s째 아이</string>
+    <string name="profile_edit_first_kid_order">첫</string>
+    <string name="profile_edit_second_kid_order">둘</string>
+    <string name="profile_edit_third_kid_order">셋</string>
+    <string name="profile_edit_fourth_kid_order">넷</string>
+    <string name="profile_edit_fifth_kid_order">다섯</string>
+    <string name="profile_edit_sixth_kid_order">여섯</string>
+    <string name="profile_edit_seventh_kid_order">일곱</string>
+    <string name="profile_edit_eighth_kid_order">여덟</string>
+    <string name="profile_edit_ninth_kid_order">아홉</string>
+    <string name="profile_edit_tenth_kid_order">열</string>
+    <string name="profile_edit_greater_than_tenth_kid_order_format">%d번</string>
 
     <string name="post_write_title">게시글 작성</string>
     <string name="post_write_post_title_hint">게시글 제목</string>
@@ -120,7 +134,8 @@
     <string name="facilities_search_hint">시설명을 입력해주세요</string>
     <string name="facilities_count_format">%d 시설</string>
     <string name="facilities_review_count_order">후기 순</string>
-    <string name="facilities_age_condition_item_format">%d살</string>
+    <string name="facilities_star_point_avg_order">별점 순</string>
+    <string name="facilities_age_conditions_item_format">%d살</string>
 
     <string name="facility_detail_call">전화</string>
     <string name="facility_detail_interest">관심</string>
@@ -130,12 +145,14 @@
     <string name="facility_detail_info_homepage">홈페이지</string>
     <string name="facility_detail_info_address">주소</string>
     <string name="facility_detail_info_copy">복사</string>
+    <string name="facility_detail_info_map">지도</string>
     <string name="facility_detail_info_time">영업안내</string>
     <string name="facility_detail_info_info">이용안내</string>
     <string name="facility_detail_info_is_not_saturday_operate">정기휴무</string>
     <string name="facility_detail_info_operate">운영</string>
     <string name="facility_detail_info_close_date">휴관일</string>
     <string name="facility_detail_info_address_copy_message">주소가 복사되었습니다.</string>
+    <string name="facility_detail_review_already_registered">이미 후기를 등록하셨습니다.</string>
 
     <string name="filter_reset">초기화</string>
     <string name="filter_apply">적용</string>
@@ -173,4 +190,36 @@
 
     <string name="filter_dialog_age_hint">나이를 입력하면 나이에 맞는 시설을 알려드려요!</string>
 
+    <string name="delete_comment_dialog_title">댓글 삭제</string>
+    <string name="delete_comment_dialog_message">댓글을 삭제하시겠습니까?</string>
+
+    <string name="deleted_post_fetch_dialog_title">삭제된 게시글</string>
+    <string name="deleted_post_fetch_dialog_message">해당 게시글은 삭제되었습니다.</string>
+
+    <string name="post_delete_comfirm_dialog_title">게시글 삭제</string>
+    <string name="post_delete_comfirm_dialog_message">게시글을 삭제하시겠습니까?</string>
+
+    <string name="post_report_confirm_dialog_title">게시글 신고</string>
+    <string name="post_report_confirm_dialog_message">게시글을 신고하시겠습니까?</string>
+
+    <string name="report_complete_dialog_title">신고 완료</string>
+    <string name="report_complete_dialog_message">신고가 완료되었습니다.</string>
+
+    <string name="post_write_exit_confirm_dialog_title">게시글 등록 취소</string>
+    <string name="post_write_exit_confirm_dialog_message">작성을 종료할까요?\n작성중이던 게시글은 저장되지 않아요.</string>
+
+    <string name="leaved_user_dialog_title">탈퇴한 사용자</string>
+    <string name="leaved_user_dialog_message">탈퇴한 사용자입니다.</string>
+
+    <string name="review_write_exit_confirm_dialog_title">리뷰 등록 취소</string>
+    <string name="review_write_exit_confirm_dialog_message">작성을 종료할까요?\n작성중이던 리뷰는 저장되지 않아요.</string>
+
+    <string name="review_delete_confirm_dialog_title">리뷰 삭제</string>
+    <string name="review_delete_confirm_dialog_message">리뷰를 삭제하시겠습니까?</string>
+
+    <string name="update_info_dialog_title">업데이트</string>"
+    <string name="update_info_dialog_message">새로운 버전이 출시되었어요!\n지금 바로 스토어로 이동해보세요!</string>
+
+    <string name="not_online_dialog_title">네트워크 오류</string>
+    <string name="not_online_dialog_message">네트워크 상태가 좋지 않아요.\n잠시 후 다시 접속해주세요.</string>
 </resources>

@@ -192,6 +192,7 @@
                     android:orientation="horizontal"
                     android:paddingHorizontal="@dimen/horizontal_padding"
                     android:paddingVertical="7dp"
+                    app:isVisible="@{!viewModel.kids.empty}"
                     app:itemAnimator="@{null}"
                     app:itemSpacing_dp="@{8}"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -213,7 +214,8 @@
                     android:textColor="@color/gray_g5"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rv_profile_kids" />
+                    app:layout_constraintTop_toBottomOf="@id/rv_profile_kids"
+                    app:layout_goneMarginTop="36dp" />
 
                 <ImageView
                     android:id="@+id/iv_profile_written_post_more_button"
@@ -234,9 +236,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/horizontal_padding"
                     android:layout_marginTop="14dp"
-                    android:layout_marginBottom="22dp"
                     app:isVisible="@{viewModel.recentPost != null}"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_profile_written_post_label"
@@ -252,7 +252,6 @@
                     android:text="@string/profile_written_review_label"
                     android:textColor="@color/gray_g5"
                     android:textSize="14sp"
-                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/include_profile_post" />
 
@@ -263,11 +262,25 @@
                     android:onClick="@{() -> onWrittenReviewMoreButtonClick.invoke(viewModel.userId)}"
                     android:padding="6dp"
                     android:src="@drawable/ic_profile_post_more"
-                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/tv_profile_written_review_label"
                     app:layout_constraintStart_toEndOf="@id/tv_profile_written_review_label"
                     app:layout_constraintTop_toTopOf="@id/tv_profile_written_review_label"
                     tools:ignore="ContentDescription" />
+
+                <include
+                    android:id="@+id/include_profile_review"
+                    layout="@layout/item_review"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/horizontal_padding"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="100dp"
+                    app:isVisible="@{viewModel.recentReview != null}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_profile_written_review_label"
+                    bind:uiState="@{viewModel.recentReview}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

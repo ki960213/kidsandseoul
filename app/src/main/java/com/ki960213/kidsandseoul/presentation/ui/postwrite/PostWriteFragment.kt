@@ -16,8 +16,7 @@ import com.ki960213.kidsandseoul.presentation.ui.firstscreen.FirstScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PostWriteFragment :
-    BaseFragment<FragmentPostWriteBinding>(R.layout.fragment_post_write) {
+class PostWriteFragment : BaseFragment<FragmentPostWriteBinding>(R.layout.fragment_post_write) {
 
     private val viewModel: PostWriteViewModel by viewModels()
 
@@ -35,11 +34,7 @@ class PostWriteFragment :
     private fun setupDataBinding() {
         binding.viewModel = viewModel
         binding.onBackButtonClick = { requireActivity().onBackPressedDispatcher.onBackPressed() }
-        binding.onRegisterButtonClick = ::handleRegisterButtonClick
-    }
-
-    private fun handleRegisterButtonClick() {
-        viewModel.register()
+        binding.onRegisterButtonClick = { viewModel.register() }
     }
 
     private fun setupBackPressedDispatcher() {
@@ -67,7 +62,7 @@ class PostWriteFragment :
     }
 
     private fun observeLoginUserId() {
-        repeatOnStarted { viewModel.loginUserId.collect {} }
+        repeatOnStarted { viewModel.loginUserId.collect {} } // 로그인 유저 아이디를 받아오기 위해
     }
 
     private fun observeUiEvent() {
@@ -82,8 +77,7 @@ class PostWriteFragment :
 
     private fun handleRegisterSuccess(postId: String) {
         findNavController().popBackStack()
-        val direction =
-            FirstScreenFragmentDirections.actionFirstScreenFragmentToPostDetailFragment(postId)
+        val direction = FirstScreenFragmentDirections.actionFirstScreenFragmentToPostDetailFragment(postId)
         findNavController().navigateSafely(direction)
     }
 }

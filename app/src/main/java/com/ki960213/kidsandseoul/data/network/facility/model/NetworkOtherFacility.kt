@@ -1,36 +1,30 @@
 package com.ki960213.kidsandseoul.data.network.facility.model
 
+import com.ki960213.domain.facility.model.Facility
 import com.ki960213.domain.facility.model.OtherFacility
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("OTHER")
+@SerialName("NetworkOtherFacility")
 data class NetworkOtherFacility(
-    @SerialName("id")
     override val id: Long,
-    @SerialName("name")
     override val name: String,
-    @SerialName("service")
-    val service: NetworkService,
-    @SerialName("point")
+    val otherFacilityType: NetworkOtherFacilityType,
     override val point: NetworkPoint,
-    @SerialName("address")
     override val address: NetworkAddress,
-    @SerialName("detailUrl")
     override val detailUrl: String,
-) : NetworkFacility() {
+    override val reviewCount: Int,
+    override val starPointAvg: Double,
+) : NetworkFacility {
 
-    fun toOtherFacility(
-        reviewCount: Int,
-        starPointAvg: Double,
-    ) = OtherFacility(
+    override fun asFacility(): Facility = OtherFacility(
         id = id,
         name = name,
         point = point.asPoint(),
         address = address.asAddress(),
         detailUrl = detailUrl,
-        type = service.asFacilityType(),
+        type = otherFacilityType.asOtherFacilityType(),
         reviewCount = reviewCount,
         starPointAvg = starPointAvg,
     )

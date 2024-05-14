@@ -11,8 +11,8 @@
         android:icon="@drawable/ic_home_map"
         android:title="@string/first_screen_bottom_navigation_map_label" />
     <item
-        android:id="@+id/postsFragment"
         android:enabled="true"
+        android:id="@+id/communityFragment"
         android:icon="@drawable/ic_home_community"
         android:title="@string/first_screen_bottom_navigation_community_label" />
     <item

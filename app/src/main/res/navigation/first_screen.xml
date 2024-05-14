@@ -17,7 +17,7 @@
         android:name="com.ki960213.kidsandseoul.presentation.ui.firstscreen.myprofile.MyProfileFragment"
         android:label="MyProfileFragment" />
     <fragment
-        android:id="@+id/postsFragment"
-        android:name="com.ki960213.kidsandseoul.presentation.ui.firstscreen.community.posts.PostsFragment"
-        android:label="PostsFragment" />
+        android:id="@+id/communityFragment"
+        android:name="com.ki960213.kidsandseoul.presentation.ui.firstscreen.community.CommunityFragment"
+        android:label="CommunityFragment" />
 </navigation>

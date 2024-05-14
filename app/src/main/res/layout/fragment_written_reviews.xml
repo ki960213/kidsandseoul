@@ -5,6 +5,13 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.ki960213.kidsandseoul.presentation.ui.writtenReviews.WrittenReviewsViewModel" />
+
+        <variable
+            name="onBackButtonClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,11 +23,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
+            android:onClick="@{() -> onBackButtonClick.invoke()}"
             android:padding="10dp"
             android:src="@drawable/ic_all_back_button"
             app:layout_constraintBottom_toBottomOf="@id/tv_written_reviews_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_written_reviews_title" />
+            app:layout_constraintTop_toTopOf="@id/tv_written_reviews_title"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/tv_written_reviews_title"
@@ -43,6 +52,7 @@
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/horizontal_padding"
             android:paddingVertical="5dp"
+            app:all_reviews="@{viewModel.reviews}"
             app:itemSpacing_dp="@{12}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -50,5 +60,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_written_reviews_title"
             tools:listitem="@layout/item_review" />
+
+        <ProgressBar
+            android:id="@+id/pb_written_reviews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:isVisible="@{viewModel.isLoading}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

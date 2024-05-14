@@ -1,7 +1,7 @@
 package com.ki960213.kidsandseoul.presentation.ui.myinterestfacilities
 
 import androidx.lifecycle.SavedStateHandle
-import com.ki960213.domain.facility.model.Facilities
+import com.ki960213.domain.facility.model.Facility
 import com.ki960213.domain.facility.repository.FacilityRepository
 import com.ki960213.kidsandseoul.presentation.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,8 +15,8 @@ class MyInterestFacilitiesViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val userId: String = savedStateHandle[MyInterestFacilitiesFragment.KEY_USER_ID]
-        ?: throw IllegalArgumentException()
+        ?: throw IllegalArgumentException("내 관심 시설 화면으로 이동할 때 유저 아이디 안넘겼음")
 
-    val interestFacilities: StateFlow<Facilities> = facilityRepository.getInterestFacilities(userId)
-        .viewModelStateIn(initialValue = Facilities(allCount = 0, value = emptyList()))
+    val interestFacilities: StateFlow<List<Facility>> = facilityRepository.getInterestFacilities(userId)
+        .viewModelStateIn(initialValue = emptyList())
 }

@@ -11,6 +11,8 @@ import com.ki960213.kidsandseoul.R
 import com.ki960213.kidsandseoul.databinding.FragmentMyProfileBinding
 import com.ki960213.kidsandseoul.presentation.common.base.BaseFragment
 import com.ki960213.kidsandseoul.presentation.common.extension.navigateSafely
+import com.ki960213.kidsandseoul.presentation.common.extension.repeatOnStarted
+import com.ki960213.kidsandseoul.presentation.common.extension.showToast
 import com.ki960213.kidsandseoul.presentation.ui.MainActivity
 import com.ki960213.kidsandseoul.presentation.ui.MainViewModel
 import com.ki960213.kidsandseoul.presentation.ui.firstscreen.FirstScreenFragmentDirections
@@ -32,6 +34,8 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(R.layout.fragme
 
         setupDataBinding()
         setupKidsRecyclerView()
+
+        observeUiEvent()
     }
 
     private fun setupDataBinding() {
@@ -165,6 +169,18 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(R.layout.fragme
         val direction =
             FirstScreenFragmentDirections.actionFirstScreenFragmentToKidAddFragment(parentId)
         navController.navigateSafely(direction)
+    }
+
+    private fun observeUiEvent() {
+        repeatOnStarted {
+            myProfileViewModel.uiEvent.collect(::handleUiEvent)
+        }
+    }
+
+    private fun handleUiEvent(uiEvent: MyProfileUiEvent) {
+        when (uiEvent) {
+            MyProfileUiEvent.LeaveFail -> requireContext().showToast(R.string.my_profile_leave_fail)
+        }
     }
 }
 

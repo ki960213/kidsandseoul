@@ -1,6 +1,5 @@
 package com.ki960213.domain.auth.repository
 
-import com.ki960213.domain.auth.JoinResult
 import com.ki960213.domain.auth.model.Authentication
 import com.ki960213.domain.auth.model.LoginResult
 import kotlinx.coroutines.flow.Flow
@@ -20,10 +19,12 @@ interface AuthRepository {
         authentication: Authentication,
         name: String,
         administrativeDongId: Long,
-    ): JoinResult
+    ): Result<Unit>
 
     /**
      * 로그아웃 하기
      */
     suspend fun logout()
+
+    suspend fun leave(userId: String): Result<Unit>
 }

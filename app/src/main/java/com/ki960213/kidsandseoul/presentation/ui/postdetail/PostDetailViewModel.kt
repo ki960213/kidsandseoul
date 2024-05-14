@@ -3,8 +3,8 @@ package com.ki960213.kidsandseoul.presentation.ui.postdetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.ki960213.domain.auth.repository.AuthRepository
+import com.ki960213.domain.comment.model.Comment
 import com.ki960213.domain.comment.repository.CommentRepository
-import com.ki960213.domain.post.model.Post
 import com.ki960213.domain.post.repository.PostRepository
 import com.ki960213.domain.user.model.JoinedUser
 import com.ki960213.domain.user.model.LeavedUser
@@ -29,7 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PostDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val authRepository: AuthRepository,
+    authRepository: AuthRepository,
     private val userRepository: UserRepository,
     private val postRepository: PostRepository,
     private val commentRepository: CommentRepository,
@@ -39,7 +39,7 @@ class PostDetailViewModel @Inject constructor(
     val uiEvent: SharedFlow<PostDetailUiEvent> = _uiEvent.asSharedFlow()
 
     private val postId: String = savedStateHandle[PostDetailFragment.KEY_POST_ID]
-        ?: throw IllegalArgumentException("자유게시글 아이디 안넘김")
+        ?: throw IllegalArgumentException("게시글 상세 화면으로 이동할 때 게시글 아이디 안넘김")
 
     private val loginUserId: StateFlow<String?> = authRepository.loginUserId
         .viewModelStateIn(initialValue = null)
@@ -48,16 +48,14 @@ class PostDetailViewModel @Inject constructor(
         .viewModelStateIn(initialValue = false)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val loginUser: StateFlow<JoinedUser?> = loginUserId.flatMapLatest {
-        if (it == null) flowOf(null) else userRepository.getUser(userId = it)
-    }
-        .map { user ->
-            when (user) {
-                is JoinedUser -> user
-                LeavedUser, null -> null
-            }
+    val loginUser: StateFlow<JoinedUser?> = loginUserId.flatMapLatest { loginUserId ->
+        if (loginUserId == null) flowOf(null) else userRepository.getUser(userId = loginUserId)
+    }.map { user ->
+        when (user) {
+            is JoinedUser -> user
+            LeavedUser, null -> null
         }
-        .viewModelStateIn(initialValue = null)
+    }.viewModelStateIn(initialValue = null)
 
     val loginUserIsAuthor: Boolean
         get() {
@@ -68,42 +66,58 @@ class PostDetailViewModel @Inject constructor(
             return loginUserId.value == authorId
         }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     val items: StateFlow<List<PostDetailItemUiState>> = combine(
-        loginUser,
         postRepository.getPost(postId),
         commentRepository.getCommentsOfPost(postId),
-    ) { loginUser, post, comments ->
-        if (post !is Post) {
+    ) { post, comments ->
+        post to comments
+    }.flatMapLatest { (post, comments) ->
+        if (post == null) {
             _uiEvent.emit(PostDetailUiEvent.DeletedPostFetch)
-            return@combine emptyList()
+            return@flatMapLatest flowOf(emptyList())
         }
         val authorIds = (comments.map { it.authorId } + post.authorId).distinct()
-        val users = userRepository.getUsers(authorIds)
-            .filterIsInstance<JoinedUser>()
-            .associateBy { it.id }
+        combine(
+            userRepository.getUsers(authorIds),
+            loginUser,
+        ) { users, loginUser ->
+            val authors = users.filterIsInstance<JoinedUser>()
+                .associateBy { it.id }
 
-        val postUiState = PostDetailUiState(
-            post = post,
-            author = users[post.authorId] ?: return@combine emptyList(),
-            isLike = post.id in (loginUser?.likePostIds ?: emptyList()),
-        )
-
-        val parentComments = comments.filter { !it.isChildComment }.sortedBy { it.createdAt }
-        val sortedComments = parentComments.map { comment ->
-            val childComments = comments.filter { it.parentCommentId == comment.id }
-            listOf(comment) + childComments
-        }.flatten()
-
-        val commentsUiState = sortedComments.mapNotNull { comment ->
-            CommentUiState(
-                comment = comment,
-                author = users[comment.authorId] ?: return@mapNotNull null,
-                isDeletable = comment.authorId == loginUser?.id,
+            val loginUserLikeThisPost = loginUser?.likePostIds?.contains(post.id) ?: false
+            val postUiState = PostDetailUiState(
+                post = post,
+                author = authors[post.authorId] ?: LeavedUser,
+                isLike = loginUserLikeThisPost,
             )
-        }
 
-        listOf(postUiState) + commentsUiState
+            val sortedComments = comments.sortedWithChildComments()
+            val commentsUiState = sortedComments.toCommentUiStates(authors, loginUser)
+            listOf(postUiState) + commentsUiState
+        }
     }.viewModelStateIn(initialValue = emptyList())
+
+    private fun List<Comment>.sortedWithChildComments(): List<Comment> {
+        val parentComments = filter { it.isParentComment }
+            .sortedBy { it.createdAt }
+        return parentComments.map { parentComment ->
+            val childComments = filter { it.isChildCommentOf(parentComment) }
+            listOf(parentComment) + childComments
+        }.flatten()
+    }
+
+    private fun List<Comment>.toCommentUiStates(
+        authors: Map<String, JoinedUser>,
+        loginUser: JoinedUser?,
+    ): List<CommentUiState> = mapNotNull { comment ->
+        val loginUserIsAuthor = comment.authorId == loginUser?.id
+        CommentUiState(
+            comment = comment,
+            author = authors[comment.authorId] ?: LeavedUser,
+            isDeletable = loginUserIsAuthor,
+        )
+    }
 
     fun setLike(postId: String, isLike: Boolean) = viewModelScope.launch {
         val loginUserId = loginUserId.value ?: return@launch

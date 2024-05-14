@@ -22,8 +22,7 @@ import com.ki960213.kidsandseoul.presentation.ui.profileedit.kids.KidsItemUiStat
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProfileEditFragment :
-    BaseFragment<FragmentProfileEditBinding>(R.layout.fragment_profile_edit) {
+class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding>(R.layout.fragment_profile_edit) {
 
     private val viewModel: ProfileEditViewModel by viewModels()
 
@@ -46,7 +45,7 @@ class ProfileEditFragment :
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
         }
-        albumLauncher.launch(Intent.createChooser(intent, "갤러리 종류를 선택하세요."))
+        albumLauncher.launch(Intent.createChooser(intent, getString(R.string.all_choose_gallery_type)))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,7 +65,7 @@ class ProfileEditFragment :
         requireActivity().onImagePermissionCompat(
             onGranted = ::navigateToGallery,
             onShouldShowRequestPermissionRationale = { showNavigateToDetailSettingDialog() },
-            onDenied = { imagePermissionLauncher.launch(it) },
+            onDenied = imagePermissionLauncher::launch,
         )
     }
 
@@ -79,9 +78,9 @@ class ProfileEditFragment :
             onKidAddClick = ::navigateToKidAdd,
             onKidDeleteClick = { viewModel.deleteKid(it) }
         )
-        binding.rvProfileEditBoroughs.adapter = BoroughsAdapter { viewModel.selectBorough(it) }
+        binding.rvProfileEditBoroughs.adapter = BoroughsAdapter(viewModel::selectBorough)
         binding.rvProfileEditAdministrativeDongs.adapter =
-            AdministrativeDongsAdapter { viewModel.selectAdministrativeDong(it) }
+            AdministrativeDongsAdapter(viewModel::selectAdministrativeDong)
     }
 
     private fun navigateToKidAdd() {

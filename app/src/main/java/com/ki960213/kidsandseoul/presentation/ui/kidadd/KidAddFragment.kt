@@ -21,7 +21,7 @@ class KidAddFragment : BaseFragment<FragmentKidAddBinding>(R.layout.fragment_kid
         super.onViewCreated(view, savedInstanceState)
 
         setupDataBinding()
-        setupRecyclerViewAdapter()
+        setupRecyclerViewAdapters()
         setupKidNameEditText()
     }
 
@@ -42,7 +42,7 @@ class KidAddFragment : BaseFragment<FragmentKidAddBinding>(R.layout.fragment_kid
         findNavController().popBackStack()
     }
 
-    private fun setupRecyclerViewAdapter() {
+    private fun setupRecyclerViewAdapters() {
         binding.rvKidAddBoroughs.adapter = BoroughsAdapter { viewModel.selectBorough(it) }
         binding.rvKidAddAdministrativeDongs.adapter =
             AdministrativeDongsAdapter { viewModel.selectAdministrativeDong(it) }

@@ -1,32 +1,25 @@
 package com.ki960213.domain.facility.repository
 
-import com.ki960213.domain.facility.model.Facilities
 import com.ki960213.domain.facility.model.Facility
-import com.ki960213.domain.facility.model.FacilityFilterCondition
+import com.ki960213.domain.facility.model.FacilityFilterConditions
+import com.ki960213.domain.facility.model.FacilityOrder
 import kotlinx.coroutines.flow.Flow
 
 interface FacilityRepository {
 
     /**
-     * 필터링된 시설 목록 조회
-     * @param[condition] 시설 필터 조건
-     * @return [Facilities]의 [Flow]
+     * 페이지는 0부터 시작
      */
-    suspend fun getFacilities(condition: FacilityFilterCondition): Facilities
+    suspend fun getFacilities(
+        page: Int,
+        size: Int,
+        order: FacilityOrder = FacilityOrder.None,
+        conditions: FacilityFilterConditions,
+    ): List<Facility>
 
-    /**
-     * 아이디로 필터링된 시설 목록 조회
-     * @param[facilityIds] 시설 아이디 목록
-     * @return [Facility] 목록
-     */
-    suspend fun getFacilities(facilityIds: List<Long>): Facilities
+    suspend fun getFacilitiesCount(conditions: FacilityFilterConditions): Int
 
-    /**
-     * 유저가 관심 있어 하는 시설 목록 조회
-     * @param[userId] 유저 아이디
-     * @return [Facilities]의 [Flow]
-     */
-    fun getInterestFacilities(userId: String): Flow<Facilities>
+    fun getInterestFacilities(userId: String): Flow<List<Facility>>
 
     /**
      * 유저의 관심 시설 추가하기
@@ -45,12 +38,6 @@ interface FacilityRepository {
      * @param[userId] 유저 아이디
      */
     suspend fun deleteInterestFacility(facilityId: Long, userId: String)
-
-    /**
-     * 최근 핫한 시설 목록 조회
-     * @return [Facilities]의 [Flow]
-     */
-    fun getHotFacilities(): Flow<Facilities>
 
     /**
      * 시설 단건 조회

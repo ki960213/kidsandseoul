@@ -26,28 +26,27 @@ class DefaultCommentRepository @Inject constructor(
     ): Flow<List<Comment>> = commentFirestore.getCommentsOfUser(userId)
         .map { it.asComments() }
 
-    private fun List<CommentDocument>.asComments(): List<Comment> = map { it.asComment() }
+    private fun List<CommentDocument>.asComments(): List<Comment> = map(CommentDocument::asComment)
 
     override suspend fun writeComment(
         authorId: String,
         postId: String,
         content: String,
     ) = externalScope.launch {
-        commentFirestore.writeComment(
-            authorId = authorId,
-            postId = postId,
-            content = content,
-        )
+        commentFirestore.writeComment(authorId, postId, content)
     }.join()
 
-    override suspend fun updateComment(commentId: String, content: String) {
-        commentFirestore.updateComment(
-            commentId = commentId,
-            content = content,
-        )
-    }
+    override suspend fun updateComment(
+        commentId: String,
+        content: String,
+    ) = externalScope.launch {
+        commentFirestore.updateComment(commentId, content)
+    }.join()
 
-    override suspend fun deleteComment(postId: String, commentId: String) {
+    override suspend fun deleteComment(
+        postId: String,
+        commentId: String,
+    ) = externalScope.launch {
         commentFirestore.deleteComment(postId, commentId)
-    }
+    }.join()
 }

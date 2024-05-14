@@ -14,4 +14,7 @@ data class Comment(
 ) {
 
     val isChildComment: Boolean = parentCommentId != null
+    val isParentComment = !isChildComment
+
+    fun isChildCommentOf(comment: Comment): Boolean = parentCommentId == comment.id
 }

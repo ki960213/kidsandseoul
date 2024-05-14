@@ -30,19 +30,18 @@ class KidViewHolder(
 @SuppressLint("SetTextI18n")
 @BindingAdapter("app:profileEditKid_order")
 fun TextView.setOrder(order: Int) {
-    text = "${order.toKorean()}째 아이"
-}
-
-private fun Int.toKorean(): String = when (this) {
-    1 -> "첫"
-    2 -> "둘"
-    3 -> "셋"
-    4 -> "넷"
-    5 -> "다섯"
-    6 -> "여섯"
-    7 -> "일곱"
-    8 -> "여덟"
-    9 -> "아홉"
-    10 -> "열"
-    else -> toString() + "번"
+    val orderText = when (order) {
+        1 -> context.getString(R.string.profile_edit_first_kid_order)
+        2 -> context.getString(R.string.profile_edit_second_kid_order)
+        3 -> context.getString(R.string.profile_edit_third_kid_order)
+        4 -> context.getString(R.string.profile_edit_fourth_kid_order)
+        5 -> context.getString(R.string.profile_edit_fifth_kid_order)
+        6 -> context.getString(R.string.profile_edit_sixth_kid_order)
+        7 -> context.getString(R.string.profile_edit_seventh_kid_order)
+        8 -> context.getString(R.string.profile_edit_eighth_kid_order)
+        9 -> context.getString(R.string.profile_edit_ninth_kid_order)
+        10 -> context.getString(R.string.profile_edit_tenth_kid_order)
+        else -> context.getString(R.string.profile_edit_greater_than_tenth_kid_order_format, order)
+    }
+    text = context.getString(R.string.profile_edit_kid_order_format, orderText)
 }

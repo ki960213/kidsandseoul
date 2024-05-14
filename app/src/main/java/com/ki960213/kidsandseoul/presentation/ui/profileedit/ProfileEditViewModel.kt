@@ -4,10 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.ki960213.domain.administrativedong.model.AdministrativeDong
 import com.ki960213.domain.administrativedong.model.Borough
+import com.ki960213.domain.administrativedong.repository.AdministrativeDongRepository
 import com.ki960213.domain.kid.repository.KidRepository
 import com.ki960213.domain.user.model.JoinedUser
 import com.ki960213.domain.user.repository.UserRepository
-import com.ki960213.kidsandseoul.data.repository.DefaultAdministrativeDongRepository
 import com.ki960213.kidsandseoul.presentation.common.base.BaseViewModel
 import com.ki960213.kidsandseoul.presentation.ui.kidadd.administrativedongs.AdministrativeDongUiState
 import com.ki960213.kidsandseoul.presentation.ui.kidadd.boroughs.BoroughUiState
@@ -29,9 +29,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    administrativeDongRepository: AdministrativeDongRepository,
     private val userRepository: UserRepository,
     private val kidRepository: KidRepository,
-    private val administrativeDongRepository: DefaultAdministrativeDongRepository,
 ) : BaseViewModel() {
 
     val parentId: String = savedStateHandle[ProfileEditFragment.KEY_PARENT_ID]
@@ -51,8 +51,10 @@ class ProfileEditViewModel @Inject constructor(
             user.name != tempName
         }.viewModelStateIn(initialValue = false)
 
-    private val _administrativeDongs: MutableStateFlow<Map<Borough, List<AdministrativeDong>>> =
-        MutableStateFlow(emptyMap())
+    private val _administrativeDongs: StateFlow<Map<Borough, List<AdministrativeDong>>> =
+        administrativeDongRepository.administrativeDongs
+            .map { it.values.groupBy { dong -> dong.borough } }
+            .viewModelMutableStateIn(initialValue = emptyMap())
     private val _boroughs: StateFlow<List<Borough>> = _administrativeDongs.map { it.keys.toList() }
         .viewModelStateIn(initialValue = emptyList())
     private val selectedBorough: MutableStateFlow<Borough?> = MutableStateFlow(null)
@@ -88,31 +90,25 @@ class ProfileEditViewModel @Inject constructor(
     }.viewModelStateIn(initialValue = emptyList())
 
     val isLivingDongChanged: StateFlow<Boolean> =
-        combine(user.filterNotNull(), selectedAdministrativeDong.filterNotNull()) { user, dong ->
+        combine(
+            user.filterNotNull(),
+            selectedAdministrativeDong.filterNotNull()
+        ) { user, dong ->
             user.livingDong != dong
         }.viewModelStateIn(initialValue = false)
 
-    private val _kids: MutableStateFlow<List<KidsItemUiState>> = kidRepository.getKids(parentId)
-        .map { kids ->
-            kids.kids.mapIndexed { index, kid ->
-                KidUiState(
-                    parentId = parentId,
-                    order = index + 1,
-                    kid = kid,
-                )
-            } + KidAddUiState
-        }
-        .viewModelMutableStateIn(initialValue = emptyList())
+    private val _kids: MutableStateFlow<List<KidsItemUiState>> =
+        kidRepository.getKids(parentId)
+            .map { kids ->
+                kids.kids.mapIndexed { index, kid ->
+                    KidUiState(
+                        parentId = parentId,
+                        order = index + 1,
+                        kid = kid,
+                    )
+                } + KidAddUiState
+            }.viewModelMutableStateIn(initialValue = emptyList())
     val kids: StateFlow<List<KidsItemUiState>> = _kids.asStateFlow()
-
-    init {
-        fetchAdministrativeDongs()
-    }
-
-    private fun fetchAdministrativeDongs() = viewModelScope.launch {
-        _administrativeDongs.value = administrativeDongRepository.getAdministrativeDongs()
-            .let { it.values.groupBy { dong -> dong.borough } }
-    }
 
     fun saveName() = viewModelScope.launch {
         userRepository.changeName(parentId, tempName.value)

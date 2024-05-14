@@ -13,8 +13,11 @@ import com.ki960213.kidsandseoul.presentation.ui.firstscreen.myprofile.kids.Kids
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -38,13 +41,12 @@ class MyProfileViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val loginUser: StateFlow<JoinedUser?> = loginUserId.flatMapLatest {
         if (it == null) flowOf(null) else userRepository.getUser(userId = it)
-    }
-        .map { user ->
-            when (user) {
-                is JoinedUser -> user
-                LeavedUser, null -> null
-            }
+    }.map { user ->
+        when (user) {
+            is JoinedUser -> user
+            LeavedUser, null -> null
         }
+    }
         .onEach { _isLoading.value = false }
         .viewModelStateIn(initialValue = null)
 
@@ -62,13 +64,18 @@ class MyProfileViewModel @Inject constructor(
             } ?: emptyList<KidAddUiState>()) + KidAddUiState
         }.viewModelStateIn(initialValue = emptyList())
 
+    private val _uiEvent = MutableSharedFlow<MyProfileUiEvent>()
+    val uiEvent: SharedFlow<MyProfileUiEvent> = _uiEvent.asSharedFlow()
+
     fun logout() = viewModelScope.launch {
         authRepository.logout()
     }
 
     fun leave() = viewModelScope.launch {
         _isLoading.value = true
-        userRepository.leave(loginUser.value?.id ?: return@launch)
+        val loginUserId = loginUser.value?.id ?: return@launch
+        authRepository.leave(loginUserId)
+            .onFailure { _uiEvent.emit(MyProfileUiEvent.LeaveFail) }
         _isLoading.value = false
     }
 }

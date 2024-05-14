@@ -22,8 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class KidAddViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    administrativeDongRepository: AdministrativeDongRepository,
     private val kidRepository: KidRepository,
-    private val administrativeDongRepository: AdministrativeDongRepository,
 ) : BaseViewModel() {
 
     private val parentId: String = savedStateHandle[KidAddFragment.KEY_PARENT_ID]
@@ -37,8 +37,10 @@ class KidAddViewModel @Inject constructor(
     private val _selectedBirthDate: MutableStateFlow<LocalDate> = MutableStateFlow(LocalDate.now())
     val selectedBirthDate: StateFlow<LocalDate> = _selectedBirthDate
 
-    private val _administrativeDongs: MutableStateFlow<Map<Borough, List<AdministrativeDong>>> =
-        MutableStateFlow(emptyMap())
+    private val _administrativeDongs: StateFlow<Map<Borough, List<AdministrativeDong>>> =
+        administrativeDongRepository.administrativeDongs
+            .map { it.values.groupBy { dong -> dong.borough } }
+            .viewModelStateIn(initialValue = emptyMap())
 
     private val _boroughs: StateFlow<List<Borough>> = _administrativeDongs.map { it.keys.toList() }
         .viewModelStateIn(initialValue = emptyList())
@@ -79,15 +81,6 @@ class KidAddViewModel @Inject constructor(
     ) { name, sex, administrativeDong ->
         name.isNotBlank() && sex != null && administrativeDong != null
     }.viewModelStateIn(initialValue = false)
-
-    init {
-        fetchAdministrativeDongs()
-    }
-
-    private fun fetchAdministrativeDongs() = viewModelScope.launch {
-        _administrativeDongs.value = administrativeDongRepository.getAdministrativeDongs()
-            .let { it.values.groupBy { dong -> dong.borough } }
-    }
 
     fun selectSex(sex: Sex) {
         _selectedSex.value = sex

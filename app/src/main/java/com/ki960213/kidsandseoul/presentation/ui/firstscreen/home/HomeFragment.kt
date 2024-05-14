@@ -6,7 +6,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
-import com.ki960213.domain.facility.model.Facilities
+import com.ki960213.domain.facility.model.Facility
 import com.ki960213.kidsandseoul.R
 import com.ki960213.kidsandseoul.databinding.FragmentHomeBinding
 import com.ki960213.kidsandseoul.presentation.common.base.BaseFragment
@@ -65,7 +65,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setupSearchInput() {
         binding.etHomeInput.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 handleSearch(binding.etHomeInput.text.toString())
             }
             false
@@ -84,6 +84,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 }
 
 @BindingAdapter("app:home_interestFacilities")
-fun RecyclerView.setInterestFacilities(facilities: Facilities) {
-    (adapter as InterestFacilitiesAdapter).submitList(facilities.value)
+fun RecyclerView.setInterestFacilities(facilities: List<Facility>) {
+    (adapter as InterestFacilitiesAdapter).submitList(facilities)
 }

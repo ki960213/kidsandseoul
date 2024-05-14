@@ -23,14 +23,14 @@ fun RecyclerView.setItemSpacing(spacing: Int) {
 
 class RecyclerViewDecoration(
     private val width: Int = 0,
-    private val height: Int = 0
+    private val height: Int = 0,
 ) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
         outRect: Rect,
         view: View,
         parent: RecyclerView,
-        state: RecyclerView.State
+        state: RecyclerView.State,
     ) {
         super.getItemOffsets(outRect, view, parent, state)
         val position = parent.getChildAdapterPosition(view)
