@@ -28,8 +28,8 @@ android {
         applicationId = "com.ki960213.kidsandseoul"
         minSdk = 26
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.0.0"
+        versionCode = 5
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
